@@ -57,6 +57,16 @@ namespace openglfExample
         private BlurFrameBufferWrapper[] frames;
         public BlurFrameBufferWrapper[] Frames { get { return frames; } private set { } }
 
+        static float[] backup_color=new float[4];
+
+        bool _enableBlur = true;
+
+        public bool Blur
+        {
+            get { return _enableBlur; }
+            set { _enableBlur = value; }
+        }
+
         int current_frame = 0;
 
         int width, height;
@@ -73,13 +83,18 @@ namespace openglfExample
                 
                 var frameGameObj = new GameObject();
                 frameGameObj.components.Add(new TextureSprite(frames[i].Texture, width, height));
-                ((TextureSprite)frameGameObj.sprite).Color = new Vec4(1,1,1,1);
+                frameGameObj.sprite.width = width;
+                frameGameObj.sprite.height = height;
+                frameGameObj.sprite.center = new Vector(width/2,height/2);
+                frameGameObj.angle += 180;
+                frameGameObj.position = new Vector(width / 2, height / 2);
+                //((TextureSprite)frameGameObj.sprite).Color = new Vec4(1,1,1,1);
                 Engine.scene.GameObjectRoot.GameObjectChildren.Add(frameGameObj);
             }
 
             BallA balla = new BallA("Assets/cursor.png");
             this.components.Add(balla);
-            balla.center = new Vector(balla.Texture.bitmap.Width / 2, balla.Texture.bitmap.Height / 2);
+            //balla.center = new Vector(balla.Texture.bitmap.Width / 2, balla.Texture.bitmap.Height / 2);
             balla.Color = new Vec4(0, 1, 0,1);
         }
 
@@ -87,21 +102,28 @@ namespace openglfExample
         {
             base.beforeDraw();
 
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, frames[current_frame].FrameBufferId);
-
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-
+            if (_enableBlur)
+            {
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, frames[current_frame].FrameBufferId);
+                GL.GetFloat(GetPName.ColorClearValue, backup_color);
+                GL.ClearColor(0, 0, 0, 0);
+                GL.Clear(ClearBufferMask.ColorBufferBit);
+                GL.ClearColor(backup_color[0], backup_color[1], backup_color[2], backup_color[3]);
+            }
         }
 
         public override void afterDraw()
         {
             base.afterDraw();
 
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            if (_enableBlur)
+            {
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
-            current_frame++;
-            if (current_frame >= frames.Length)
-                current_frame = 0;
+                current_frame++;
+                if (current_frame >= frames.Length)
+                    current_frame = 0;
+            }
         }
 
         public override void update()

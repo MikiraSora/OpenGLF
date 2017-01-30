@@ -48,6 +48,8 @@ namespace openglfExample
             gameObject.sprite.center = new Vector(sprite.Textures.frames[0].bitmap.Width / 2, sprite.Textures.frames[0].bitmap.Height / 2);
 
             gameObj = new BlurBall(1,Width, Height);
+
+            //((BlurBall)gameObj).Blur = false;
             /*
             frameGameObj = new GameObject();
             frameGameObj.components.Add(new TextureSprite(((BlurBall)gameObj).Frames[0].Texture,Width,Height));
