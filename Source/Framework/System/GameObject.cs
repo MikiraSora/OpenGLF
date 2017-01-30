@@ -554,10 +554,11 @@ namespace OpenGLF
             foreach (var c in components)
                 if (((Component)c).enabled)
                     ((Component)c).draw(mode);
-            afterDraw();
+            
 
             foreach (var child in _children)
                 child.draw(mode);
+            afterDraw();
         }
 
         public virtual void afterDraw()
