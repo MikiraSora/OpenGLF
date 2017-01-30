@@ -231,8 +231,16 @@ namespace OpenGLF
             if (height <= 0) height = 1;
 
             Texture tex = new Texture();
-            Bitmap bitmap = new Bitmap(texture.bitmap, width, height);
-            tex.LoadFromBitmap(bitmap);
+            Bitmap bitmap = null;
+            if (texture.bitmap != null)
+            {
+                bitmap = new Bitmap(texture.bitmap, width, height);
+                tex.LoadFromBitmap(bitmap);
+            }
+            else
+            {
+                tex.LoadFromTextureId(tex.ID);
+            }
 
             Engine.shaders.guiShader.begin();
             Engine.shaders.guiShader.pass("texture", tex);
@@ -261,7 +269,10 @@ namespace OpenGLF
 
             GL.DeleteTexture(tex.ID);
 
-            bitmap.Dispose();
+            if (bitmap != null)
+            {
+                bitmap.Dispose();
+            }
             tex.Dispose();
 
             GL.PopMatrix();

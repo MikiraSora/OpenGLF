@@ -91,13 +91,13 @@ namespace OpenGLF
             get { if (_audio != null) return _audio.Finished; else return true; }
         }
 
-        internal override void start()
+        public override void start()
         {
             if (playOnStart)
                 play();
         }
 
-        internal override void update()
+        public override void update()
         {
             if (_audio != null)
                 _audio.Position = new Vector3D((float)gameObject.position.x, (float)gameObject.position.y, 0);

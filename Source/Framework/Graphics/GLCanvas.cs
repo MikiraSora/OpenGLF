@@ -50,8 +50,10 @@ namespace OpenGLF
         void createCamera()
         {
             GameObject cameraObj = new GameObject();
+            /*
             if (Engine.scene != null)
                 Engine.scene.objects.Remove(cameraObj);
+                */
             _camera = new Camera();
 
             cameraObj.components.Add(camera);

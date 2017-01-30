@@ -1,0 +1,13 @@
+G:\OpenGLF\Bin\OpenGLF.dll
+G:\OpenGLF\Bin\OpenGLF.pdb
+G:\OpenGLF\Source\Framework\obj\Debug\Framework.csprojResolveAssemblyReference.cache
+G:\OpenGLF\Source\Framework\obj\Debug\OpenGLF.ComponentsEditorWindow.resources
+G:\OpenGLF\Source\Framework\obj\Debug\OpenGLF.DictionaryEditorWindow.resources
+G:\OpenGLF\Source\Framework\obj\Debug\OpenGLF.InputBox.resources
+G:\OpenGLF\Source\Framework\obj\Debug\OpenGLF.SequenceEditorWindow.resources
+G:\OpenGLF\Source\Framework\obj\Debug\OpenGLF.StringEditorWindow.resources
+G:\OpenGLF\Source\Framework\obj\Debug\OpenGLF.VerticesEditorWindow.resources
+G:\OpenGLF\Source\Framework\obj\Debug\OpenGLF.Properties.Resources.resources
+G:\OpenGLF\Source\Framework\obj\Debug\Framework.csproj.GenerateResource.Cache
+G:\OpenGLF\Source\Framework\obj\Debug\OpenGLF.dll
+G:\OpenGLF\Source\Framework\obj\Debug\OpenGLF.pdb

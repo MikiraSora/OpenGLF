@@ -53,7 +53,7 @@ namespace OpenGLF
 
             if (_shader != null)
             {
-                _shader.fullRecompile();
+                //_shader.fullRecompile();
             }
             else
                 parameters.Clear();

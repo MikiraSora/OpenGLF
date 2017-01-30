@@ -21,8 +21,10 @@ namespace OpenGLF
         static Window self;
         public static bool showCursor { get { return self.CursorVisible; } set { self.CursorVisible = value; } }
 
+        public static Window CurrentWindow { get { return self; } private set { } }
+
         public Window()
-            : base(800, 600)
+            : base(800,600)/*base(800, 600,OpenTK.Graphics.GraphicsMode.Default,"",GameWindowFlags.Default,DisplayDevice.Default,4,3,OpenTK.Graphics.GraphicsContextFlags.Debug)*/
         {
             self = this;
             showCursor = true;

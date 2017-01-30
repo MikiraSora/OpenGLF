@@ -89,7 +89,7 @@ namespace OpenGLF
             GL.DeleteBuffer(tId);
         }
 
-        internal override void draw(OpenTK.Graphics.OpenGL.RenderingMode mode)
+        public override void draw(OpenTK.Graphics.OpenGL.RenderingMode mode)
         {
             guiUpdate();
 

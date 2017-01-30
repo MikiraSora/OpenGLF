@@ -29,6 +29,8 @@ namespace OpenGLF
         public Camera camera;
         public Rigidbody rigidbody;
 
+        public delegate bool ForeachCallFunc(GameObject obj, object state = null);
+
         [Category("Transform")]
         public Vector position 
         { 
@@ -122,10 +124,10 @@ namespace OpenGLF
             {
                 Regex regex = new Regex(@"\d+");
                 string val = regex.Replace(value, "");
-
+                /*
                 if (Engine.scene != null)
                 {
-                    if (Engine.scene.objects.Contains(GameObject.find(value)))
+                    if (Engine.scene.gameObjectRoot.getAllChildren().Contains(GameObject.find(value)))
                         _name = val + ID;
                     else
                         _name = value;
@@ -133,7 +135,11 @@ namespace OpenGLF
                 else
                 {
                     _name = value;
-                }
+                }*/
+                if (_children.Contains(GameObject.find(value)))
+                    _name = val + ID;
+                else
+                    _name = value;
 
                 if (String.IsNullOrEmpty(_name))
                     name = "Unnamed object";
@@ -152,7 +158,14 @@ namespace OpenGLF
             }
             set
             {
+                if (_parent != null)
+                {
+                    _parent.GameObjectChildren.Remove(this);
+                }
                 _parent = value;
+
+                if(!_parent.GameObjectChildren.Contains(this))
+                    _parent.GameObjectChildren.Add(this);
             }
         }
 
@@ -161,13 +174,23 @@ namespace OpenGLF
         [Category("Components")]
         public ComponentList components { get; set; }
 
+        [Category("GameObject")]
+        public GameObjectList GameObjectChildren {
+            protected set {
+                _children = value;
+            }
+            get {
+                return _children;
+            }
+        }
+
         [Category("Properties")]
         public int depth
         {
             get
             {
                 if (Engine.scene != null)
-                    return Engine.scene.objects.IndexOf(this);
+                    return Engine.scene.GameObjectRoot.getAllChildren().IndexOf(this);
                 else return 0;
             }
             set
@@ -180,14 +203,19 @@ namespace OpenGLF
         {
             try
             {
-                if (Engine.scene.objects.IndexOf(this) > -1)
+                //todo
+                /*
+                    deal with global depth postion map to current parent position;
+                 */
+                 /*
+                if (Engine.scene.GameObjectRoot.getAllChildren().IndexOf(this) > -1)
                 {
                     if (d <= 1) d = 1;
-                    if (d >= Engine.scene.objects.Count) d = Engine.scene.objects.Count - 1;
+                    if (d >= Engine.scene.GameObjectRoot.getAllChildren().Count) d = Engine.scene.GameObjectRoot.getAllChildren().Count - 1;
 
                     Engine.scene.objects.Remove(this);
                     Engine.scene.objects.Insert(d, this);
-                }
+                }*/
             }
             catch
             {
@@ -225,7 +253,7 @@ namespace OpenGLF
         {
             _position = new Vector(0, 0);
             components = new ComponentList(this);
-
+            /*
             try
             {
                 Engine.scene.objects.Add(this);
@@ -236,7 +264,7 @@ namespace OpenGLF
             {
                 Console.WriteLine("Ошибка создания объекта. Сначала создайте сцену");
             }
-
+            */
             name = "Game Object";
 
             createInstances();
@@ -286,20 +314,28 @@ namespace OpenGLF
             }
 
             setComponents();
-
-            for (int i = 0; i < Engine.scene.objects.Count; i++)
+            /*
+            for (int i = 0; i < Engine.scene.gameObjectRoot.getAllChildren().Count; i++)
             {
-                if (Engine.scene.objects[i].parent == this)
+                if (Engine.scene.gameObjectRoot.getAllChildren()[i].parent == this)
                 {
-                    GameObject clone = Engine.scene.objects[i].clone();
+                    GameObject clone = Engine.scene.gameObjectRoot.getAllChildren()[i].clone();
                     clone.parent = obj;
                 }
             }
-
+            */
+            for (int i = 0; i < _children.Count; i++)
+            {
+                if (_children[i].parent == this)
+                {
+                    GameObject clone = _children[i].clone();
+                    clone.parent = obj;
+                }
+            }
             return obj;
         }
 
-        public T getComponent<T>() where T : Component
+        public T getComponent<T>(int position=0) where T : Component
         {
             Component c = null;
 
@@ -308,7 +344,9 @@ namespace OpenGLF
                 if (components[i] is T)
                 {
                     c = components[i];
-                    break;
+                    position--;
+                    if (position < 0)
+                        return (T)c;
                 }
                 else if (components[i] is Behavior)
                 {
@@ -317,13 +355,16 @@ namespace OpenGLF
                         if (((Behavior)components[i]).instance is T)
                         {
                             c = ((Behavior)components[i]).instance;
-                            break;
+                            position--;
+                            if (position < 0)
+                                return (T)c;
                         }
                     }
                 }
             }
 
-            return (T)c;
+            //result maybe is null ref or last find;
+            return (T)c; 
         }
 
         internal void createInstances()
@@ -336,12 +377,22 @@ namespace OpenGLF
                     beh.createInstance(this);
                 }
             }
+
+            foreach (var child in _children)
+                child.createInstances();
         }
 
-        internal void start()
+        public void start()
         {
+            for (int j = 0; j < components.Count; j++)
+            {
+                if (components[j].enabled)
+                    components[j].start();
+            }
+
             for (int i = 0; i < components.Count; i++)
             {
+
                 if (components[i] is Behavior)
                 {
                     Behavior beh = (Behavior)components[i];
@@ -362,10 +413,28 @@ namespace OpenGLF
                     }
                 }
             }
+
+            foreach (var child in _children)
+                child.start();
         }
 
-        internal void update()
+        public virtual void stopAnimations()
         {
+            foreach(var i in components)
+            {
+                if (i is Sprite)
+                    ((Sprite)i).stop();
+            }
+        }
+
+        public virtual void update()
+        {
+            for (int j = 0; j < components.Count; j++)
+            {
+                if (components[j].enabled)
+                    components[j].update();
+            }
+
             for (int i = 0; i < components.Count; i++)
             {
                 if (components[i] is Behavior)
@@ -389,10 +458,26 @@ namespace OpenGLF
                     }
                 }
             }
+
+            foreach (var child in _children)
+                child.update();
         }
 
-        internal void beforeDraw()
+        public virtual void beforeDraw()
         {
+            /*
+            foreach (var child in _children)
+                child.beforeDraw();
+                */
+        }
+
+        public virtual void prepareDraw()
+        {
+            //todo
+            /*
+             Move beforeDraw() codes to THIS METHOD because it may want Post-Process for one gameObject.
+             */
+
             for (int i = 0; i < components.Count; i++)
             {
                 if (components[i] is Behavior)
@@ -415,10 +500,18 @@ namespace OpenGLF
                     }
                 }
             }
+
+            foreach (var child in _children)
+                child.prepareDraw();
         }
 
-        internal void afterDraw()
+        public virtual void finDraw()
         {
+            //todo
+            /*
+             Move afterDraw() codes to THIS METHOD because it(afterDraw()) may want Post-Process for one gameObject.
+             */
+
             for (int i = 0; i < components.Count; i++)
             {
                 if (components[i] is Behavior)
@@ -441,24 +534,84 @@ namespace OpenGLF
                     }
                 }
             }
+
+            foreach (var child in _children)
+                child.finDraw();
+        }
+
+        public virtual void ForeachCall(ForeachCallFunc func,object state=null)
+        {
+            if (func(this,state))
+                return;
+            foreach (var child in _children)
+                child.ForeachCall(func, state);
+        }
+
+        public virtual void draw(RenderingMode mode)
+        {
+
+            beforeDraw();
+            foreach (var c in components)
+                if (((Component)c).enabled)
+                    ((Component)c).draw(mode);
+            afterDraw();
+
+            foreach (var child in _children)
+                child.draw(mode);
+        }
+
+        public virtual void afterDraw()
+        {
+            /*
+            foreach (var child in _children)
+                child.afterDraw();
+            */
+        }
+
+        public void RemoveChildGameObject(GameObject gameObject)
+        {
+            if (_children.Contains(gameObject))
+            {
+                _children.Remove(gameObject);
+                gameObject.parent = null;
+            }
+            else
+            {
+                foreach(var obj in _children)
+                {
+                    obj.RemoveChildGameObject(gameObject);
+                }
+            }
+        }
+
+        public void InsertChildGameObject(GameObject gameObject,int position=-1)
+        {
+            if (_children.Contains(gameObject))
+                return;
+            if (position < 0)
+                _children.Add(gameObject);
+            else
+                _children.Insert(position, gameObject);
+            gameObject.parent = this;
         }
 
         public List<GameObject> getAllChildren()
         {
             List<GameObject> list = new List<GameObject>();
-            _getAllChildren(list);
+            _getAllChildren(ref list);
             return list;
         }
 
         public List<GameObject> getChildren()
         {
+            /*
             if (Engine.scene != null)
             {
                 List<GameObject> children = new List<GameObject>();
 
-                for (int i = 0; i < Engine.scene.objects.Count; i++)
+                for (int i = 0; i < Engine.scene.gameObjectRoot.getAllChildren().Count; i++)
                 {
-                    GameObject obj = Engine.scene.objects[i];
+                    GameObject obj = Engine.scene.gameObjectRoot.getAllChildren()[i];
                     if (obj._parent == this)
                         children.Add(obj);
                 }
@@ -466,15 +619,18 @@ namespace OpenGLF
                 return children;
             }
             else return null;
+            */
+            return _children;
         }
 
-        void _getAllChildren(List<GameObject> children)
+        void _getAllChildren(ref List<GameObject> children)
         {
+            /*
             if (Engine.scene != null)
             {
-                for (int i = 0; i < Engine.scene.objects.Count; i++)
+                for (int i = 0; i < Engine.scene.gameObjectRoot.getAllChildren().Count; i++)
                 {
-                    GameObject obj = Engine.scene.objects[i];
+                    GameObject obj = Engine.scene.gameObjectRoot.getAllChildren()[i];
                     if (obj._parent == this)
                     {
                         children.Add(obj);
@@ -482,56 +638,115 @@ namespace OpenGLF
                     }
                 }
             }
+            */
+            foreach (var obj in _children)
+            {
+                children.Add(obj);
+                obj._getAllChildren(ref children);
+            }
+
+        }
+
+        public GameObject findId(int id)
+        {
+            GameObject result;
+            if(this.ID != id)
+            {
+                foreach(var obj in _children)
+                {
+                    result = obj.findId(id);
+                    if (result != null)
+                        return result;
+                }
+                return null;
+            }
+            return this;
+        }
+
+        public GameObject findName(string name)
+        {
+            GameObject result;
+            if (this.name != name)
+            {
+                foreach (var obj in _children)
+                {
+                    result = obj.findName(name);
+                    if (result != null)
+                        return result;
+                }
+                return null;
+            }
+            return this;
+        }
+
+        public void findTag(string tag, ref GameObjectList resultList)
+        {
+            if (this.tag == tag)
+            {
+                resultList.Add(this);
+            }
+
+            foreach(var obj in _children)
+            {
+                findTag(tag, ref resultList);
+            }
         }
 
         public static GameObject find(int id)
         {
-            GameObject o = null;
-
+            /*
+            GameObject o = null;    
             if (Engine.scene != null)
             {
-                for (int i = 0; i < Engine.scene.objects.Count; i++)
+                for (int i = 0; i < Engine.scene.gameObjectRoot.getAllChildren().Count; i++)
                 {
-                    if (Engine.scene.objects[i] != null)
+                    if (Engine.scene.gameObjectRoot.getAllChildren()[i] != null)
                     {
-                        if (Engine.scene.objects[i].ID == id)
-                            o = Engine.scene.objects[i];
+                        if (Engine.scene.gameObjectRoot.getAllChildren()[i].ID == id)
+                            o = Engine.scene.gameObjectRoot.getAllChildren()[i];
                     }
                 }
             }
-
             return o;
+            */
+            return Engine.scene.GameObjectRoot.findId(id);
         }
 
         public static GameObject find(string id)
         {
+            /*
             GameObject o = null;
 
             if (Engine.scene != null)
             {
-                for (int i = 0; i < Engine.scene.objects.Count; i++)
+                for (int i = 0; i < Engine.scene.gameObjectRoot.getAllChildren().Count; i++)
                 {
-                    if (Engine.scene.objects[i] != null)
+                    if (Engine.scene.gameObjectRoot.getAllChildren()[i] != null)
                     {
-                        if (Engine.scene.objects[i].name == id)
-                            o = Engine.scene.objects[i];
+                        if (Engine.scene.gameObjectRoot.getAllChildren()[i].name == id)
+                            o = Engine.scene.gameObjectRoot.getAllChildren()[i];
                     }
                 }
             }
-
-            return o;
+            return o;   
+            */
+            return Engine.scene!=null?Engine.scene.GameObjectRoot.findName(id):null;
         }
 
-        public static GameObject[] findWithTag(string tag)
+        public static void findWithTag(string tag,ref GameObjectList resultList)
         {
+            /*
             GameObject[] o = null;
 
             if (Engine.scene != null)
             {
-                o = Engine.scene.objects.FindAll(obj => obj.tag == tag).ToArray();
+                o = Engine.scene.gameObjectRoot.getAllChildren().FindAll(obj => obj.tag == tag).ToArray();
             }
 
             return o;
+            */
+
+            Engine.scene.GameObjectRoot.findTag(tag, ref resultList);
         }
 
         ~GameObject(){
@@ -550,15 +765,19 @@ namespace OpenGLF
             {
                 if (disposing)
                 {
+                    /*
                     if (Engine.scene != null)
                     {
-                        if (Engine.scene.objects.Contains(this))
-                            Engine.scene.objects.Remove(this);
-                    }
+                        if (Engine.scene.gameObjectRoot.getAllChildren( ).Contains(this))
+                            Engine.scene.gameObjectRoot.getAllChildren().Remove(this);
+                    }*/
 
-                    List<GameObject> children = getChildren();
+                    if (this.parent == null)
+                        throw new Exception("Not allow to dispose root GameObject");
 
-                    foreach (GameObject obj in children)
+                    this.parent._children.Remove(this);
+
+                    foreach (var obj in _children)
                     {
                         obj.Dispose();
                     }
@@ -605,9 +824,11 @@ namespace OpenGLF
             List<string> names = new List<string>();
             names.Add("");
 
-            for (int i = 0; i < Engine.scene.objects.Count; i++)
+            var list = Engine.scene.GameObjectRoot.getAllChildren();
+
+            for (int i = 0; i < list.Count; i++)
             {
-                names.Add(Engine.scene.objects[i].name);
+                names.Add(list[i].name);
             }
 
             return new StandardValuesCollection(names);
@@ -627,7 +848,7 @@ namespace OpenGLF
         {
             if (value is string)
             {
-                foreach (GameObject s in Engine.scene.objects)
+                foreach (GameObject s in Engine.scene.GameObjectRoot.getAllChildren())
                 {
                     if (s.name == (string)value)
                     {

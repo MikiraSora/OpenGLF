@@ -35,8 +35,10 @@ namespace OpenGLF
             _output = new Connector(this, ConnectorType.Output);
             _output.name = "GameObject";
             GameObject obj = new GameObject();
+            /*
             if (Engine.scene != null)
                 Engine.scene.objects.Remove(obj);
+                */
             _output.value = obj;
 
             width = 120;

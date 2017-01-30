@@ -25,8 +25,8 @@ namespace OpenGLF
                 try
                 {
                     GameObject obj = value.clone();
-                    Engine.scene.objects.Remove(obj);
-                    Engine.scene.objCount -= 1;
+                    //Engine.scene.objects.Remove(obj);
+                    //Engine.scene.objCount -= 1;
                     _object = obj;
                 }
                 catch

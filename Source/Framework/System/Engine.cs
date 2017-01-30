@@ -120,33 +120,42 @@ namespace OpenGLF
                         beforeDraw();
                 }
 
+                /*
                 for (int i = 0; i < Engine.scene.objects.Count; i++)
                 {
                     GameObject obj = Engine.scene.objects[i];
 
                     if (callObjectDraw == true)
                     {
-                        obj.beforeDraw();
+                        obj.prepareDraw();
                     }
-
+                    
                     for (int j = 0; j < obj.components.Count; j++)
                     {
                         if (obj.components[j].enabled)
+                        {
+                            obj.beforeDraw();
                             obj.components[j].draw(mode);
+                            obj.afterDraw();
+                        }
                     } 
+                }*/
+
+                if (callObjectDraw == true)
+                {
+                    Engine.scene.GameObjectRoot.prepareDraw();
                 }
+
+                //Engine.scene.GameObjectRoot.beforeDraw();
+                Engine.scene.GameObjectRoot.draw(mode);
+                //Engine.scene.GameObjectRoot.afterDraw();
 
                 GL.ActiveTexture(TextureUnit.Texture0);
                 GL.BindTexture(TextureTarget.Texture2D, -1);
 
                 if (callObjectDraw == true)
                 {
-                    for (int i = 0; i < Engine.scene.objects.Count; i++)
-                    {
-                        GameObject obj = Engine.scene.objects[i];
-
-                        obj.afterDraw();
-                    }
+                    Engine.scene.GameObjectRoot.finDraw();
                 }
 
                 if (nodraw == false)
@@ -168,22 +177,22 @@ namespace OpenGLF
             {
                 if (callObjectStart == true)
                 {
-                    for (int i = 0; i < Engine.scene.objects.Count; i++)
-                    {
-                        GameObject obj = Engine.scene.objects[i];
-                        obj.createInstances();
-                    }
+                    Engine.scene.GameObjectRoot.createInstances();
+                    Engine.scene.GameObjectRoot.start();
+                    /*
+                    var list = Engine.scene.GameObjectRoot.getAllChildren();
 
-                    for (int i = 0; i < Engine.scene.objects.Count; i++)
+                    for (int i = 0; i < list.Count; i++)
                     {
-                        GameObject obj = Engine.scene.objects[i];
+                        GameObject obj = list[i];
                         for (int j = 0; j < obj.components.Count; j++)
                         {
                             if (obj.components[j].enabled)
                                 obj.components[j].start();
                         }
-                        obj.start();
+                        obj.start(true);
                     }
+                    */
                 }
             }
         }
@@ -196,7 +205,7 @@ namespace OpenGLF
                 {
                     for (int i = 0; i < 6; i++ )
                         world.Step(dt);
-
+                    /*
                     for (int i = 0; i < scene.objects.Count; i++)
                     {
                         GameObject obj = scene.objects[i];
@@ -207,6 +216,8 @@ namespace OpenGLF
                         }
                         obj.update();
                     }
+                    */
+                    Engine.scene.GameObjectRoot.update();
                 }
             }
         }
@@ -426,11 +437,16 @@ namespace OpenGLF
 
         public static void stopAnimations()
         {
+            /*
             if (Engine.scene != null)
+            {
                 for (int i = 0; i < Engine.scene.objects.Count; i++)
                     foreach (Component c in Engine.scene.objects[i].components)
                         if (c is Sprite)
                             ((Sprite)c).stop();
+            }
+            */
+            Engine.scene.GameObjectRoot.stopAnimations();
         }
     }
 }

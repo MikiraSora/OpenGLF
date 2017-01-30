@@ -14,13 +14,16 @@ namespace OpenGLF
     public class Scene : Asset
     {
         internal int objCount = 0;
-        public GameObjectList objects;
+        //public GameObjectList objects;
+        protected GameObject gameObjectRoot;
         public Camera mainCamera;
         public Dictionary<string, object> data;
 
+        public GameObject GameObjectRoot { private set { } get { return gameObjectRoot; } }
+
         public Scene(){
             name = "New scene";
-            objects = new GameObjectList();
+            gameObjectRoot = new GameObject();
             data = new Dictionary<string, object>();
         }
 
@@ -36,18 +39,13 @@ namespace OpenGLF
 
         public override void Loaded()
         {
-            if (objects == null)
-                objects = new GameObjectList();
-            else
+            foreach (GameObject obj in gameObjectRoot.getAllChildren())
             {
-                foreach (GameObject obj in objects)
-                {
-                    if (obj.ID > objCount)
-                        objCount = obj.ID;
-                }
+                if (obj.ID > objCount)
+                    objCount = obj.ID;
             }
 
-            foreach (GameObject o in objects)
+            foreach (GameObject o in gameObjectRoot.getAllChildren())
             {
                 foreach (Component c in o.components)
                 {

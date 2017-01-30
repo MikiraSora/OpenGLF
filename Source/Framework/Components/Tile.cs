@@ -18,7 +18,7 @@ namespace OpenGLF
             material.shader = Engine.shaders.defaultShader;
         }
 
-        internal override void draw(RenderingMode renderMode)
+        public override void draw(RenderingMode renderMode)
         {
             if (gameObject != null)
             {

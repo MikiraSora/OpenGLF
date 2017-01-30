@@ -7,13 +7,14 @@ namespace OpenGLF
 {
     public class Shaders
     {
-        public Shader defaultShader { get; protected set; }
+        Shader _defaultShader = null;
+        public Shader defaultShader { get { return _defaultShader; } protected set { _defaultShader = value; } }
         public Shader guiShader { get; protected set; }
 
         public Shaders()
         {
-            defaultShader = new Shader();
-            defaultShader.compile();
+            _defaultShader = new Shader();
+            _defaultShader.compile();
 
             guiShader = new Shader();
 

@@ -19,9 +19,9 @@ namespace OpenGLF
         public GameObject gameObject { get; internal set; }
         [Category("Properties")]
         public bool enabled { get { return _enabled; } set { _enabled = value; } }
-        internal virtual void start() { }
-        internal virtual void update() { }
-        internal virtual void draw(RenderingMode mode) { }
+        public virtual void start() { }
+        public virtual void update() { }
+        public virtual void draw(RenderingMode mode) { }
 
         public Component()
         {

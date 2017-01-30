@@ -15,7 +15,7 @@ namespace OpenGLF
     [TypeConverter(typeof(TextureConverter))]
     public class Texture : Asset
     {
-        int _id;
+        protected int _id;
         byte[] _bytes;
 
         [NonSerialized]
@@ -63,6 +63,14 @@ namespace OpenGLF
             _id = 0;
 
             LoadFromBitmap(bitmap);
+        }
+
+        public Texture(int id)
+        {
+            name = "Texture";
+            _id = 0;
+
+            LoadFromTextureId(id);
         }
 
         public void LoadFromFile(string filename)
@@ -156,6 +164,11 @@ namespace OpenGLF
 
                 bmp.UnlockBits(bmp_data);
             }
+        }
+
+        public void LoadFromTextureId(int texGenId)
+        {
+            _id = texGenId;
         }
 
         public void LoadFromData(IntPtr data, int width, int height)

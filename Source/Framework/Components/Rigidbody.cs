@@ -158,7 +158,7 @@ namespace OpenGLF
             vertices = new List<Vector>();
         }
 
-        internal override void start()
+        public override void start()
         {
             float angle = (float)gameObject.angle;
             
@@ -196,6 +196,8 @@ namespace OpenGLF
             if (onCollision != null)
             {
                 GameObject col = null;
+
+                /*
                 for (int i = 0; i < Engine.scene.objects.Count; i++)
                 {
                     if (Engine.scene.objects[i].rigidbody != null)
@@ -203,19 +205,26 @@ namespace OpenGLF
                         if (Engine.scene.objects[i].rigidbody.fixture[j] == fixtureB)
                             col = Engine.scene.objects[i];
                 }
+                */
+                Engine.scene.GameObjectRoot.ForeachCall((obj,state)=> {
+                    for (int j = 0; j < obj.rigidbody.fixture.Count; j++)
+                        if (obj.rigidbody.fixture[j] == fixtureB)
+                            col = obj;
+                    return false;
+                });
                 
                 onCollision(col);
             }
             return true;
         }
 
-        internal override void update()
+        public override void update()
         {
             gameObject.position = new Vector(body.Position.X, body.Position.Y);
             gameObject.angle = (float)Mathf.toDegrees(body.Rotation);
         }
 
-        internal override void draw(OpenTK.Graphics.OpenGL.RenderingMode mode)
+        public override void draw(OpenTK.Graphics.OpenGL.RenderingMode mode)
         {
             if (Engine.debugPhysics == true)
             {

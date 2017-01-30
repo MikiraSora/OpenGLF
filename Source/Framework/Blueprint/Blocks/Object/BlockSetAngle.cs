@@ -16,8 +16,10 @@ namespace OpenGLF
             c_gameObject = new Connector(this, ConnectorType.Input);
             c_gameObject.name = "GameObject";
             GameObject obj = new GameObject();
+            /*
             if (Engine.scene != null)
                 Engine.scene.objects.Remove(obj);
+                */
             c_gameObject.value = obj;
 
             c_angle = new Connector(this, ConnectorType.Input);

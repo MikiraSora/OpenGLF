@@ -103,7 +103,7 @@ namespace OpenGLF
             //GL.DeleteBuffer(tId);
         }
 
-        internal override void draw(RenderingMode renderMode)
+        public override void draw(RenderingMode renderMode)
         {
             if (gameObject != null)
             {

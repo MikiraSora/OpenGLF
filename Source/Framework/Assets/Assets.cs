@@ -128,7 +128,7 @@ namespace OpenGLF
 
                 if (Engine.scene != null)
                 {
-                    foreach (GameObject obj in Engine.scene.objects)
+                    foreach (GameObject obj in Engine.scene.GameObjectRoot.getAllChildren())
                     {
                         foreach (Component cmp in obj.components)
                         {
@@ -159,7 +159,7 @@ namespace OpenGLF
                                                 switch (field.FieldType.Name)
                                                 {
                                                     case "GameObject":
-                                                        beh.fields[field.Name] = Engine.scene.objects[0];
+                                                        beh.fields[field.Name] = Engine.scene.GameObjectRoot;
                                                         break;
                                                     case "Material":
                                                         beh.fields[field.Name] = (Material)Assets.find(typeof(Material));

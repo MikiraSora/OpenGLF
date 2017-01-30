@@ -530,7 +530,8 @@ namespace OpenGLF
         {
             if (Engine.scene != null)
             {
-                foreach (GameObject o in Engine.scene.objects)
+                Engine.scene.GameObjectRoot.ForeachCall((o, state) =>
+                //foreach (GameObject o in Engine.scene.objects)
                 {
                     if (o.rigidbody != null)
                     {
@@ -560,7 +561,8 @@ namespace OpenGLF
                             }
                         }
                     }
-                }
+                    return false;
+                });
             }
         }
 

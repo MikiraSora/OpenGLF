@@ -26,12 +26,12 @@ namespace OpenGLF
             } 
         }
 
-        internal override void start()
+        public override void start()
         {
             Engine.sound.SoundVolume = _volume;
         }
 
-        internal override void update()
+        public override void update()
         {
             Engine.sound.SetListenerPosition(new Vector3D((float)gameObject.position.x, (float)gameObject.position.y, 200), new Vector3D(0, 0, 1));
         }
