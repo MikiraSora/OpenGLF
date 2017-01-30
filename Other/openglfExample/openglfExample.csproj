@@ -64,7 +64,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenGLF\Source\Framework\Framework.csproj">
+    <ProjectReference Include="..\..\Source\Framework\Framework.csproj">
       <Project>{e9b2e136-8fb7-4383-91df-2ce1d68246c5}</Project>
       <Name>Framework</Name>
     </ProjectReference>
