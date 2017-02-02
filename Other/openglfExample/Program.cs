@@ -16,8 +16,7 @@ namespace openglfExample
 
     class GameWindow : Window
     {
-        GameObject gameObj,frameGameObj;
-        OpenGLF.Font font;
+        OpenGLF.Font font = new OpenGLF.Font("Assets/OpenSans-Bold.ttf");
 
         protected override void OnLoad(EventArgs e)
         {
@@ -28,49 +27,24 @@ namespace openglfExample
             Engine.scene = new Scene();
             engine.resize(800, 600);
 
-            var gameObject = new GameObject();
+            GameObject gameobject = new GameObject();
 
-            string[] texArr = new string[31];
-            for (int i = 0; i < 31; i++)
-                texArr[i] = string.Format(@"Assets/menu-back-{0}.png", i);
+            gameobject.position = new Vector(Width / 2, Height / 2);
+            gameobject.name = "base";
+            Engine.scene.GameObjectRoot.addChild(gameobject);
 
-            AnimationTextureSprite sprite = new AnimationTextureSprite(texArr);
-            sprite.speed = 6.0f;
+            GameObject cursor = new GameObject();
+            gameobject.addChild(cursor);
 
-            sprite.width = sprite.Textures.frames[0].bitmap.Width;
-            sprite.height = sprite.Textures.frames[0].bitmap.Height;
-            sprite.scale = new Vector(1.5f, 1.5f);
+            cursor.localPosition = new Vector(-100, 0);
+            cursor.name = "cursor";
+            cursor.components.Add(new TextureSprite("Assets/cursor.png"));
+            cursor.sprite.width = ((TextureSprite)cursor.sprite).Texture.bitmap.Width;
+            cursor.sprite.height = ((TextureSprite)cursor.sprite).Texture.bitmap.Height;
+            cursor.sprite.center = new Vector(cursor.sprite.width/2, cursor.sprite.height/2);
 
-            gameObject.components.Add(sprite);
 
-            gameObject.angle = 0;
-            gameObject.position = new Vector(Width / 2, Height / 2);
-            gameObject.sprite.center = new Vector(sprite.Textures.frames[0].bitmap.Width / 2, sprite.Textures.frames[0].bitmap.Height / 2);
-
-            gameObj = new BlurBall(1,Width, Height);
-
-            //((BlurBall)gameObj).Blur = false;
-            /*
-            frameGameObj = new GameObject();
-            frameGameObj.components.Add(new TextureSprite(((BlurBall)gameObj).Frames[0].Texture,Width,Height));
-            */
-            Engine.scene.GameObjectRoot.GameObjectChildren.Add(gameObj);
-
-            Engine.scene.GameObjectRoot.GameObjectChildren.Add(gameObject);
-
-            CircleBall ball = new CircleBall();
-
-            Engine.scene.GameObjectRoot.GameObjectChildren.Add(ball);
-
-            var rtex = new Texture("Assets/cursor.png");
-            ReflectionBall rball;
-            for (int i = 0; i < 40; i++) {
-                rball = new ReflectionBall(rtex, (float)OpenGLF.Random.range(0+100, Width-100), (float)OpenGLF.Random.range(0+100, Height-100));
-                Engine.scene.GameObjectRoot.GameObjectChildren.Add(rball);
-            }
-
-            font = new OpenGLF.Font("Assets/OpenSans-Bold.ttf");
-
+            #region debugDraw
             //Draw XY for debug
             engine.beforeDraw += () =>
             {
@@ -83,6 +57,14 @@ namespace openglfExample
             {
                 //Drawing.drawText(new Vector(Width - 250, Height - 30), Vector.zero, new Vector(1, 1), 0, 250, 50, string.Format("r:{0:F2}ms,u:{1:F2}ms", (RenderTime * 100), (UpdateTime * 100)), new OpenGLF.Color(0,125,125,125), 20, font);
             };
+#endregion
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+            GameObject selectObj = engine.selectAt(e.X,e.Y);
+            Console.WriteLine("select objName = {0}\tx:{1} y:{2} offsetDepth:{3} AbsoluteDepth={4}\n-----------------",selectObj.name,selectObj.position.x,selectObj.position.y,selectObj.depth,selectObj.FullDepth);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -100,16 +82,9 @@ namespace openglfExample
     {
         static void Main(string[] args)
         {
-            IntPtr allocMessage = new IntPtr(1024);
-            //GL.DebugMessageCallback(onDebugMessage, IntPtr.Zero);
+
             GameWindow mainWindow = new GameWindow();
             mainWindow.Run();
-        }
-
-        public static void onDebugMessage(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
-        {
-            string ss = Marshal.PtrToStringAuto(message,length);
-            Console.WriteLine("{0}-{1} id {2}:{3}",source.ToString(),severity.ToString(),id,message);
         }
     }
 }

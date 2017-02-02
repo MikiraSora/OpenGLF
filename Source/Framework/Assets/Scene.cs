@@ -22,8 +22,9 @@ namespace OpenGLF
         public GameObject GameObjectRoot { private set { } get { return gameObjectRoot; } }
 
         public Scene(){
-            name = "New scene";
+            name = "Default Scene";
             gameObjectRoot = new GameObject();
+            gameObjectRoot.name = "root";
             data = new Dictionary<string, object>();
         }
 

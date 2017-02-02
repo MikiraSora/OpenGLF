@@ -29,6 +29,8 @@ namespace OpenGLF
         public Camera camera;
         public Rigidbody rigidbody;
 
+        static int gen_ID =0;
+
         public delegate bool ForeachCallFunc(GameObject obj, object state = null);
 
         [Category("Transform")]
@@ -189,9 +191,40 @@ namespace OpenGLF
         {
             get
             {
+                /*
                 if (Engine.scene != null)
                     return Engine.scene.GameObjectRoot.getAllChildren().IndexOf(this);
-                else return 0;
+                    else return 0;
+                    */
+                Int result=new Int();
+                result.value = 0;
+                int index = 0;
+                if (_parent != null)
+                {
+                    _parent.ForeachCall((child, state) =>
+                    {
+                        if (child == this)
+                        {
+                            result.value = index;
+                            return true;
+                        }
+                        index++;
+                        return false;
+                    }, null);
+                    /*
+                    Engine.scene.GameObjectRoot.ForeachCall((child, state) =>
+                    {
+                        if (child == this)
+                        {
+                            result.value = index;
+                            return true;
+                        }
+                        index++;
+                        return false;
+                    }, null);
+                    */
+                }
+                return result.value-1;
             }
             set
             {
@@ -203,23 +236,25 @@ namespace OpenGLF
         {
             try
             {
-                //todo
-                /*
-                    deal with global depth postion map to current parent position;
-                 */
-                 /*
-                if (Engine.scene.GameObjectRoot.getAllChildren().IndexOf(this) > -1)
-                {
-                    if (d <= 1) d = 1;
-                    if (d >= Engine.scene.GameObjectRoot.getAllChildren().Count) d = Engine.scene.GameObjectRoot.getAllChildren().Count - 1;
-
-                    Engine.scene.objects.Remove(this);
-                    Engine.scene.objects.Insert(d, this);
-                }*/
+                var max = _children.Count;
+                d = max > d ? max : d;
+                var parent = _parent;
+                _parent.removeChild(this);
+                _parent.addChild(this, d);
             }
             catch
             {
                 Console.WriteLine("Ошибка изменения глубины");
+            }
+        }
+
+        public int FullDepth
+        {
+            get
+            {
+                int result = 0;
+                result = depth + (_parent == null ? 0 : _parent.FullDepth);
+                return result;
             }
         }
 
@@ -266,9 +301,25 @@ namespace OpenGLF
             }
             */
             name = "Game Object";
+            _id = gen_ID++;
 
             createInstances();
             start();
+        }
+
+        public void addChild(GameObject obj,int position=-1)
+        {
+            if (obj._parent != null)
+                obj._parent.removeChild(obj);
+            obj._parent = this;
+            position = position<0? _children.Count:position > _children.Count ? _children.Count : position;
+            _children.Insert(position,obj);
+        }
+
+        public void removeChild(GameObject obj)
+        {
+            _children.Remove(obj);
+            obj._parent = null;
         }
 
         public static GameObject getRoot(GameObject obj)

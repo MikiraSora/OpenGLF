@@ -324,7 +324,6 @@ namespace OpenGLF
         private void onDeserialized(StreamingContext context)
         {
             //_frame = 0;
-            
         }
     }
 }

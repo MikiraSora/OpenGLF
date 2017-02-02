@@ -70,6 +70,100 @@ namespace OpenGLF
             GL.Viewport(0, 0, Screen.width, Screen.height);
         }
 
+        /*
+         public void draw(RenderingMode mode, bool callObjectDraw)
+        {
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            if (scene != null)
+                if (Camera.main != null)
+                {
+                    Color clr = Camera.main.backColor;
+                    GL.ClearColor(1.0f / 255.0f * clr.r, 1.0f / 255.0f * clr.g, 1.0f / 255.0f * clr.b, 1.0f / 255.0f * clr.a);
+                }
+                else
+                    GL.ClearColor(System.Drawing.Color.FromArgb(Color.gray.a, Color.gray.r, Color.gray.g, Color.gray.b));
+            else
+                GL.ClearColor(System.Drawing.Color.Black);
+
+            GL.ClearDepth(1.0f);
+
+            if (Engine.scene != null)
+            {
+                if (nodraw == false)
+                {
+                    GL.MatrixMode(MatrixMode.Projection);
+                    GL.LoadIdentity();
+
+                    if (Engine.scene.mainCamera != null)
+                    {
+                        float xx = -(Screen.width / 2);
+                        float yy = -(Screen.height / 2);
+                        float ww = Screen.width + xx;
+                        float hh = Screen.height + yy;
+
+                        float zoom = Engine.scene.mainCamera.z;
+                        if (zoom < 0.01f) zoom = 0.01f;
+
+                        GL.Ortho(xx * zoom, ww * zoom, hh * zoom, yy * zoom, 0, 100);
+                        GL.Translate(-Engine.scene.mainCamera.gameObject.position.x, -Engine.scene.mainCamera.gameObject.position.y, 0);
+                    }
+                    else
+                    {
+                        GL.Ortho(0, Screen.width, Screen.height, 0, 0, 100);
+                        GL.Translate(0, 0, 0);
+                    }
+
+                    GL.MatrixMode(MatrixMode.Modelview);
+                    GL.LoadIdentity();
+
+                    if (beforeDraw != null)
+                        beforeDraw();
+                }
+
+                for (int i = 0; i < Engine.scene.objects.Count; i++)
+                {
+                    GameObject obj = Engine.scene.objects[i];
+
+                    if (callObjectDraw == true)
+                    {
+                        obj.beforeDraw();
+                    }
+
+                    for (int j = 0; j < obj.components.Count; j++)
+                    {
+                        if (obj.components[j].enabled)
+                            obj.components[j].draw(mode);
+                    } 
+                }
+
+                GL.ActiveTexture(TextureUnit.Texture0);
+                GL.BindTexture(TextureTarget.Texture2D, -1);
+
+                if (callObjectDraw == true)
+                {
+                    for (int i = 0; i < Engine.scene.objects.Count; i++)
+                    {
+                        GameObject obj = Engine.scene.objects[i];
+
+                        obj.afterDraw();
+                    }
+                }
+
+                if (nodraw == false)
+                {
+                    if (afterDraw != null)
+                        afterDraw();
+                }
+            }
+            else
+            {
+                GL.ActiveTexture(TextureUnit.Texture0);
+                GL.BindTexture(TextureTarget.Texture2D, -1);
+            }
+        }
+             */
+
         public void draw(RenderingMode mode, bool callObjectDraw)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -128,7 +222,7 @@ namespace OpenGLF
                     if (callObjectDraw == true)
                     {
                         obj.prepareDraw();
-                    }
+                          }
                     
                     for (int j = 0; j < obj.components.Count; j++)
                     {
@@ -234,13 +328,15 @@ namespace OpenGLF
 
                 GL.InitNames();
                 GL.PushName(0);
-
+                
                 GL.MatrixMode(MatrixMode.Projection);
                 GL.PushMatrix();
 
+                GL.LoadIdentity();
+
                 GL.GetInteger(GetPName.Viewport, viewport);
 
-                Glu.gluPickMatrix(x, y, 0.001f, 0.001f, viewport);
+                Glu.gluPickMatrix(x, y, 0.002f, 0.002f, viewport);
 
                 if (Engine.scene.mainCamera != null)
                 {
@@ -260,10 +356,11 @@ namespace OpenGLF
                     GL.Ortho(0, viewport[2], 0, viewport[3], 0, 100);
                     GL.Translate(0, 0, 0);
                 }
-
+                
                 GL.MatrixMode(MatrixMode.Modelview);
                 GL.PushMatrix();
-
+                GL.LoadIdentity();
+                
                 nodraw = true;
                 draw(RenderingMode.Select, false);
                 nodraw = false;
@@ -277,11 +374,16 @@ namespace OpenGLF
 
                 int hits = GL.RenderMode(RenderingMode.Render);
 
+                Console.WriteLine("select x:{0} y{1} hits:{2}",x,y,hits);
+
                 uint closest = uint.MaxValue;
                 int selectedId = -1;
+                int id;
+                uint minDepth, maxDepth;
 
                 for (int i = 0; i < hits; i++)
                 {
+                    
                     uint distance = (uint)sz[i * 4 + 1];
 
                     if (closest >= distance)
@@ -289,6 +391,7 @@ namespace OpenGLF
                         closest = distance;
                         selectedId = (int)sz[i * 4 + 3];
                     }
+                    
                 }
                 GameObject o = null;
 
