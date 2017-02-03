@@ -37,12 +37,25 @@ namespace openglfExample
             gameobject.addChild(cursor);
 
             cursor.localPosition = new Vector(-100, 0);
-            cursor.name = "cursor";
+            cursor.name = "red cursor";
             cursor.components.Add(new TextureSprite("Assets/cursor.png"));
             cursor.sprite.width = ((TextureSprite)cursor.sprite).Texture.bitmap.Width;
             cursor.sprite.height = ((TextureSprite)cursor.sprite).Texture.bitmap.Height;
             cursor.sprite.center = new Vector(cursor.sprite.width/2, cursor.sprite.height/2);
 
+            cursor.components.Add(new Selectable());
+
+            GameObject cursor2 = new GameObject();
+            gameobject.addChild(cursor2);
+
+            cursor2.localPosition = new Vector(100, 0);
+            cursor2.name = "green cursor";
+            cursor2.components.Add(new TextureSprite("Assets/cursor.png"));
+            cursor2.sprite.width = ((TextureSprite)cursor.sprite).Texture.bitmap.Width;
+            cursor2.sprite.height = ((TextureSprite)cursor.sprite).Texture.bitmap.Height;
+            cursor2.sprite.center = new Vector(cursor.sprite.width / 2, cursor.sprite.height / 2);
+
+            cursor2.components.Add(new Selectable());
 
             #region debugDraw
             //Draw XY for debug
@@ -63,7 +76,9 @@ namespace openglfExample
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);
-            GameObject selectObj = engine.selectAt(e.X,e.Y);
+            GameObject selectObj = SelectManager.selectGameObject(e.X,e.Y);
+            if (selectObj == null)
+                return;
             Console.WriteLine("select objName = {0}\tx:{1} y:{2} offsetDepth:{3} AbsoluteDepth={4}\n-----------------",selectObj.name,selectObj.position.x,selectObj.position.y,selectObj.depth,selectObj.FullDepth);
         }
 

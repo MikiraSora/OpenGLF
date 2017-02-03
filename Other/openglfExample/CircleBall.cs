@@ -27,8 +27,10 @@ namespace openglfExample
             public override void update()
             {
                 base.update();
+                /*
                 angle += 0.02f;
                 this.gameObject.position = new Vector(Window.CurrentWindow.Width / 2+(float)Math.Cos(angle)*200, Window.CurrentWindow.Height / 2+(float)Math.Sin(angle)*200);
+                */
             }
         }
     }

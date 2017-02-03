@@ -366,6 +366,8 @@ namespace OpenGLF
                 nodraw = false;
 
                 GL.PopMatrix();
+
+                GL.MatrixMode(MatrixMode.Projection);
                 GL.PopMatrix();
 
                 GL.Flush();

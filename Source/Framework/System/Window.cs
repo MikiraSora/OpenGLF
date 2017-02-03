@@ -17,7 +17,7 @@ namespace OpenGLF
 {
     public class Window : OpenTK.GameWindow
     {
-        protected Engine engine;
+        public Engine engine;
         static Window self;
         public static bool showCursor { get { return self.CursorVisible; } set { self.CursorVisible = value; } }
 

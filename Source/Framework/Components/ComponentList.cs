@@ -62,6 +62,7 @@ namespace OpenGLF
                 {
                     T.gameObject = gameObject;
                     this.List.Add(T);
+                    T.attach();
                 }
             }
             gameObject.setComponents();
@@ -91,31 +92,27 @@ namespace OpenGLF
             }
 
             gameObject.setComponents();
+            T.attach();
         }
 
         public void Remove(Component T)
         {
+            T.detach();
             T.gameObject = null;
-            this.List.Remove(T);
+            this.List.Remove(T);          
         }
 
         public void RemoveAll(Predicate<Component> match)
         {
-            for (int i = 0; i < Count; i++)
-            {
-                this[i].gameObject = null;
-            }
-
             while (this.List.Count > 0)
             {
-                this.List.RemoveAt(0);
+                Remove((Component)this.List[0]);
             }
         }
 
         public new void RemoveAt(int index)
         {
-            this[index].gameObject = null;
-            base.RemoveAt(index);
+            Remove((Component)this.List[index]);
         }
 
         public void RemoveRange(int index, int count)
@@ -123,9 +120,12 @@ namespace OpenGLF
             int i = 0;
             while(i < count)
             {
+                /*
                 this[index + i].gameObject = null;
                 this.List.Remove(this[index + i]);
-                i+=1;
+                */
+                Remove((Component)this.List[index]);
+                i +=1;
             }
         }
 

@@ -80,13 +80,13 @@ namespace OpenGLF
 
                 GL.CompileShader(vertexShader);
                 GL.CompileShader(fragmentShader);
-
+                /*
                 if (!String.IsNullOrEmpty(GL.GetShaderInfoLog(vertexShader)))
                     Console.WriteLine(GL.GetShaderInfoLog(vertexShader));
 
                 if (!String.IsNullOrEmpty(GL.GetShaderInfoLog(fragmentShader)))
                     Console.WriteLine(GL.GetShaderInfoLog(fragmentShader));
-
+                    */
                 program = GL.CreateProgram();
 
                 GL.AttachShader(program, vertexShader);

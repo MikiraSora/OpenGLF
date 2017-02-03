@@ -174,7 +174,7 @@ namespace OpenGLF
         public int ID { get { return _id; } }
 
         [Category("Components")]
-        public ComponentList components { get; set; }
+        public ComponentList components {get; set;}
 
         [Category("GameObject")]
         public GameObjectList GameObjectChildren {

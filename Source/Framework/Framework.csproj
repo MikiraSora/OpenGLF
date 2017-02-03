@@ -87,6 +87,7 @@
     <Compile Include="Blueprint\Blocks\Object\BlockSetAngle.cs" />
     <Compile Include="Blueprint\Blocks\Object\BlockMove.cs" />
     <Compile Include="Blueprint\Blocks\Variables\BlockFloat.cs" />
+    <Compile Include="Components\Selectable.cs" />
     <Compile Include="Components\Tile.cs" />
     <Compile Include="Blueprint\Blocks\Block.cs" />
     <Compile Include="Assets\Blueprint.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="System\Input.cs" />
     <Compile Include="System\Physics.cs" />
     <Compile Include="Shaders\Shaders.cs" />
+    <Compile Include="System\SelectManager.cs" />
     <Compile Include="Utils\BezierCurveCubic.cs" />
     <Compile Include="Utils\Mathf.cs" />
     <Compile Include="Components\Camera.cs" />

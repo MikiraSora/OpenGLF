@@ -22,6 +22,16 @@ namespace OpenGLF
         public virtual void start() { }
         public virtual void update() { }
         public virtual void draw(RenderingMode mode) { }
+        
+        public virtual void attach()
+        {
+
+        }
+
+        public virtual void detach()
+        {
+
+        }
 
         public Component()
         {

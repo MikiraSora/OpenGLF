@@ -11,6 +11,13 @@ namespace OpenGLF
         public Shader defaultShader { get { return _defaultShader; } protected set { _defaultShader = value; } }
         public Shader guiShader { get; protected set; }
 
+        public string selectFragShader =
+            "uniform vec4 code;"+
+            "void main()" +
+            "{" +
+            "gl_FragColor=vec4(code.r/255.0,code.g/255.0,code.b/255.0,code.a/255.0);" +
+            "}";
+
         public Shaders()
         {
             _defaultShader = new Shader();
