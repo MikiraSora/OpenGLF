@@ -36,8 +36,11 @@ namespace OpenGLF
             }
             saveShader = gameObject.sprite.material.shader;
             gameObject.sprite.material.shader = currentShader;
-            byte[] codeArr = ByteConverter.intToBytes(gameObject.ID);
+
+            byte[] codeArr = ByteConverter.intToBytes(gameObject.ID);//int to byte[4]
+
             gameObject.sprite.material.parameters["code"] = new Vec4(codeArr[0], codeArr[1], codeArr[2],codeArr[3]);
+
             hashSave = saveShader.GetHashCode();
         }
 

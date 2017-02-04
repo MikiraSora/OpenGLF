@@ -17,10 +17,13 @@ namespace openglfExample
     class GameWindow : Window
     {
         OpenGLF.Font font = new OpenGLF.Font("Assets/OpenSans-Bold.ttf");
+        static byte[] colorBuffer = new byte[4];
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            Engine.debugGameObject = true;
 
             Title = "OpenGLF_Ex test";
 
@@ -33,29 +36,19 @@ namespace openglfExample
             gameobject.name = "base";
             Engine.scene.GameObjectRoot.addChild(gameobject);
 
-            GameObject cursor = new GameObject();
-            gameobject.addChild(cursor);
+            GameObject textGameObject = new GameObject();
+            textGameObject.components.Add(new TextureSprite(font.GenTexture("Hello,OpenGLF!",153,27,20,new OpenGLF.Color(255,0,0,255))));
+            gameobject.addChild(textGameObject);
+            textGameObject.localPosition = new Vector(0, 0);
+            textGameObject.sprite.width = ((TextureSprite)textGameObject.sprite).Texture.bitmap.Width;
+            textGameObject.sprite.height = ((TextureSprite)textGameObject.sprite).Texture.bitmap.Height;
+            textGameObject.sprite.center = new Vector(textGameObject.sprite.width/2, textGameObject.sprite.height/2);
+            textGameObject.name = "text";
+            textGameObject.components.Add(new Selectable());
 
-            cursor.localPosition = new Vector(-100, 0);
-            cursor.name = "red cursor";
-            cursor.components.Add(new TextureSprite("Assets/cursor.png"));
-            cursor.sprite.width = ((TextureSprite)cursor.sprite).Texture.bitmap.Width;
-            cursor.sprite.height = ((TextureSprite)cursor.sprite).Texture.bitmap.Height;
-            cursor.sprite.center = new Vector(cursor.sprite.width/2, cursor.sprite.height/2);
+            var size = font.calculateSize("Hello,OpenGLF!", 20);
 
-            cursor.components.Add(new Selectable());
-
-            GameObject cursor2 = new GameObject();
-            gameobject.addChild(cursor2);
-
-            cursor2.localPosition = new Vector(100, 0);
-            cursor2.name = "green cursor";
-            cursor2.components.Add(new TextureSprite("Assets/cursor.png"));
-            cursor2.sprite.width = ((TextureSprite)cursor.sprite).Texture.bitmap.Width;
-            cursor2.sprite.height = ((TextureSprite)cursor.sprite).Texture.bitmap.Height;
-            cursor2.sprite.center = new Vector(cursor.sprite.width / 2, cursor.sprite.height / 2);
-
-            cursor2.components.Add(new Selectable());
+            Console.WriteLine("font width:{0}\theight:{1}",size.x,size.y);
 
             #region debugDraw
             //Draw XY for debug
@@ -71,6 +64,14 @@ namespace openglfExample
                 //Drawing.drawText(new Vector(Width - 250, Height - 30), Vector.zero, new Vector(1, 1), 0, 250, 50, string.Format("r:{0:F2}ms,u:{1:F2}ms", (RenderTime * 100), (UpdateTime * 100)), new OpenGLF.Color(0,125,125,125), 20, font);
             };
 #endregion
+        }
+
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            //GL.ReadPixels<byte>(e.X,e.Y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, colorBuffer);
+            //Console.WriteLine("x:{0}\ty:{1}\t---r:{2}g:{3}b:{4}a:{5}",e.X,e.Y,colorBuffer[0], colorBuffer[1],colorBuffer[2],colorBuffer[3]);
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)

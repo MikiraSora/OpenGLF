@@ -11,6 +11,9 @@ namespace OpenGLF
         public Shader defaultShader { get { return _defaultShader; } protected set { _defaultShader = value; } }
         public Shader guiShader { get; protected set; }
 
+        Shader _debugGameObjectShader = null;
+        public Shader debugGameObjectShader { get { return _debugGameObjectShader; } protected set { _debugGameObjectShader = value; } }
+
         public string selectFragShader =
             "uniform vec4 code;"+
             "void main()" +
@@ -42,6 +45,22 @@ namespace OpenGLF
                         "}";
 
             guiShader.compile();
+
+            _debugGameObjectShader = new Shader();
+
+            _debugGameObjectShader.vertexProgram= 
+                        "void main(void)" +
+                        "{" +
+                            "gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;" +
+                            "gl_Position = ftransform();" +
+                        "}";
+            _debugGameObjectShader.fragmentProgram =
+                        "uniform vec4 colorkey;" +
+                        "void main(void)" +
+                        "{" +
+                            "gl_FragColor = vec4(colorkey.r,colorkey.g,colorkey.b,colorkey.a);" +
+                        "}";
+            _debugGameObjectShader.compile();
         }
     }
 }

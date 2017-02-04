@@ -23,6 +23,8 @@ namespace OpenGLF
         Vector _scale = new Vector(1, 1);
         Material _material;
 
+        Vec4 debugColor = new Vec4((float)Random.range(0, 1), (float)Random.range(0, 1), (float)Random.range(0, 1), 0.35f);
+
         [Category("Transform")]
         public Vector center { get { return _center; } set { _center = value; vboUpdate(); } }
 
@@ -204,6 +206,26 @@ namespace OpenGLF
 
                 //Рисуем
                 GL.DrawArrays(PrimitiveType.Quads, 0, vertexBuf.Length);
+
+                if (Engine.debugGameObject&&!SelectManager.isSelecting)
+                {
+                    var SaveShader = material.shader;
+
+                    //load debugShader
+                    material.shader = Engine.shaders.debugGameObjectShader;
+
+                    var SaveColor = material.parameters["colorkey"];
+                    
+
+                    material.shader.begin();
+                    material.parameters["colorkey"] = debugColor;
+
+                    material.shader.pass("colorkey", (Vec4)material.parameters["colorkey"]);
+                    GL.DrawArrays(PrimitiveType.Quads, 0, vertexBuf.Length);
+
+                    material.parameters["colorkey"] = SaveColor;
+                    material.shader = SaveShader;
+                }
 
                 //Убираем текстуры
                 if (material != null && material.shader != null)

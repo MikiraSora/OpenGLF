@@ -117,6 +117,50 @@ namespace OpenGLF
             LoadFromByteArray(bytes);
         }
 
+        public Texture GenTexture(string text,int width,int height, int size, Color color, FontStyle style= FontStyle.Regular)
+        {
+            Bitmap bitmap = new Bitmap(width, height);
+            Graphics g = Graphics.FromImage(bitmap);
+
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+
+            g.Clear(System.Drawing.Color.Transparent);
+
+            g.DrawString(text, font, new SolidBrush(System.Drawing.Color.FromArgb(color.a, color.r, color.g, color.b)), new PointF(0, 0));
+
+            Texture tex = new Texture();
+            tex.LoadFromBitmap(bitmap);
+
+            return tex;
+        }
+
+        public Vector calculateSize(string text,int size,int maxWidthSize=0,FontStyle style=FontStyle.Regular,StringFormat format=null)
+        {
+            Bitmap bitmap = new Bitmap(1, 1);
+            Graphics g = Graphics.FromImage(bitmap);
+
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+
+            g.Clear(System.Drawing.Color.Transparent);
+
+            SizeF sizef = new SizeF();
+
+            if(format==null)
+                sizef=g.MeasureString(text, this.font, maxWidthSize);
+            else
+                sizef = g.MeasureString(text, this.font, maxWidthSize,format);
+
+            if (sizef.IsEmpty)
+                throw new Exception("sizef is empty");
+
+            var result=new Vector(sizef.Width,sizef.Height);
+
+            bitmap.Dispose();
+            return result;
+        }
+
         internal void renderString(Vector position, Vector center, Vector scale, int angle, int width, int height, string text, Color color, int size)
         {
             Vector[] vertexBuf = new Vector[4];
@@ -160,6 +204,7 @@ namespace OpenGLF
             g.Clear(System.Drawing.Color.Transparent);
 
             font = new System.Drawing.Font(font.FontFamily, size, FontStyle.Regular);
+
             g.DrawString(text, font, new SolidBrush(System.Drawing.Color.FromArgb(color.a, color.r, color.g, color.b)), new PointF(0, 0));
 
             if (bitmap != null)
@@ -196,6 +241,7 @@ namespace OpenGLF
 
                 bitmap.Dispose();
                 g.Dispose();
+                font.Dispose();
                 tex.Dispose();
             }
 

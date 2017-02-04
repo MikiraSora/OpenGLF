@@ -23,6 +23,7 @@ namespace OpenGLF
         internal static ISoundEngine sound;
         public static bool debugPhysics = false;
         public static bool debugGUI = false;
+        public static bool debugGameObject = false;
         public static Scene scene { get { return _scene; } set { _scene = value; Assets._assets = Assets.items.Count; } }
         public delegate void OnDraw();  
         public event OnDraw afterDraw;

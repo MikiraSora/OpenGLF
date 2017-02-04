@@ -14,6 +14,8 @@ namespace OpenGLF
         static IntPtr color = Marshal.AllocHGlobal(4);
         static byte[] colorBuffer = new byte[4];
 
+        public static bool isSelecting = false;
+
         public static void registerSelectObject(GameObject gameObject)
         {
             if (gameObject.sprite == null)
@@ -30,6 +32,7 @@ namespace OpenGLF
 
         public static GameObject selectGameObject(int x,int y)
         {
+            isSelecting = true;
             List<GameObject> result = new List<GameObject>();
 
             Selectable selector;
@@ -37,10 +40,10 @@ namespace OpenGLF
 
             foreach(var obj in registerGameObject)
             {
-                
-                obj.getComponent<Selectable>().beforeSelect(ref result, x, y);
+                selector = obj.getComponent<Selectable>();
+                selector.beforeSelect(ref result, x, y);
                 obj.draw(RenderingMode.Render);
-                obj.getComponent<Selectable>().afterSelect();
+                selector.afterSelect();
             }
             
             GL.ReadPixels<byte>(x,y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, colorBuffer);
@@ -48,6 +51,7 @@ namespace OpenGLF
             int id = ByteConverter.byteToInt(colorBuffer);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            isSelecting = false;
             return Engine.scene.GameObjectRoot.findId(id);
         }
     }
