@@ -22,6 +22,11 @@ namespace OpenGLF
             this.interpolator = interpolator;
             _timeEnd = timeEnd;
             _timeStart = timeStart;
+            if (interpolator != null)
+            {
+                this.interpolator.start = _timeStart;
+                this.interpolator.end = _timeEnd;
+            }
         }
 
         private ActionBase() : this(0,0,new LinearInterpolator(),null){}
@@ -38,12 +43,15 @@ namespace OpenGLF
 
         public virtual void onStart()
         {
-
+            this.interpolator.start = _timeStart;
+            this.interpolator.end = _timeEnd;
         }
 
         public virtual void onFinish()
         {
-
+            //reset status
+            _done = false;
+            _totalTime = 0;
         }
 
         public virtual void onAction(float passTime)

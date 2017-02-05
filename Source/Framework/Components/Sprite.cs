@@ -191,7 +191,7 @@ namespace OpenGLF
                     }
                 }
 
-                GL.Translate(gameObject.position.x, gameObject.position.y, 0);
+                GL.Translate(gameObject.WorldPosition.x, gameObject.WorldPosition.y, 0);
                 GL.Rotate(gameObject.angle, 0, 0, 1);
                 GL.Scale(_scale.x, _scale.y, 1);
 
@@ -299,6 +299,31 @@ namespace OpenGLF
         public void stop()
         {
             _isplaying = false;
+        }
+
+        /// <summary>
+        /// you must override it if you dont need default shader and want your subclass to support for Color-Transform Action.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="g"></param>
+        /// <param name="b"></param>
+        /// <param name="a"></param>
+        public virtual void setColor(float r,float g,float b,float a)
+        {
+            if (material.shader == Engine.shaders.defaultShader)
+                material.parameters["colorkey"] = new Vec4(r,g,b,a);
+        }
+
+        /// <summary>
+        /// you must override it if you dont need default shader and want your subclass to support for Color-Transform Action.
+        /// </summary>
+        /// <returns></returns>
+        public virtual Vec4 getColor()
+        {
+            if (material.shader == Engine.shaders.defaultShader)
+                return (Vec4)material.parameters["colorkey"];
+
+            return null;
         }
 
         void setFrame(int frm)

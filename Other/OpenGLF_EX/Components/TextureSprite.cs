@@ -72,5 +72,10 @@ namespace OpenGLF_EX
         {
             Color = new Vec4(r, g, b, a);
         }
+
+        public override void setColor(float r, float g, float b, float a)
+        {
+            ChangeColor(r, g, b, a);
+        }
     }
 }

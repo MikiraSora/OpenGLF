@@ -178,7 +178,7 @@ namespace OpenGLF
 
             _vertices = FarseerPhysics.Common.Decomposition.Triangulate.ConvexPartition(vrts, TriangulationAlgorithm.Bayazit);
 
-            body = new Body(Engine.world, new Vector2((float)gameObject.position.x, (float)gameObject.position.y), (float)Mathf.toRadians(angle), FarseerPhysics.Dynamics.BodyType.Dynamic, null);
+            body = new Body(Engine.world, new Vector2((float)gameObject.WorldPosition.x, (float)gameObject.WorldPosition.y), (float)Mathf.toRadians(angle), FarseerPhysics.Dynamics.BodyType.Dynamic, null);
             setBodyType(bodyType);
             fixture = FixtureFactory.AttachCompoundPolygon(_vertices, 1.0f, body);
 
@@ -220,7 +220,7 @@ namespace OpenGLF
 
         public override void update()
         {
-            gameObject.position = new Vector(body.Position.X, body.Position.Y);
+            gameObject.LocalPosition = new Vector(body.Position.X, body.Position.Y);
             gameObject.angle = (float)Mathf.toDegrees(body.Rotation);
         }
 
@@ -231,7 +231,7 @@ namespace OpenGLF
                 if (mode == OpenTK.Graphics.OpenGL.RenderingMode.Render)
                 {
                     GL.PushMatrix();
-                    GL.Translate(gameObject.position.x, gameObject.position.y, 0);
+                    GL.Translate(gameObject.WorldPosition.x, gameObject.WorldPosition.y, 0);
 
                     GL.Rotate(gameObject.angle, 0, 0, 1);
 

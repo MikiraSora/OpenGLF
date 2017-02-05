@@ -47,8 +47,8 @@ namespace OpenGLF
 
             if (obj != null)
             {
-                obj.position += pos;
-                c_out_position.value = obj.position;
+                obj.LocalPosition += pos;
+                c_out_position.value = obj.LocalPosition;
             }
 
             doNext();

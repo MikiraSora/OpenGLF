@@ -366,20 +366,20 @@ namespace OpenGLF
 
             if (e.Button == System.Windows.Forms.MouseButtons.Middle)
             {
-                camMemory.x = -(e.X * zoom + canvas.camera.gameObject.position.x);
-                camMemory.y = -(e.Y * zoom + canvas.camera.gameObject.position.y);
+                camMemory.x = -(e.X * zoom + canvas.camera.gameObject.LocalPosition.x);
+                camMemory.y = -(e.Y * zoom + canvas.camera.gameObject.LocalPosition.y);
             }
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right && ModifierKeys == System.Windows.Forms.Keys.Shift)
             {
-                camMemory.x = -(e.X * zoom + canvas.camera.gameObject.position.x);
-                camMemory.y = -(e.Y * zoom + canvas.camera.gameObject.position.y);
+                camMemory.x = -(e.X * zoom + canvas.camera.gameObject.LocalPosition.x);
+                camMemory.y = -(e.Y * zoom + canvas.camera.gameObject.LocalPosition.y);
             }
 
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                float minx = canvas.camera.gameObject.position.x - glControl1.Width / 2 * zoom;
-                float miny = canvas.camera.gameObject.position.y - glControl1.Height / 2 * zoom;
+                float minx = canvas.camera.gameObject.LocalPosition.x - glControl1.Width / 2 * zoom;
+                float miny = canvas.camera.gameObject.LocalPosition.y - glControl1.Height / 2 * zoom;
 
                 bool sel = false;
 
@@ -404,8 +404,8 @@ namespace OpenGLF
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                float minx = canvas.camera.gameObject.position.x - glControl1.Width / 2 * zoom;
-                float miny = canvas.camera.gameObject.position.y - glControl1.Height / 2 * zoom;
+                float minx = canvas.camera.gameObject.LocalPosition.x - glControl1.Width / 2 * zoom;
+                float miny = canvas.camera.gameObject.LocalPosition.y - glControl1.Height / 2 * zoom;
                 Vector mousePos = new Vector(e.X * zoom, e.Y * zoom);
                 for (int i = 0; i < v.Count; i++)
                 {
@@ -424,15 +424,15 @@ namespace OpenGLF
         {
             float zoom = canvas.camera.z;
 
-            float minx = canvas.camera.gameObject.position.x - glControl1.Width / 2 * zoom;
-            float miny = canvas.camera.gameObject.position.y - glControl1.Height / 2 * zoom;
+            float minx = canvas.camera.gameObject.LocalPosition.x - glControl1.Width / 2 * zoom;
+            float miny = canvas.camera.gameObject.LocalPosition.y - glControl1.Height / 2 * zoom;
 
             if (e.Button == System.Windows.Forms.MouseButtons.Middle)
-                canvas.camera.gameObject.position = new Vector(-(e.X * zoom + camMemory.x), -(e.Y * zoom + camMemory.y));
+                canvas.camera.gameObject.LocalPosition = new Vector(-(e.X * zoom + camMemory.x), -(e.Y * zoom + camMemory.y));
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right && ModifierKeys == System.Windows.Forms.Keys.Shift)
             {
-                canvas.camera.gameObject.position = new Vector(-(e.X * zoom + camMemory.x), -(e.Y * zoom + camMemory.y));
+                canvas.camera.gameObject.LocalPosition = new Vector(-(e.X * zoom + camMemory.x), -(e.Y * zoom + camMemory.y));
             }
 
             if (e.Button == System.Windows.Forms.MouseButtons.Left)

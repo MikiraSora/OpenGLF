@@ -38,7 +38,7 @@ namespace OpenGLF
                     material.shader.pass("colorkey", new Vec4(1, 1, 1, 1));
                 }
 
-                GL.Translate(gameObject.position.x, gameObject.position.y, 0);
+                GL.Translate(gameObject.WorldPosition.x, gameObject.WorldPosition.y, 0);
                 GL.Rotate(gameObject.angle, 0, 0, 1);
                 GL.Scale(scale.x, scale.y, 1);
 

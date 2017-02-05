@@ -81,7 +81,7 @@ namespace OpenGLF
                 if (zoom < 0.01f) zoom = 0.01f;
 
                 GL.Ortho(xx * zoom, ww * zoom, hh * zoom, yy * zoom, 0, 100);
-                GL.Translate(-camera.gameObject.position.x, -camera.gameObject.position.y, 0);
+                GL.Translate(-camera.gameObject.LocalPosition.x, -camera.gameObject.LocalPosition.y, 0);
 
                 //Restore matrix
                 GL.MatrixMode(MatrixMode.Modelview);
@@ -133,7 +133,7 @@ namespace OpenGLF
                 if (zoom < 0.01f) zoom = 0.01f;
 
                 GL.Ortho(xx * zoom, ww * zoom, yy * zoom, hh * zoom, 0, 100);
-                GL.Translate(-camera.gameObject.position.x, -camera.gameObject.position.y, 0);
+                GL.Translate(-camera.gameObject.WorldPosition.x, -camera.gameObject.WorldPosition.y, 0);
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PushMatrix();

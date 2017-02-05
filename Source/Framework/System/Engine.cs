@@ -200,7 +200,7 @@ namespace OpenGLF
                         if (zoom < 0.01f) zoom = 0.01f;
 
                         GL.Ortho(xx * zoom, ww * zoom, hh * zoom, yy * zoom, 0, 100);
-                        GL.Translate(-Engine.scene.mainCamera.gameObject.position.x, -Engine.scene.mainCamera.gameObject.position.y, 0);
+                        GL.Translate(-Engine.scene.mainCamera.gameObject.LocalPosition.x, -Engine.scene.mainCamera.gameObject.LocalPosition.y, 0);
                     }
                     else
                     {
@@ -350,7 +350,7 @@ namespace OpenGLF
                     if (zoom < 0.01f) zoom = 0.01f;
 
                     GL.Ortho(xx * zoom, ww * zoom, yy * zoom, hh * zoom, 0, 100);
-                    GL.Translate(-Engine.scene.mainCamera.gameObject.position.x, -Engine.scene.mainCamera.gameObject.position.y, 0);
+                    GL.Translate(-Engine.scene.mainCamera.gameObject.WorldPosition.x, -Engine.scene.mainCamera.gameObject.WorldPosition.y, 0);
                 }
                 else
                 {

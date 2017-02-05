@@ -98,11 +98,11 @@ namespace OpenGLF
                 GL.LoadName(gameObject.ID);
             }
 
-            Drawing.drawText(gameObject.position, center, scale, 0, width, height, text, color, fontSize, font);
+            Drawing.drawText(gameObject.WorldPosition, center, scale, 0, width, height, text, color, fontSize, font);
 
             if (Engine.debugGUI)
             {
-                Drawing.drawQuad(gameObject.position, width * scale.x, height * scale.y, 1, false, Color.yellow);
+                Drawing.drawQuad(gameObject.WorldPosition, width * scale.x, height * scale.y, 1, false, Color.yellow);
             }
         }
 

@@ -87,6 +87,14 @@
     <Compile Include="Blueprint\Blocks\Object\BlockSetAngle.cs" />
     <Compile Include="Blueprint\Blocks\Object\BlockMove.cs" />
     <Compile Include="Blueprint\Blocks\Variables\BlockFloat.cs" />
+    <Compile Include="Components\Action\Action\ActionBase.cs" />
+    <Compile Include="Components\Action\ActionExecutor.cs" />
+    <Compile Include="Components\Action\Action\ColorToAction.cs" />
+    <Compile Include="Components\Action\Action\LoopAction.cs" />
+    <Compile Include="Components\Action\Action\ScaleToAction.cs" />
+    <Compile Include="Components\Action\Interpolator\IInterpolator.cs" />
+    <Compile Include="Components\Action\Interpolator\LinearInterpolator.cs" />
+    <Compile Include="Components\Action\Action\MoveToAction.cs" />
     <Compile Include="Components\Selectable.cs" />
     <Compile Include="Components\Tile.cs" />
     <Compile Include="Blueprint\Blocks\Block.cs" />
@@ -138,6 +146,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Shaders\Int.cs" />
+    <Compile Include="System\ActionManager.cs" />
     <Compile Include="System\GameObjectList.cs" />
     <Compile Include="Graphics\Color.cs" />
     <Compile Include="Graphics\GLCanvas.cs" />
@@ -184,6 +193,7 @@
     <Compile Include="System\Engine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System\GameObject.cs" />
+    <Compile Include="Utils\Time.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Editors\ComponentsEditor.resx">

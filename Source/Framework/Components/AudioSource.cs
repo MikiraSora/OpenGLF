@@ -100,12 +100,12 @@ namespace OpenGLF
         public override void update()
         {
             if (_audio != null)
-                _audio.Position = new Vector3D((float)gameObject.position.x, (float)gameObject.position.y, 0);
+                _audio.Position = new Vector3D((float)gameObject.WorldPosition.x, (float)gameObject.WorldPosition.y, 0);
         }
 
         public void play()
         {
-            _audio = Engine.sound.Play3D(_source, (float)gameObject.position.x, (float)gameObject.position.y, 0, false, false, true);
+            _audio = Engine.sound.Play3D(_source, (float)gameObject.WorldPosition.x, (float)gameObject.WorldPosition.y, 0, false, false, true);
             _audio.Looped = _loop;
             _audio.MaxDistance = _maxDistance;
             _audio.MinDistance = _minDistance;

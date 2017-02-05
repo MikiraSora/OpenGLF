@@ -32,7 +32,7 @@ namespace OpenGLF
         static int gen_ID =0;
 
         public delegate bool ForeachCallFunc(GameObject obj, object state = null);
-
+        /*
         [Category("Transform")]
         public Vector position 
         { 
@@ -85,6 +85,35 @@ namespace OpenGLF
                 }
             }
         }
+        */
+        [Category("Transform")]
+        public Vector LocalPosition
+        {
+            get
+            {
+                return _localPosition;
+            }
+
+            set
+            {
+                _localPosition = value;
+                updateWorldPosition();
+            }
+        }
+
+        [Category("Transform")]
+        public Vector WorldPosition
+        {
+            get { return _position; }
+            private set { }
+        }
+
+        public void updateWorldPosition()
+        {
+            _position = (_parent == null ? Vector.zero : _parent.WorldPosition) + _localPosition;
+            foreach (var child in _children)
+                child.updateWorldPosition();
+        }
 
         [Category("Transform")]
         public float angle {
@@ -108,7 +137,7 @@ namespace OpenGLF
                         GameObject child = list[i];
                         if (child.camera == null)
                         {
-                            child._position = Mathf.rotateAround(child.position, position, (float)Mathf.toRadians(_new_angle));
+                            child._position = Mathf.rotateAround(child.LocalPosition, LocalPosition, (float)Mathf.toRadians(_new_angle));
                             child._angle = child._angle + _new_angle;
                         }
                     }
@@ -352,11 +381,11 @@ namespace OpenGLF
         public virtual GameObject clone()
         {
             GameObject obj = new GameObject();
-            obj.name = name;
-            obj.position = position.clone();
+            obj.name = name;      
             obj.angle = angle;
             obj.tag = tag;
             obj.parent = parent;
+            obj._localPosition = _localPosition.clone();
 
             for (int i = 0; i < components.Count; i++)
             {

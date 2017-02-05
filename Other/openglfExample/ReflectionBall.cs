@@ -46,7 +46,7 @@ namespace openglfExample
                 if (x >= Window.CurrentWindow.Width - Texture.bitmap.Width / 2 || x <= Texture.bitmap.Width / 2)
                     xAdd = !xAdd;
 
-                gameObject.position = new Vector(x,y);
+                gameObject.LocalPosition = new Vector(x,y);
             }
         }
     }

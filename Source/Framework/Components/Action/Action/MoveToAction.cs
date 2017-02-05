@@ -7,9 +7,11 @@ namespace OpenGLF
 {
     public class MoveToAction : ActionBase
     {
-        int endX, endY,startX,startY;
-        float time = 0;
+        int endX,endY,startX,startY;
         float angle;
+
+        public MoveToAction(GameObject gameObject, int endX, int endY, float time, IInterpolator interpolatior) : this(gameObject, (int)gameObject.LocalPosition.x, (int)gameObject.LocalPosition.y, endX, endY, time, interpolatior) { }
+
 
         public MoveToAction(GameObject gameObject,int startX,int startY,int endX,int endY,float time,IInterpolator interpolatior) : base(0, time, interpolatior,gameObject)
         {
@@ -18,11 +20,6 @@ namespace OpenGLF
 
             this.startX = startX;
             this.startY = startY;
-
-            this.time = time;
-
-            interpolatior.start = 0;
-            interpolatior.end = time;
         }
 
         public override void onStart()
@@ -36,20 +33,19 @@ namespace OpenGLF
             
             float x = passTime * (endX - startX);
             float y = passTime * (endY - startY);
-            Console.WriteLine("time : {0:F2}\tx : {1:F2}\ty :　{2:F2}",passTime,x,y);
+            //Console.WriteLine("time : {0:F2}\tx : {1:F2}\ty :　{2:F2}",passTime,x,y);
 
-            gameObject.LocalPosition=new Vector(/*passTime * (endX - startX)*/x+startX, /*passTime * (endY - startY)*/y+startY);
+            gameObject.LocalPosition=new Vector(x+startX,y+startY);
 
             if (passTime >= 1)
             {
                 markDone();
-                Console.WriteLine("Done");
             }
         }
 
         public override ActionBase reverse()
         {
-            return new MoveToAction(gameObject,endX,endY,startX,startY,time,interpolator);
+            return new MoveToAction(gameObject,endX,endY,startX,startY,_timeEnd-_timeStart,interpolator);
         }
 
     }

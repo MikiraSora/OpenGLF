@@ -80,8 +80,8 @@ namespace OpenGLF
                 w = Screen.width / 2;
                 h = Screen.height / 2;
                 zoom = Camera.main.z;
-                x = (float)Camera.main.gameObject.position.x;
-                y = (float)Camera.main.gameObject.position.y;
+                x = (float)Camera.main.gameObject.LocalPosition.x;
+                y = (float)Camera.main.gameObject.LocalPosition.y;
             }
             Input._mousePos = new Vector(Mouse.X * zoom - w * zoom + x, Mouse.Y * zoom - h * zoom + y);
 

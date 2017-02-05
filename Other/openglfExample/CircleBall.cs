@@ -14,7 +14,7 @@ namespace openglfExample
         {
             this.components.Add(new Ball("Assets/cursor.png"));
 
-            this.position = new Vector(Window.CurrentWindow.Width / 2, Window.CurrentWindow.Width / 2);
+            this.LocalPosition = new Vector(Window.CurrentWindow.Width / 2, Window.CurrentWindow.Width / 2);
             this.sprite.center = new Vector(((Ball)this.sprite).Texture.bitmap.Width / 2, ((Ball)this.sprite).Texture.bitmap.Height / 2);
         }
 

@@ -38,7 +38,7 @@ namespace OpenGLF
 
             if (obj != null)
             {
-                c_pos.value = obj.position;
+                c_pos.value = obj.LocalPosition;
             }
 
             doNext();

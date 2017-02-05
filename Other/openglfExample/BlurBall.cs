@@ -90,7 +90,7 @@ namespace openglfExample
                 frameGameObj.sprite.height = height;
                 frameGameObj.sprite.center = new Vector(width/2,height/2);
                 //frameGameObj.angle += 180;
-                frameGameObj.position = new Vector(width / 2, height / 2);
+                frameGameObj.LocalPosition = new Vector(width / 2, height / 2);
                 ((TextureSprite)frameGameObj.sprite).Color = new Vec4(1,1,1,0.5f);
 
                 addChild(frameGameObj);
@@ -113,7 +113,7 @@ namespace openglfExample
             DisplayOutputGameObject.sprite.height = height;
             DisplayOutputGameObject.sprite.center = new Vector(width / 2, height / 2);
             DisplayOutputGameObject.angle += 180;
-            DisplayOutputGameObject.position = new Vector(width / 2, height / 2);
+            DisplayOutputGameObject.LocalPosition = new Vector(width / 2, height / 2);
             DisplayOutputGameObject.addChild(this);
 
             Engine.scene.GameObjectRoot.addChild(DisplayOutputGameObject);
@@ -166,7 +166,7 @@ namespace openglfExample
             public override void update()
             {
                 base.update();
-                this.gameObject.position = new Vector((float)(Math.Sin(Environment.TickCount * 0.001)+1)*(Window.CurrentWindow.Width/2), Window.CurrentWindow.Width / 2);
+                this.gameObject.LocalPosition = new Vector((float)(Math.Sin(Environment.TickCount * 0.001)+1)*(Window.CurrentWindow.Width/2), Window.CurrentWindow.Width / 2);
             }
         }
     }

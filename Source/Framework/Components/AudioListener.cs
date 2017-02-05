@@ -33,7 +33,7 @@ namespace OpenGLF
 
         public override void update()
         {
-            Engine.sound.SetListenerPosition(new Vector3D((float)gameObject.position.x, (float)gameObject.position.y, 200), new Vector3D(0, 0, 1));
+            Engine.sound.SetListenerPosition(new Vector3D((float)gameObject.WorldPosition.x, (float)gameObject.WorldPosition.y, 200), new Vector3D(0, 0, 1));
         }
 
         public override Component clone()

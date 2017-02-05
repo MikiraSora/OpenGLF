@@ -25,7 +25,7 @@ namespace OpenGLF
         {
             get
             {
-                return new Rect((gameObject.position.x - Screen.width / 2), (gameObject.position.y - Screen.height / 2), (gameObject.position.x + Screen.width / 2), (gameObject.position.y + Screen.height / 2));
+                return new Rect((gameObject.WorldPosition.x - Screen.width / 2), (gameObject.WorldPosition.y - Screen.height / 2), (gameObject.WorldPosition.x + Screen.width / 2), (gameObject.WorldPosition.y + Screen.height / 2));
             }
         }
 
