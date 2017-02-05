@@ -18,8 +18,10 @@ namespace OpenGLF
 
         public static void registerSelectObject(GameObject gameObject)
         {
+            /*Skip
             if (gameObject.sprite == null)
                 throw new Exception("Gameobject must have a sprite (or drawable component)");
+            */
             if (registerGameObject.Contains(gameObject))
                 return;
             registerGameObject.Add(gameObject);
@@ -40,17 +42,22 @@ namespace OpenGLF
 
             foreach(var obj in registerGameObject)
             {
+
+                if (obj.sprite == null)
+                    continue;//skip
+
                 selector = obj.getComponent<Selectable>();
                 selector.beforeSelect(ref result, x, y);
                 obj.draw(RenderingMode.Render);
                 selector.afterSelect();
+
             }
             
-            GL.ReadPixels<byte>(x,y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, colorBuffer);
+            GL.ReadPixels<byte>(x,Window.CurrentWindow.Height - y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, colorBuffer);
 
             int id = ByteConverter.byteToInt(colorBuffer);
             GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             isSelecting = false;
             return Engine.scene.GameObjectRoot.findId(id);
         }

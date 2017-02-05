@@ -119,18 +119,26 @@ namespace OpenGLF
 
         public Texture GenTexture(string text,int width,int height, int size, Color color, FontStyle style= FontStyle.Regular)
         {
+            //创建一个Bitmap来保存渲染的文字内容
             Bitmap bitmap = new Bitmap(width, height);
+            //创建一个绘制工具
             Graphics g = Graphics.FromImage(bitmap);
 
+            //钦定渲染的设定
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
 
+            //将Bitmap弄成透明底色
             g.Clear(System.Drawing.Color.Transparent);
 
+            //将文字写到Bitmap
             g.DrawString(text, font, new SolidBrush(System.Drawing.Color.FromArgb(color.a, color.r, color.g, color.b)), new PointF(0, 0));
 
+            //新建OpenGL纹理，并把此Bitmap交给纹理使用
             Texture tex = new Texture();
             tex.LoadFromBitmap(bitmap);
+
+            g.Dispose();
 
             return tex;
         }
@@ -158,6 +166,7 @@ namespace OpenGLF
             var result=new Vector(sizef.Width,sizef.Height);
 
             bitmap.Dispose();
+            g.Dispose();
             return result;
         }
 

@@ -24,6 +24,7 @@ namespace OpenGLF
         Material _material;
 
         Vec4 debugColor = new Vec4((float)Random.range(0, 1), (float)Random.range(0, 1), (float)Random.range(0, 1), 0.35f);
+        Dictionary<string, object> debugParamters = new Dictionary<string, object>();
 
         [Category("Transform")]
         public Vector center { get { return _center; } set { _center = value; vboUpdate(); } }
@@ -214,8 +215,10 @@ namespace OpenGLF
                     //load debugShader
                     material.shader = Engine.shaders.debugGameObjectShader;
 
-                    var SaveColor = material.parameters["colorkey"];
-                    
+                    object SaveColor=null;
+
+                    if (material.parameters.ContainsKey("colorkey"))
+                        SaveColor = material.parameters["colorkey"];
 
                     material.shader.begin();
                     material.parameters["colorkey"] = debugColor;
@@ -223,7 +226,9 @@ namespace OpenGLF
                     material.shader.pass("colorkey", (Vec4)material.parameters["colorkey"]);
                     GL.DrawArrays(PrimitiveType.Quads, 0, vertexBuf.Length);
 
-                    material.parameters["colorkey"] = SaveColor;
+                    if (material.parameters.ContainsKey("colorkey"))
+                        material.parameters["colorkey"] = SaveColor;
+
                     material.shader = SaveShader;
                 }
 

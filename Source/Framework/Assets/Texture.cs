@@ -206,6 +206,17 @@ namespace OpenGLF
         {
             LoadFromByteArray(bytes);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            //free
+            _bytes = null;
+            _filename = null;
+            GL.DeleteTexture(_id);
+            //remove from assets list
+            Assets.items.Remove(this);
+        }
     }
 
     public class TextureConverter : TypeConverter

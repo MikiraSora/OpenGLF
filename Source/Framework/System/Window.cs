@@ -12,6 +12,7 @@ using Microsoft.CSharp;
 using System.Reflection;
 using System.Drawing;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 
 namespace OpenGLF
 {
@@ -23,8 +24,7 @@ namespace OpenGLF
 
         public static Window CurrentWindow { get { return self; } private set { } }
 
-        public Window()
-            : base(800,600)/*base(800, 600,OpenTK.Graphics.GraphicsMode.Default,"",GameWindowFlags.Default,DisplayDevice.Default,4,3,OpenTK.Graphics.GraphicsContextFlags.Debug)*/
+        public Window(int width=800,int height=600):base(width,height)/*base(800, 600,OpenTK.Graphics.GraphicsMode.Default,"",GameWindowFlags.Default,DisplayDevice.Default,4,3,OpenTK.Graphics.GraphicsContextFlags.Debug)*/
         {
             self = this;
             showCursor = true;
@@ -43,6 +43,12 @@ namespace OpenGLF
            
             Icon = Icon.ExtractAssociatedIcon(Assembly.GetEntryAssembly().Location);
             engine.resize(Width, Height);
+        }
+
+        public void resizeWindow(int width,int height)
+        {
+            base.Size = new Size(width, height);
+            engine.resize(width, height);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -102,6 +108,36 @@ namespace OpenGLF
                 self.WindowState = OpenTK.WindowState.Fullscreen;
             else
                 self.WindowState = OpenTK.WindowState.Normal;
+        }
+
+        public void setCursorImage(string filePath,int centerX=-1,int centerY=-1)
+        {
+            Bitmap bitmap=null;
+            BitmapData data=null;
+            try
+            {
+                bitmap = new Bitmap(filePath);
+                centerX = centerX < 0 ? bitmap.Width / 2 : centerX;
+                centerY = centerY < 0 ? bitmap.Height / 2 : centerY;
+                data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                this.Cursor = new MouseCursor(centerX, centerY, bitmap.Width, bitmap.Height, data.Scan0);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("set custom cursor failed!{0}", e.Message);
+            }
+            finally
+            {
+                if (bitmap != null)
+                {
+                    if (data !=null)
+                    {
+                        bitmap.UnlockBits(data);
+                    }   
+                    bitmap.Dispose();             
+                }
+            }
+
         }
 
         public static void close()

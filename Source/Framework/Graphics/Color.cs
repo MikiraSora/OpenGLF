@@ -21,20 +21,22 @@ namespace OpenGLF
         public byte b { get { return _b; } set { _b = value; } }
         public byte a { get { return _a; } set { _a = value; } }
 
-        public static Color white { get { return new Color(255, 255, 255, 255); } }
-        public static Color black { get { return new Color(0, 0, 0, 255); } }
-        public static Color red { get { return new Color(255, 0, 0, 255); } }
-        public static Color green { get { return new Color(0, 255, 0, 255); } }
-        public static Color blue { get { return new Color(0, 0, 255, 255); } }
-        public static Color cornflowerBlue { get { return new Color(100, 149, 208, 255); } }
-        public static Color gray { get { return new Color(140, 140, 140, 255); } }
-        public static Color lightGray { get { return new Color(210, 210, 210, 255); } }
-        public static Color yellow { get { return new Color(255, 255, 0, 255); } }
-        public static Color airForceBlue { get { return new Color(93, 138, 168); } }
-        public static Color alizarinCrimson { get { return new Color(227, 38, 54); } }
-        public static Color amethyst { get { return new Color(153, 102, 204); } }
-        public static Color canonicalAubergine { get { return new Color(119, 41, 83); } }
-        public static Color oliveDrab { get { return new Color(107, 142, 35); } }
+        public static Color white= new Color(255, 255, 255, 255);
+        public static Color black = new Color(0, 0, 0, 255);
+        public static Color red = new Color(255, 0, 0, 255);
+        public static Color green = new Color(0, 255, 0, 255);
+        public static Color blue = new Color(0, 0, 255, 255);
+
+        public static Color cornflowerBlue = new Color(100, 149, 208, 255);
+        public static Color gray = new Color(144, 144, 144, 255);
+        public static Color lightGray = new Color(210, 210, 210, 255);
+        public static Color yellow = new Color(255, 255, 0, 255);
+        public static Color airForceBlue = new Color(93, 138, 168, 255);
+
+        public static Color alizarinCrimson = new Color(227, 38, 54, 255);
+        public static Color amethyst = new Color(153, 102, 204, 255);
+        public static Color canonicalAubergine = new Color(119, 41, 83, 255);
+        public static Color oliveDrab = new Color(107, 142, 35, 255);
 
         public Color(byte R, byte G, byte B, byte A)
         {
