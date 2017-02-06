@@ -153,6 +153,7 @@
     <Compile Include="System\GameObjectList.cs" />
     <Compile Include="Graphics\Color.cs" />
     <Compile Include="Graphics\GLCanvas.cs" />
+    <Compile Include="Components\Action\Action\ImmediatelyActionBase.cs" />
     <Compile Include="System\Input.cs" />
     <Compile Include="System\Physics.cs" />
     <Compile Include="Shaders\Shaders.cs" />
