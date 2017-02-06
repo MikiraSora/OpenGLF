@@ -36,6 +36,11 @@ namespace OpenGLF
             return interpolator.calculate(passTime);
         }
 
+        public virtual float timeCast()
+        {
+            return _timeEnd - _timeStart;
+        }
+
         public virtual void onUpdate(float norValue)
         {
             throw new NotImplementedException();

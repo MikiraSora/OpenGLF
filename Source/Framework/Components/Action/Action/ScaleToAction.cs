@@ -19,15 +19,15 @@ namespace OpenGLF
 
         public override void onUpdate(float norValue)
         {
-            float sx = norValue * (endScale.x - startScale.x);
-            float sy = norValue * (endScale.y - startScale.y);
-
-            gameObject.sprite.scale=new Vector(startScale.x + sx, startScale.x + sy);
-
             if (norValue >= 1)
             {
                 markDone();
             }
+
+            float sx = norValue * (endScale.x - startScale.x);
+            float sy = norValue * (endScale.y - startScale.y);
+
+            gameObject.sprite.scale=new Vector(startScale.x + sx, startScale.x + sy);
         }
 
         public override ActionBase reverse()

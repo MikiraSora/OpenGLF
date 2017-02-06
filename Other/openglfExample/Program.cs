@@ -61,14 +61,15 @@ namespace openglfExample
             ballGameObject.LocalPosition = new Vector(0,0);
             ballGameObject.sprite.center = new Vector(ballGameObject.sprite.width / 2, ballGameObject.sprite.height / 2);
 
-            LoopAction loopAction = new LoopAction(50000,new ActionBase[]{
-                new ScaleToAction(ballGameObject,new Vector(2,2),500,new LinearInterpolator()),
-                new ScaleToAction(ballGameObject,new Vector(2,2),500,new LinearInterpolator()).reverse()
+            var loopAction = new LoopAction(50000,new ActionBase[]{
+                new MoveToAction(ballGameObject, 200,100, -300,-200,500,new LinearInterpolator()).reverse(),
+                new WaitAction(500),
+                new MoveToAction(ballGameObject, 200,100, -300,-200,500,new LinearInterpolator())
             });
 
             ballGameObject.getComponent<ActionExecutor>().executeAction(
                 loopAction
-                /*
+                /* 
                 new MoveToAction(ballGameObject, (int)ballGameObject.LocalPosition.x, (int)ballGameObject.LocalPosition.y, 200,100,2000,new LinearInterpolator())
                 .reverse()  
                 */

@@ -19,17 +19,17 @@ namespace OpenGLF
 
         public override void onUpdate(float norValue)
         {
+            if (norValue >= 1)
+            {
+                markDone();
+            }
+
             float r = norValue * (endColor.x - startColor.x);
             float g = norValue * (endColor.y - startColor.y);
             float b = norValue * (endColor.z - startColor.z);
             float a = norValue * (endColor.w - startColor.w);
 
             gameObject.sprite.setColor(startColor.x+r, startColor.x + b,startColor.z + b,startColor.w+ a);
-
-            if (norValue >= 1)
-            {
-                markDone();
-            }
         }
 
         public override ActionBase reverse()

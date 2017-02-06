@@ -13,8 +13,6 @@ namespace OpenGLF
 {
     public class Engine
     {
-        int MAX_OBJECTS = 4096;
-        int[] sz;
         int[] viewport;
         bool nodraw = false;
         static Scene _scene;
@@ -52,8 +50,6 @@ namespace OpenGLF
             world = new World(new FarseerPhysics.Common.Vector2(0, 9.82f));
 
             viewport = new int[4];
-
-            sz = new int[MAX_OBJECTS * 4];
 
             shaders = new Shaders();
         }
@@ -319,6 +315,8 @@ namespace OpenGLF
 
         public GameObject selectAt(int x, int y)
         {
+            return SelectManager.selectGameObject(x, y);
+            /*
             if (Engine.scene != null)
             {
                 resize(Screen.width, Screen.height);
@@ -404,6 +402,7 @@ namespace OpenGLF
                 return o;
             }
             else return null;
+            */
         }
 
         void setReferences()

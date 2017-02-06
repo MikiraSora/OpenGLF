@@ -28,19 +28,18 @@ namespace OpenGLF
             Console.WriteLine("local position={0},{1}", startX, startY);
         }
 
-        public override void onUpdate(float passTime)
+        public override void onUpdate(float norValue)
         {
-            
-            float x = passTime * (endX - startX);
-            float y = passTime * (endY - startY);
-            //Console.WriteLine("time : {0:F2}\tx : {1:F2}\ty :　{2:F2}",passTime,x,y);
-
-            gameObject.LocalPosition=new Vector(x+startX,y+startY);
-
-            if (passTime >= 1)
+            if (norValue >= 1)
             {
                 markDone();
             }
+
+            float x = norValue * (endX - startX);
+            float y = norValue * (endY - startY);
+            //Console.WriteLine("time : {0:F2}\tx : {1:F2}\ty :　{2:F2}",passTime,x,y);
+
+            gameObject.LocalPosition=new Vector(x+startX,y+startY);
         }
 
         public override ActionBase reverse()
