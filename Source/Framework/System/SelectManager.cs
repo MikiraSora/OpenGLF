@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL;
 using System.Text;
+using OpenTK.Input;
 
 namespace OpenGLF
 {
@@ -43,7 +44,7 @@ namespace OpenGLF
             foreach(var obj in registerGameObject)
             {
 
-                if (obj.sprite == null)
+                if (obj.sprite == null&& obj.getComponent<Selectable>() == null)
                     continue;//skip
 
                 selector = obj.getComponent<Selectable>();
@@ -57,9 +58,37 @@ namespace OpenGLF
 
             int id = ByteConverter.byteToInt(colorBuffer);
             GL.Enable(EnableCap.Blend);
-            //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             isSelecting = false;
-            return Engine.scene.GameObjectRoot.findId(id);
+            return id==0?null:Engine.scene.GameObjectRoot.findId(id);
         }
+
+        static GameObject _currentGameObject = null;
+
+        public static void updateMove (int x,int y)
+        {
+
+            GameObject selectObj = SelectManager.selectGameObject(x,y);
+
+            if (_currentGameObject != selectObj)
+            {
+                if (_currentGameObject != null && _currentGameObject.getComponent<Selectable>().Type.HasFlag(Selectable.CALLBACKTYPE.MOVEAREA))
+                    _currentGameObject.getComponent<Selectable>().leaveArea();
+                if (selectObj != null)
+                {
+                    if (selectObj.getComponent<Selectable>().Type.HasFlag(Selectable.CALLBACKTYPE.MOVEAREA))
+                        selectObj.getComponent<Selectable>().enterArea();
+                }
+            }
+
+            _currentGameObject = selectObj;
+        }
+
+        static GameObject _prevClickGameObject;
+
+        public static void updateClick(MouseEventArgs e)
+        {
+            GameObject selectObj = selectGameObject(e.X,e.Y);
+        }
+
     }
 }

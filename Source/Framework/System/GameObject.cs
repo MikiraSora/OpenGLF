@@ -220,40 +220,7 @@ namespace OpenGLF
         {
             get
             {
-                /*
-                if (Engine.scene != null)
-                    return Engine.scene.GameObjectRoot.getAllChildren().IndexOf(this);
-                    else return 0;
-                    */
-                Int result=new Int();
-                result.value = 0;
-                int index = 0;
-                if (_parent != null)
-                {
-                    _parent.ForeachCall((child, state) =>
-                    {
-                        if (child == this)
-                        {
-                            result.value = index;
-                            return true;
-                        }
-                        index++;
-                        return false;
-                    }, null);
-                    /*
-                    Engine.scene.GameObjectRoot.ForeachCall((child, state) =>
-                    {
-                        if (child == this)
-                        {
-                            result.value = index;
-                            return true;
-                        }
-                        index++;
-                        return false;
-                    }, null);
-                    */
-                }
-                return result.value-1;
+                return _parent == null ? 0 : _parent._children.IndexOf(this);
             }
             set
             {
@@ -283,7 +250,7 @@ namespace OpenGLF
             {
                 int result = 0;
                 result = depth + (_parent == null ? 0 : _parent.FullDepth);
-                return result;
+                return result+1;
             }
         }
 

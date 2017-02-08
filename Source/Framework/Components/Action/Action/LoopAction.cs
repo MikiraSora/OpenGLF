@@ -10,15 +10,19 @@ namespace OpenGLF
         protected List<ActionBase> _action_list = new List<ActionBase>();
         public List<ActionBase> ActionList { get { return _action_list; }private set { } }
 
+        bool _mustFinish;
+
         int _currentActionIndex = 0;
 
-        public LoopAction(float time,ActionBase[] init_ActionArray):base(0,time,null,null)
+        public LoopAction(bool mustFinish,float time,ActionBase[] init_ActionArray):base(0,time,null,null)
         {
+            _mustFinish = mustFinish;
+
             foreach (var action in init_ActionArray)
                 _action_list.Add(action);
         }
 
-        public LoopAction(float time, List<ActionBase> init_ActionList) :this(time,init_ActionList.ToArray()){}
+        public LoopAction(bool mustFinish,float time, List<ActionBase> init_ActionList) :this(mustFinish,time,init_ActionList.ToArray()){}
 
         public override void onStart()
         {
@@ -66,7 +70,7 @@ namespace OpenGLF
                 action_list.Add(_action_list[i].reverse());
             }
 
-            LoopAction reverseLoop = new LoopAction(_timeEnd - _timeStart, action_list);
+            LoopAction reverseLoop = new LoopAction(_mustFinish,_timeEnd - _timeStart, action_list);
             return reverseLoop;
         }
     }

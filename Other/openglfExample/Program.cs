@@ -32,8 +32,6 @@ namespace openglfExample
         {
             Engine.debugGameObject = true;
 
-            Title = "OpenGLF_Ex test";
-
             Engine.scene = new Scene();
 
             setCursorImage("Assets/cursor.png");
@@ -50,37 +48,32 @@ namespace openglfExample
             base.OnLoad(e);
 
             init();
+            /*
+            //for (int i = 0; i < 100; i++)
+            {
 
-            GameObject ballGameObject = new GameObject();
-            gameobject.addChild(ballGameObject);
+                GameObject ballGameObject = new GameObject();
+                gameobject.addChild(ballGameObject);
 
-            ballGameObject.components.Add(new Selectable());
-            ballGameObject.components.Add(new ActionExecutor());
-            ballGameObject.components.Add(new TextureSprite("Assets/cursor.png"));
+                ballGameObject.components.Add(new Selectable());
+                ballGameObject.components.Add(new ActionExecutor());
+                ballGameObject.components.Add(new TextureSprite("Assets/cursor.png"));
 
-            ballGameObject.LocalPosition = new Vector(0,0);
-            ballGameObject.sprite.center = new Vector(ballGameObject.sprite.width / 2, ballGameObject.sprite.height / 2);
+                ballGameObject.getComponent<Selectable>().onEnterArea += () =>
+                {
+                    Console.WriteLine("enter " + ballGameObject.ID);
+                };
 
-            var loopAction = new LoopAction(50000,new ActionBase[]{
-                new MoveToAction(ballGameObject, 200,100, -300,-200,500,new LinearInterpolator()).reverse(),
-                new WaitAction(500),
-                new MoveToAction(ballGameObject, 200,100, -300,-200,500,new LinearInterpolator())
-            });
+                ballGameObject.getComponent<Selectable>().onLeaveArea += () =>
+                {
+                    Console.WriteLine("leave " + ballGameObject.ID);
+                };
 
-            ballGameObject.getComponent<ActionExecutor>().executeAction(
-                loopAction
-                /* 
-                new MoveToAction(ballGameObject, (int)ballGameObject.LocalPosition.x, (int)ballGameObject.LocalPosition.y, 200,100,2000,new LinearInterpolator())
-                .reverse()  
-                */
-                /*
-                new ColorToAction(ballGameObject,new Vec4(0,0,0,0),new Vec4(1,1,1,1),1000,new LinearInterpolator()).reverse()
-                */
-                /*
-                new ScaleToAction(ballGameObject,new Vector(1,1),new Vector(2,2),3000,new LinearInterpolator()).reverse()
-                */
-                );
-            
+                ballGameObject.LocalPosition = new Vector((int)OpenGLF.Random.range(-200,200), (int)OpenGLF.Random.range(-200, 200));
+                ballGameObject.sprite.center = new Vector(ballGameObject.sprite.width / 2, ballGameObject.sprite.height / 2);
+
+            }
+            */
             #region debugDraw
             //Draw XY for debug
             engine.beforeDraw += () =>
@@ -92,7 +85,28 @@ namespace openglfExample
                 Drawing.drawLine(new Vector(10000, Height / 2), new Vector(-10000, Height / 2), 5, new OpenGLF.Color(255, 0, 0, 125));
                 Drawing.drawLine(new Vector(Width / 2, 10000), new Vector(Width / 2, -10000), 5, new OpenGLF.Color(0, 255, 0, 125));
 
+                for(int i = 0; i < 100; i++)
+                {
+
+                }
+
             };
+
+            /*
+             * 
+            FILE* f=fopen("gugugu","r"),*newf = fopen("gegege", "w");
+
+            long fileLength = fseek(f, 0, SEEK_END);
+
+            char* fileBuffer = (char*)malloc(fileLength * sizeof(char));
+
+            for (int i = 0; i < fileLength; i++)
+                fileBuffer[i] = getc(f);
+
+            for(int i=fileLength-1;i>=0;i--)
+                //putc(fileBuffer[i],newf);
+            
+             */
             
             engine.afterDraw += () =>
             {
@@ -101,12 +115,16 @@ namespace openglfExample
             #endregion
         }
 
+        GameObject selectobject = null;
+
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
             base.OnMouseMove(e);
 
             mx = e.X;
             my = e.Y;
+
+            SelectManager.updateMove(e.X, e.Y);
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
@@ -123,6 +141,11 @@ namespace openglfExample
                 );
         }
 
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            base.OnMouseUp(e);
+        }
+
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
@@ -131,6 +154,8 @@ namespace openglfExample
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);
+
+            Title=string.Format("OpenGLF_Ex test : FPS:{0:F2}",UpdateFrequency);
         }
     }
 

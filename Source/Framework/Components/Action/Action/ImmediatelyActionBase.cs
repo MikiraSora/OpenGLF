@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OpenGLF
 {
-    class ImmediatelyActionBase : ActionBase
+    public class ImmediatelyActionBase : ActionBase
     {
         public ImmediatelyActionBase(GameObject gameobject) : base(0, 0, null, gameobject) {}
 

@@ -91,8 +91,11 @@
     <Compile Include="Components\Action\ActionExecutor.cs" />
     <Compile Include="Components\Action\Action\ColorToAction.cs" />
     <Compile Include="Components\Action\Action\ComboAction.cs" />
+    <Compile Include="Components\Action\Action\FadeToAction.cs" />
     <Compile Include="Components\Action\Action\FrameAction.cs" />
     <Compile Include="Components\Action\Action\LoopAction.cs" />
+    <Compile Include="Components\Action\Action\PlaySoundAction.cs" />
+    <Compile Include="Components\Action\Action\RotateToAction.cs" />
     <Compile Include="Components\Action\Action\WaitAction.cs" />
     <Compile Include="Components\Action\Action\ScaleToAction.cs" />
     <Compile Include="Components\Action\Interpolator\IInterpolator.cs" />

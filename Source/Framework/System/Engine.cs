@@ -18,7 +18,7 @@ namespace OpenGLF
         static Scene _scene;
         string _projectPath;
         internal static World world;
-        internal static ISoundEngine sound;
+        public static ISoundEngine sound;
         public static bool debugPhysics = false;
         public static bool debugGUI = false;
         public static bool debugGameObject = false;

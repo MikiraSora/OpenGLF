@@ -13,6 +13,11 @@ namespace OpenGLF
 
         int _currentActionIndex = 0;
 
+        public FrameAction():base(0,0,null,null)
+        {
+
+        }
+
         public FrameAction(ActionBase[] init_ActionArray):base(0,0,null,null)
         {
             foreach (var action in init_ActionArray)
