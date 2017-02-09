@@ -35,17 +35,23 @@ namespace OsuStoryBroadPlayer
                 SBSprite = spriteObject;
 
                 //setup image
-                sprite = new TextureSprite(_oszFilePath+spriteObject._imgPath);
+                sprite = new TextureSprite(TextureManager.cacheTexture(_oszFilePath + spriteObject._imgPath,name=> { return new Texture(name); }));
                 //setup anchor
                 sprite.center = new Vector(sprite.Texture.bitmap.Width / 2, sprite.Texture.bitmap.Height/ 2);
 
                 sprite.width = sprite.Texture.bitmap.Width;
                 sprite.height = sprite.Texture.bitmap.Height;
 
+                gameObject.name = spriteObject._imgPath;
+
                 gameObject.components.Add(sprite);
                 gameObject.components.Add(new ActionExecutor());
 
-                gameObject.LocalPosition = new Vector(400, 300);
+#if DEBUG
+                //gameObject.components.Add(new Selectable());
+#endif
+
+                gameObject.LocalPosition = new Vector(Window.CurrentWindow.Width/2, Window.CurrentWindow.Height / 2);
 
                 Engine.scene.GameObjectRoot.addChild(gameObject);
 
@@ -93,21 +99,19 @@ namespace OsuStoryBroadPlayer
                             (int)Convert.ToSingle(command._params[0]), (int)Convert.ToSingle(command._params[1]),
                             (int)Convert.ToSingle(command._params[2]), (int)Convert.ToSingle(command._params[3]),
                             command._endTime-command._startTime,interpolator);
-                        //prev_x = Int32.Parse(command._params[0]);
-                        //prev_y = Int32.Parse(command._params[1]);
                         break;
 
                     case Events.Fade:
-                        action = new ColorToAction(gameObject,new Vec4(1,1,1,Convert.ToSingle(command._params[0])),new Vec4(1, 1, 1, Convert.ToSingle(command._params[1])),
+                        action = new FadeToAction(gameObject,
+                            Convert.ToSingle(command._params[0]),Convert.ToSingle(command._params[1]),
                             command._endTime - command._startTime
                             , interpolator);
-                        prev_fade = Convert.ToSingle(command._params[1]);
                         break;
 
                     case Events.Scale:
                         startScale = Convert.ToSingle(command._params[0]);
                         endScale = Convert.ToSingle(command._params[1]);
-                        action = new ScaleToAction(gameObject,new Vector(startScale,endScale),new Vector(endScale,endScale),
+                        action = new ScaleToAction(gameObject,new Vector(startScale,startScale),new Vector(endScale,endScale),
                             command._endTime - command._startTime
                             , interpolator);
                         break;
@@ -156,16 +160,30 @@ namespace OsuStoryBroadPlayer
 
             int waitOffset = spriteObject._commands.Count != 0 ? spriteObject._commands[0]._startTime<0?0- spriteObject._commands[0]._startTime:0 : 0;
 
-            int prev_time = spriteObject._commands.Count!=0?spriteObject._commands[0]._startTime:-28577582;
+            Command prev_command=null;
 
+            gameObject.sprite.setColor(1, 1, 1, 0);
+
+            Dictionary<Type, List<SBActions>> map = new Dictionary<Type, List<SBActions>>();
+
+            Type type;
+
+            foreach(SBActions sbaction in action_list)
+            {
+                type = sbaction.action.GetType();
+                if (!map.ContainsKey(type))
+                    map.Add(type, new List<SBActions>());
+
+                map[sbaction.action.GetType()].Add(sbaction);
+            }
+
+            List<ActionBase> result = new List<ActionBase>();
+
+            /*
             List<List<ActionBase>> actionList = new List<List<ActionBase>>();
 
             actionList.Add(new List<ActionBase>());
-            actionList[actionList.Count - 1].Add(new ColorToAction(gameObject,new Vec4(1,1,1,0),0,new LinearInterpolator()));
-            actionList.Add(new List<ActionBase>());
             actionList[actionList.Count - 1].Add(new WaitAction(spriteObject._commands.Count != 0 ? spriteObject._commands[0]._startTime : 0));
-            actionList.Add(new List<ActionBase>());
-            actionList[actionList.Count - 1].Add(new ColorToAction(gameObject, new Vec4(1, 1, 1, 1), 0, new LinearInterpolator()));
 
             List<ActionBase> result = new List<ActionBase>();
 
@@ -173,36 +191,60 @@ namespace OsuStoryBroadPlayer
             {
                 sbAction = action_list[i];
 
-                if (sbAction.command._startTime != prev_time)
+                if (sbAction.command._startTime != (prev_command==null?0:prev_command._startTime))
                 {
                     if (actionList.Count != 0)
                     {
-                        actionList.Add(new List<ActionBase>());
-                        actionList[actionList.Count - 1].Add(new WaitAction(Math.Abs(sbAction.command._startTime - prev_time)));
+                        int waitTime = Math.Abs(sbAction.command._startTime - (prev_command == null ? 0 : prev_command._startTime));
+                        if (waitTime != 0)
+                        {
+                            actionList.Add(new List<ActionBase>());
+                            actionList[actionList.Count - 1].Add(new WaitAction(0));
+                        }
                     }
 
                     actionList.Add(new List<ActionBase>());
-                    prev_time = sbAction.command._startTime;
+                    prev_command = sbAction.command;
                 }
 
                 actionList[actionList.Count - 1].Add(sbAction.action);
             }
+            */
 
-            foreach (var list in actionList)
+            foreach (var list in map)
             {
-                if (list.Count == 1)
+                //Multi-Command process
+
+                List<ActionBase> actionbaseList = new List<ActionBase>();
+
+                //Pick all command up;
+                for (int i=0;i<list.Value.Count;i++)
                 {
-                    result.Add(list[0]);
-                    continue;
+                    sbAction = list.Value[i];
+                    int offsetTime;
+                    if (i != 0)
+                    {
+                        offsetTime =Math.Abs(list.Value[i - 1].command._endTime - sbAction.command._startTime);
+                    }
+                    else
+                    {
+                        offsetTime = sbAction.command._startTime;
+                    }
+
+                    if (offsetTime != 0)
+                    {
+                        actionbaseList.Add(new WaitAction(offsetTime)); //wait for next same event
+                    }
+                    actionbaseList.Add(sbAction.action);
                 }
 
-                result.Add(new ComboAction(false,list));
+                result.Add(new FrameAction(actionbaseList));
             }
 
             if (result.Count == 0)
                 return new WaitAction(0);
 
-            return new FrameAction(result);
+            return new ComboAction(false,result);
         }
 
         public IInterpolator getEasing(Easing easing)

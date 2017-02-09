@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenGLF;
+using OpenTK.Input;
 using IrrKlang;
 using OpenTK;
 using System.IO;
@@ -73,17 +74,33 @@ namespace OsuStoryBroadPlayer
 
                 initializer.Genarate();
 
-                mp3Player = Engine.sound.AddSoundSourceFromFile(_mp3FilePath);
+                //mp3Player = Engine.sound.AddSoundSourceFromFile(_mp3FilePath);
 
-                Engine.sound.Play2D(mp3Player,false,false,true);
+                //Engine.sound.Play2D(mp3Player,false,false,true);
             }
+            /*
+            protected override void OnMouseDown(MouseButtonEventArgs e)
+            {
+                base.OnMouseDown(e);
+                GameObject selectObj = SelectManager.selectGameObject(e.X, e.Y);
+                if (selectObj == null)
+                    return;
+                Console.WriteLine("select objName = {0}\tx:{5}({1}) l_y:{6}({2}) offsetDepth:{3} AbsoluteDepth={4}\n CurrentAction:{7}",
+                    selectObj.name,
+                    selectObj.LocalPosition.x, selectObj.LocalPosition.y,
+                    selectObj.depth, selectObj.FullDepth,
+                    selectObj.WorldPosition.x, selectObj.WorldPosition.y,
+                    selectObj.getComponent<ActionExecutor>() != null ? (selectObj.getComponent<ActionExecutor>().CurrentAction==null?"NoAction": selectObj.getComponent<ActionExecutor>().CurrentAction.GetType().Name) : "??"
+                    );
+            }*/
         }
 
         public static void Main(string[] argv)
         {
-            string oszPath = @"G:\osu!\Songs\94790 Hatsuki Yura - Fuuga\";
+            //G:\osu!\Songs\94790 Hatsuki Yura - Fuuga\Hatsuki Yura - Fuuga (Lan wings).osb
+            string oszPath = @"G:\";
 
-            StoryBroadPlayer player = new StoryBroadPlayer(oszPath,oszPath+ @"fuuga.mp3", oszPath+ @"Hatsuki Yura - Fuuga (Lan wings).osb");
+            StoryBroadPlayer player = new StoryBroadPlayer(oszPath,oszPath+ @"KIMONO PRINCESS.mp3", oszPath+ @"test.osb");
             player.Run();
         }
     }

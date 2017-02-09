@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OpenGLF
 {
-    class FadeToAction : ActionBase
+    public class FadeToAction : ActionBase
     {
         float _startAlpha, _endAlpha;
 
@@ -25,12 +25,13 @@ namespace OpenGLF
             float a = norValue * (_endAlpha - _startAlpha);
 
             var color = gameObject.sprite.getColor();
-            gameObject.sprite.setColor(color.x, color.y, color.z, a);
+
+            gameObject.sprite.setColor(color.x, color.y, color.z, _startAlpha+a);
         }
 
         public override ActionBase reverse()
         {
-            return base.reverse();
+            return new FadeToAction(gameObject,_endAlpha,_startAlpha,_timeEnd-_timeStart,interpolator);
         }
     }
 }

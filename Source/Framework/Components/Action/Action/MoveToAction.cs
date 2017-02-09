@@ -22,12 +22,6 @@ namespace OpenGLF
             this.startY = startY;
         }
 
-        public override void onStart()
-        {
-            //recordPos = gameObject.LocalPosition;
-            Console.WriteLine("local position={0},{1}", startX, startY);
-        }
-
         public override void onUpdate(float norValue)
         {
             if (norValue >= 1)

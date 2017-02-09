@@ -52,6 +52,8 @@ namespace OpenGLF
             viewport = new int[4];
 
             shaders = new Shaders();
+
+            Schedule.init();
         }
 
         ~Engine()
@@ -210,36 +212,13 @@ namespace OpenGLF
                     if (beforeDraw != null)
                         beforeDraw();
                 }
-
-                /*
-                for (int i = 0; i < Engine.scene.objects.Count; i++)
-                {
-                    GameObject obj = Engine.scene.objects[i];
-
-                    if (callObjectDraw == true)
-                    {
-                        obj.prepareDraw();
-                          }
-                    
-                    for (int j = 0; j < obj.components.Count; j++)
-                    {
-                        if (obj.components[j].enabled)
-                        {
-                            obj.beforeDraw();
-                            obj.components[j].draw(mode);
-                            obj.afterDraw();
-                        }
-                    } 
-                }*/
-
+                
                 if (callObjectDraw == true)
                 {
                     Engine.scene.GameObjectRoot.prepareDraw();
                 }
 
-                //Engine.scene.GameObjectRoot.beforeDraw();
                 Engine.scene.GameObjectRoot.draw(mode);
-                //Engine.scene.GameObjectRoot.afterDraw();
 
                 GL.ActiveTexture(TextureUnit.Texture0);
                 GL.BindTexture(TextureTarget.Texture2D, -1);

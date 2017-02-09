@@ -48,7 +48,7 @@ namespace openglfExample
             base.OnLoad(e);
 
             init();
-            /*
+            
             //for (int i = 0; i < 100; i++)
             {
 
@@ -73,22 +73,16 @@ namespace openglfExample
                 ballGameObject.sprite.center = new Vector(ballGameObject.sprite.width / 2, ballGameObject.sprite.height / 2);
 
             }
-            */
+
             #region debugDraw
             //Draw XY for debug
             engine.beforeDraw += () =>
             {
-
                 Drawing.drawLine(new Vector(10000, my), new Vector(-10000, my), 5, new OpenGLF.Color(255, 255, 0, 125));
                 Drawing.drawLine(new Vector(mx, 10000), new Vector(mx, -10000), 5, new OpenGLF.Color(255, 255, 0, 125));
 
                 Drawing.drawLine(new Vector(10000, Height / 2), new Vector(-10000, Height / 2), 5, new OpenGLF.Color(255, 0, 0, 125));
                 Drawing.drawLine(new Vector(Width / 2, 10000), new Vector(Width / 2, -10000), 5, new OpenGLF.Color(0, 255, 0, 125));
-
-                for(int i = 0; i < 100; i++)
-                {
-
-                }
 
             };
 

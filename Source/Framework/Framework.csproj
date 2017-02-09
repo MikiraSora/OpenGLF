@@ -160,6 +160,7 @@
     <Compile Include="System\Input.cs" />
     <Compile Include="System\Physics.cs" />
     <Compile Include="Shaders\Shaders.cs" />
+    <Compile Include="System\Schedule.cs" />
     <Compile Include="System\SelectManager.cs" />
     <Compile Include="Utils\BezierCurveCubic.cs" />
     <Compile Include="Utils\Mathf.cs" />

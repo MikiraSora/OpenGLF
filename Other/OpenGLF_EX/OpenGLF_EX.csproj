@@ -57,6 +57,7 @@
     <Compile Include="Components\TextureSprite.cs" />
     <Compile Include="System\GameObjectEx.cs" />
     <Compile Include="Assets\RawTexture.cs" />
+    <Compile Include="System\TextureManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

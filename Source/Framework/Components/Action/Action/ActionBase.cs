@@ -50,6 +50,8 @@ namespace OpenGLF
         {
             this.interpolator.start = _timeStart;
             this.interpolator.end = _timeEnd;
+
+            //Console.WriteLine("GameObject:{0} action{1} start", gameObject != null ? gameObject.name : "unknwon", this.GetType().Name);
         }
 
         public virtual void onFinish()
@@ -57,6 +59,8 @@ namespace OpenGLF
             //reset status
             _done = false;
             _totalTime = 0;
+
+            //Console.WriteLine("GameObject:{0} action{1} end", gameObject != null ? gameObject.name : "unknwon", this.GetType().Name);
         }
 
         public virtual void onAction(float passTime)
