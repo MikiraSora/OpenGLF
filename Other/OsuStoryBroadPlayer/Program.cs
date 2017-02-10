@@ -20,47 +20,92 @@ namespace OsuStoryBroadPlayer
 
             StoryBroadInitializer initializer;
 
-            string _mp3FilePath, _osbFilePath;
+            string _mp3FilePath, _osbFilePath,_osuFilePath;
 
             ISoundSource mp3Player;
 
-            public StoryBroadPlayer(string oszPath,string mp3FilePath,string osbFilePath):base(640,460)
+            public StoryBroadPlayer(string oszPath,string mp3FilePath,string osbFilePath,string osuFilePath):base(640,460)
             {
                 string buffer;
 
                 _osbFilePath = osbFilePath;
                 _oszPath = oszPath;
                 _mp3FilePath = mp3FilePath;
+                _osuFilePath = osuFilePath;
 
-                StreamReader reader = new StreamReader(osbFilePath);
+                StreamReader reader;
 
                 StoryBroadParser.Sprite sprite;
                 Command command;
 
                 List<StoryBroadParser.Sprite> spriteList = new List<StoryBroadParser.Sprite>();
 
-                while (!reader.EndOfStream)
+                if (_osuFilePath != null)
                 {
-                    buffer = reader.ReadLine();
-
-                    if (Parser.isSpriteLine(buffer))
+                    using (reader = new StreamReader(_osuFilePath))
                     {
-                        sprite = Parser.tryParseSprite(buffer);
-                        if (sprite != null)
-                            spriteList.Add(sprite);
-                        continue;
-                    }
-
-                    if (Parser.isCommandLine(buffer))
-                    {
-                        command = Parser.tryParseCommand(buffer);
-                        if (command != null)
+                        while (!reader.EndOfStream)
                         {
-                            spriteList[spriteList.Count - 1]._commands.Add(command);
-                        }
-                        continue;
-                    }
+                            buffer = reader.ReadLine();
 
+                            if (Parser.isSpriteLine(buffer))
+                            {
+                                sprite = Parser.tryParseSprite(buffer);
+                                if (sprite != null)
+                                {
+                                    /**
+                                     */
+                                    if (spriteList.Count != 0)
+                                    {
+                                        var prev_sprite = spriteList[spriteList.Count - 1];
+                                        //Parser.recheckCommand(ref prev_sprite); BUG
+                                    }
+
+                                    //add new sprite and clear
+                                     spriteList.Add(sprite);
+                                }
+                                continue;
+                            }
+
+                            if (Parser.isCommandLine(buffer))
+                            {
+                                command = Parser.tryParseCommand(buffer);
+                                if (command != null)
+                                {
+                                    spriteList[spriteList.Count - 1]._commands.Add(command);
+                                }
+                                continue;
+                            }
+
+                        }
+                    }
+                }
+
+                using (reader = new StreamReader(osbFilePath))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        buffer = reader.ReadLine();
+
+                        if (Parser.isSpriteLine(buffer))
+                        {
+                            sprite = Parser.tryParseSprite(buffer);
+                            if (sprite != null)
+                                spriteList.Add(sprite);
+                            continue;
+                        }
+
+                        if (Parser.isCommandLine(buffer))
+                        {
+                            command = Parser.tryParseCommand(buffer);
+                            if (command != null)
+                            {
+                                spriteList[spriteList.Count - 1]._commands.Add(command);
+                            }
+                            continue;
+                        }
+
+                    }
                 }
 
                 initializer = new StoryBroadInitializer(_oszPath,spriteList);
@@ -74,11 +119,12 @@ namespace OsuStoryBroadPlayer
 
                 initializer.Genarate();
 
-                //mp3Player = Engine.sound.AddSoundSourceFromFile(_mp3FilePath);
-
-                //Engine.sound.Play2D(mp3Player,false,false,true);
+                //miss plugin
+                mp3Player = Engine.sound.AddSoundSourceFromFile(_mp3FilePath);
+                Engine.sound.Play2D(mp3Player,false,false,true);
             }
-            /*
+
+            /*for debug
             protected override void OnMouseDown(MouseButtonEventArgs e)
             {
                 base.OnMouseDown(e);
@@ -97,10 +143,11 @@ namespace OsuStoryBroadPlayer
 
         public static void Main(string[] argv)
         {
-            //G:\osu!\Songs\94790 Hatsuki Yura - Fuuga\Hatsuki Yura - Fuuga (Lan wings).osb
-            string oszPath = @"G:\";
+            //path
+            string oszPath = @"372552 yuiko - Azuma no Sora kara Hajimaru Sekai (Short)\";
+            
 
-            StoryBroadPlayer player = new StoryBroadPlayer(oszPath,oszPath+ @"KIMONO PRINCESS.mp3", oszPath+ @"test.osb");
+            StoryBroadPlayer player = new StoryBroadPlayer(oszPath,oszPath+ @"Azuma no sora kara hajimaru sekai (Short).mp3", oszPath+ @"yuiko - Azuma no Sora kara Hajimaru Sekai (Short) (KaedekaShizuru).osb",oszPath+ @"yuiko - Azuma no Sora kara Hajimaru Sekai (Short) (KaedekaShizuru) [Yomi's Hard].osu");
             player.Run();
         }
     }
