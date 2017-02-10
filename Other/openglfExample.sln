@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework", "..\Source\Fram
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuStoryBroadPlayer", "OsuStoryBroadPlayer\OsuStoryBroadPlayer.csproj", "{F8223493-E422-4FA6-8380-726B8DBBE20B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoryBroadParser", "..\..\StoryBroadParser\StoryBroadParser\StoryBroadParser.csproj", "{EF5B4FE1-89E2-4989-810A-374258E26E99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoryBroadParser", "OsuStoryBroadPlayer\StoryBroadParser\StoryBroadParser\StoryBroadParser.csproj", "{EF5B4FE1-89E2-4989-810A-374258E26E99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

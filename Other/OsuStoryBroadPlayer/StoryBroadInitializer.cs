@@ -37,7 +37,38 @@ namespace OsuStoryBroadPlayer
                 //setup image
                 sprite = new TextureSprite(TextureManager.cacheTexture(_oszFilePath + spriteObject._imgPath,name=> { return new Texture(name); }));
                 //setup anchor
-                sprite.center = new Vector(sprite.Texture.bitmap.Width / 2, sprite.Texture.bitmap.Height/ 2);
+                switch (spriteObject._origin)
+                {
+                    case Origin.TopLeft:
+                        sprite.center = new Vector(0, 0);
+                        break;
+                    case Origin.TopCentre:
+                        sprite.center = new Vector(sprite.Texture.bitmap.Width / 2, 0);
+                        break;
+                    case Origin.TopRight:
+                        sprite.center = new Vector(sprite.Texture.bitmap.Width, 0);
+                        break;
+                    case Origin.CentreLeft:
+                        sprite.center = new Vector(0, sprite.Texture.bitmap.Height / 2);
+                        break;
+                    case Origin.Centre:
+                        sprite.center = new Vector(sprite.Texture.bitmap.Width / 2, sprite.Texture.bitmap.Height / 2);
+                        break;
+                    case Origin.CentreRight:
+                        sprite.center = new Vector(sprite.Texture.bitmap.Width, sprite.Texture.bitmap.Height / 2);
+                        break;
+                    case Origin.BottomLeft:
+                        sprite.center = new Vector(0, sprite.Texture.bitmap.Height);
+                        break;
+                    case Origin.BottomCentre:
+                        sprite.center = new Vector(sprite.Texture.bitmap.Width/2, sprite.Texture.bitmap.Height);
+                        break;
+                    case Origin.BottomRight:
+                        sprite.center = new Vector(sprite.Texture.bitmap.Width, sprite.Texture.bitmap.Height);
+                        break;
+                    default:
+                        break;
+                }
 
                 sprite.width = sprite.Texture.bitmap.Width;
                 sprite.height = sprite.Texture.bitmap.Height;
