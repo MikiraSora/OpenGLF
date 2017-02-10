@@ -120,8 +120,8 @@ namespace OsuStoryBroadPlayer
                 initializer.Genarate();
 
                 //miss plugin
-                //mp3Player = Engine.sound.AddSoundSourceFromFile(_mp3FilePath);
-                //Engine.sound.Play2D(mp3Player,false,false,true);
+                mp3Player = Engine.sound.AddSoundSourceFromFile(_mp3FilePath);
+                Engine.sound.Play2D(mp3Player,false,false,true);
             }
 
             /*for debug
@@ -147,7 +147,7 @@ namespace OsuStoryBroadPlayer
             string oszPath = @"372552 yuiko - Azuma no Sora kara Hajimaru Sekai (Short)\";
             
 
-            StoryBroadPlayer player = new StoryBroadPlayer(oszPath,oszPath+ @".mp3", oszPath+ @"yuiko - Azuma no Sora kara Hajimaru Sekai (Short) (KaedekaShizuru).osb",oszPath+ @"yuiko - Azuma no Sora kara Hajimaru Sekai (Short) (KaedekaShizuru) [Yomi's Hard].osu");
+            StoryBroadPlayer player = new StoryBroadPlayer(oszPath,oszPath+ @"Azuma no sora kara hajimaru sekai (Short).mp3", oszPath+ @"yuiko - Azuma no Sora kara Hajimaru Sekai (Short) (KaedekaShizuru).osb",oszPath+ @"yuiko - Azuma no Sora kara Hajimaru Sekai (Short) (KaedekaShizuru) [Yomi's Hard].osu");
             player.Run();
         }
     }
