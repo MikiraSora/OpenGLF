@@ -98,6 +98,7 @@
     <Compile Include="Components\Action\Action\RotateToAction.cs" />
     <Compile Include="Components\Action\Action\WaitAction.cs" />
     <Compile Include="Components\Action\Action\ScaleToAction.cs" />
+    <Compile Include="Components\Action\Interpolator\EasingInterpolator.cs" />
     <Compile Include="Components\Action\Interpolator\IInterpolator.cs" />
     <Compile Include="Components\Action\Interpolator\LinearInterpolator.cs" />
     <Compile Include="Components\Action\Action\MoveToAction.cs" />

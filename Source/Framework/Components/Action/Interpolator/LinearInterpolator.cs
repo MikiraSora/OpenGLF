@@ -21,5 +21,10 @@ namespace OpenGLF
 
             return value/(end-start);
         }
+
+        public IInterpolator reverse()
+        {
+            return new LinearInterpolator();
+        }
     }
 }

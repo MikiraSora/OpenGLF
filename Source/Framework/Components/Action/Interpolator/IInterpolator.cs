@@ -11,5 +11,7 @@ namespace OpenGLF
         float end { get; set; }
 
         float calculate(float value);
+
+        IInterpolator reverse();
     }
 }

@@ -27,6 +27,7 @@ namespace OpenGLF
             if (norValue >= 1)
             {
                 markDone();
+                gameObject.LocalPosition = new Vector(endX, endY);
             }
 
             float x = norValue * (endX - startX);
@@ -38,7 +39,7 @@ namespace OpenGLF
 
         public override ActionBase reverse()
         {
-            return new MoveToAction(gameObject,endX,endY,startX,startY,_timeEnd-_timeStart,interpolator);
+            return new MoveToAction(gameObject,endX,endY,startX,startY,_timeEnd-_timeStart, interpolator.reverse());
         }
 
     }

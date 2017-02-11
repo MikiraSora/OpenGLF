@@ -69,8 +69,14 @@ namespace openglfExample
                     Console.WriteLine("leave " + ballGameObject.ID);
                 };
 
-                ballGameObject.LocalPosition = new Vector((int)OpenGLF.Random.range(-200,200), (int)OpenGLF.Random.range(-200, 200));
                 ballGameObject.sprite.center = new Vector(ballGameObject.sprite.width / 2, ballGameObject.sprite.height / 2);
+
+                MoveToAction action = new MoveToAction(ballGameObject, 0, 0, 200, 200, 2000, new EasingInterpolator(EasingInterpolator.EaseType.Linear));
+
+                ballGameObject.getComponent<ActionExecutor>().executeAction(new LoopAction(true, 500000, new ActionBase[] {
+                    action,
+                    action.reverse()
+                }));
 
             }
 

@@ -22,6 +22,8 @@ namespace OpenGLF
             if (norValue >= 1)
             {
                 markDone();
+
+                gameObject.sprite.scale = endScale;
             }
 
             float sx = norValue * (endScale.x - startScale.x);
@@ -32,7 +34,7 @@ namespace OpenGLF
 
         public override ActionBase reverse()
         {
-            return new ScaleToAction(gameObject, endScale, startScale, _timeEnd - _timeStart, interpolator);
+            return new ScaleToAction(gameObject, endScale, startScale, _timeEnd - _timeStart, interpolator.reverse());
         }
     }
 }

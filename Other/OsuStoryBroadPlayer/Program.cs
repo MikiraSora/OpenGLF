@@ -22,7 +22,8 @@ namespace OsuStoryBroadPlayer
 
             string _mp3FilePath, _osbFilePath,_osuFilePath;
 
-            ISoundSource mp3Player;
+            ISoundSource mp3PlayerSource;
+            ISound player;
 
             public StoryBroadPlayer(string oszPath,string mp3FilePath,string osbFilePath,string osuFilePath):base(640,460)
             {
@@ -35,8 +36,7 @@ namespace OsuStoryBroadPlayer
 
                 StreamReader reader;
 
-                StoryBroadParser.Sprite sprite;
-                Command command;
+                List<string> strList = new List<string>();
 
                 List<StoryBroadParser.Sprite> spriteList = new List<StoryBroadParser.Sprite>();
 
@@ -47,36 +47,7 @@ namespace OsuStoryBroadPlayer
                         while (!reader.EndOfStream)
                         {
                             buffer = reader.ReadLine();
-
-                            if (Parser.isSpriteLine(buffer))
-                            {
-                                sprite = Parser.tryParseSprite(buffer);
-                                if (sprite != null)
-                                {
-                                    /**
-                                     */
-                                    if (spriteList.Count != 0)
-                                    {
-                                        var prev_sprite = spriteList[spriteList.Count - 1];
-                                        //Parser.recheckCommand(ref prev_sprite); BUG
-                                    }
-
-                                    //add new sprite and clear
-                                     spriteList.Add(sprite);
-                                }
-                                continue;
-                            }
-
-                            if (Parser.isCommandLine(buffer))
-                            {
-                                command = Parser.tryParseCommand(buffer);
-                                if (command != null)
-                                {
-                                    spriteList[spriteList.Count - 1]._commands.Add(command);
-                                }
-                                continue;
-                            }
-
+                            strList.Add(buffer);
                         }
                     }
                 }
@@ -87,28 +58,13 @@ namespace OsuStoryBroadPlayer
                     {
                         buffer = reader.ReadLine();
 
-                        if (Parser.isSpriteLine(buffer))
-                        {
-                            sprite = Parser.tryParseSprite(buffer);
-                            if (sprite != null)
-                                spriteList.Add(sprite);
-                            continue;
-                        }
-
-                        if (Parser.isCommandLine(buffer))
-                        {
-                            command = Parser.tryParseCommand(buffer);
-                            if (command != null)
-                            {
-                                spriteList[spriteList.Count - 1]._commands.Add(command);
-                            }
-                            continue;
-                        }
-
+                        strList.Add(buffer);
                     }
                 }
 
-                initializer = new StoryBroadInitializer(_oszPath,spriteList);
+                spriteList = Parser.parseStrings(strList.ToArray());
+
+                initializer = new StoryBroadInitializer(_oszPath, spriteList);
             }
 
             protected override void OnLoad(EventArgs e)
@@ -120,14 +76,15 @@ namespace OsuStoryBroadPlayer
                 initializer.Genarate();
 
                 //miss plugin
-                mp3Player = Engine.sound.AddSoundSourceFromFile(_mp3FilePath);
-                Engine.sound.Play2D(mp3Player,false,false,true);
+                mp3PlayerSource = Engine.sound.AddSoundSourceFromFile(_mp3FilePath);
+                player=Engine.sound.Play2D(mp3PlayerSource,false,false,true);
             }
 
-            /*for debug
+           
             protected override void OnMouseDown(MouseButtonEventArgs e)
             {
                 base.OnMouseDown(e);
+                /*
                 GameObject selectObj = SelectManager.selectGameObject(e.X, e.Y);
                 if (selectObj == null)
                     return;
@@ -138,7 +95,14 @@ namespace OsuStoryBroadPlayer
                     selectObj.WorldPosition.x, selectObj.WorldPosition.y,
                     selectObj.getComponent<ActionExecutor>() != null ? (selectObj.getComponent<ActionExecutor>().CurrentAction==null?"NoAction": selectObj.getComponent<ActionExecutor>().CurrentAction.GetType().Name) : "??"
                     );
-            }*/
+                    */
+            }
+
+            protected override void OnUpdateFrame(FrameEventArgs e)
+            {
+                base.OnUpdateFrame(e);
+                Title = string.Format("StoryBoard Player time:{0} \t fps:{1}", player.PlayPosition , Math.Truncate(UpdateFrequency));
+            }
         }
 
         public static void Main(string[] argv)

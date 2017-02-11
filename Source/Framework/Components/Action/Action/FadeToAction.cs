@@ -17,21 +17,22 @@ namespace OpenGLF
 
         public override void onUpdate(float norValue)
         {
+            var color = gameObject.sprite.getColor();
+
             if (norValue >= 1)
             {
                 markDone();
+                gameObject.sprite.setColor(color.x, color.y, color.z, _endAlpha);
             }
 
             float a = norValue * (_endAlpha - _startAlpha);
-
-            var color = gameObject.sprite.getColor();
 
             gameObject.sprite.setColor(color.x, color.y, color.z, _startAlpha+a);
         }
 
         public override ActionBase reverse()
         {
-            return new FadeToAction(gameObject,_endAlpha,_startAlpha,_timeEnd-_timeStart,interpolator);
+            return new FadeToAction(gameObject,_endAlpha,_startAlpha,_timeEnd-_timeStart, interpolator.reverse());
         }
     }
 }

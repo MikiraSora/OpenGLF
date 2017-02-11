@@ -22,6 +22,7 @@ namespace OpenGLF
             if (norValue >= 1)
             {
                 markDone();
+                gameObject.sprite.setColor(endColor.x , endColor.y, endColor.z , endColor.w );
             }
 
             float r = norValue * (endColor.x - startColor.x);
@@ -29,12 +30,12 @@ namespace OpenGLF
             float b = norValue * (endColor.z - startColor.z);
             float a = norValue * (endColor.w - startColor.w);
 
-            gameObject.sprite.setColor(startColor.x+r, startColor.x + b,startColor.z + b,startColor.w+ a);
+            gameObject.sprite.setColor(startColor.x+r, startColor.y + g,startColor.z + b,startColor.w+ a);
         }
 
         public override ActionBase reverse()
         {
-            return new ColorToAction(gameObject,endColor,startColor,_timeEnd-_timeStart,interpolator);
+            return new ColorToAction(gameObject,endColor,startColor,_timeEnd-_timeStart,interpolator.reverse());
         }
     }
 }

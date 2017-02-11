@@ -32,7 +32,7 @@ namespace OpenGLF
 
         public override ActionBase reverse()
         {
-            return new RotateToAction(gameObject,_endAngle, _startAngle, _timeEnd - _timeStart, interpolator);
+            return new RotateToAction(gameObject,_endAngle, _startAngle, _timeEnd - _timeStart, interpolator.reverse());
         }
     }
 }
