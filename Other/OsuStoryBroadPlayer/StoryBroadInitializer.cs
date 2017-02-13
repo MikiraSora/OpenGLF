@@ -7,14 +7,17 @@ using StoryBroadParser;
 using OpenGLF;
 using System.Drawing;
 using OpenGLF_EX;
+using IrrKlang;
 
 namespace OsuStoryBroadPlayer
 {
-    class StoryBroadInitializer
+    public class StoryBroadInitializer
     {
         List<StoryBroadParser.Sprite> _spriteList;
 
         string _oszFilePath;
+
+        public ISound _currentPlayer;
 
         public StoryBroadInitializer(string oszFilePath,List<StoryBroadParser.Sprite> spriteList)
         {
@@ -22,11 +25,18 @@ namespace OsuStoryBroadPlayer
             _oszFilePath = oszFilePath;
         }
 
-        public void Genarate()
+        public void SetPlayer(ISound player)
+        {
+            _currentPlayer = player;
+        }
+
+        public List<GameObject> Genarate()
         {
             GameObject gameObject;
             TextureSprite sprite;
             StoryBroadParser.Sprite SBSprite;
+
+            List<GameObject> outputList = new List<GameObject>();
 
             foreach (var spriteObject in _spriteList)
             {
@@ -82,12 +92,16 @@ namespace OsuStoryBroadPlayer
                 //gameObject.components.Add(new Selectable());
 #endif
 
-                gameObject.LocalPosition = new Vector(Window.CurrentWindow.Width/2, Window.CurrentWindow.Height / 2);
+                gameObject.LocalPosition = new Vector(spriteObject._x, spriteObject._y);
 
-                Engine.scene.GameObjectRoot.addChild(gameObject);
+                outputList.Add(gameObject);
+
+                //Engine.scene.GameObjectRoot.addChild(gameObject);
 
                 gameObject.getComponent<ActionExecutor>().executeAction(buildSpriteCommand(ref gameObject,ref SBSprite));
             }
+
+            return outputList;
         }
 
         struct SBActions
@@ -256,16 +270,19 @@ namespace OsuStoryBroadPlayer
                     if (i != 0)
                     {
                         offsetTime =Math.Abs(list.Value[i - 1].command._endTime - sbAction.command._startTime);
+                        actionbaseList.Add(new WaitAction(offsetTime));
                     }
                     else
                     {
                         offsetTime = sbAction.command._startTime;
+                        actionbaseList.Add(new SyncMusicPlayerAction(null,this,offsetTime));
                     }
-
+                    /*
                     if (offsetTime != 0)
                     {
                         actionbaseList.Add(new WaitAction(offsetTime)); //wait for next same event
                     }
+                    */
                     actionbaseList.Add(sbAction.action);
                 }
 

@@ -32,6 +32,8 @@ namespace OpenGLF
 
         public Engine()
         {
+            Log.Init();
+
             GL.Enable(EnableCap.Texture2D);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
@@ -273,20 +275,11 @@ namespace OpenGLF
             {
                 if (callObjectUpdate == true)
                 {
+                    Schedule.mainThreadRun();
+
                     for (int i = 0; i < 6; i++ )
                         world.Step(dt);
-                    /*
-                    for (int i = 0; i < scene.objects.Count; i++)
-                    {
-                        GameObject obj = scene.objects[i];
-                        for (int j = 0; j < obj.components.Count; j++)
-                        {
-                            if (obj.components[j].enabled)
-                                obj.components[j].update();
-                        }
-                        obj.update();
-                    }
-                    */
+
                     Engine.scene.GameObjectRoot.update();
                 }
             }

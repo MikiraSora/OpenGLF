@@ -15,6 +15,10 @@ namespace OpenGLF
 
         static List<ScheduleTask> _taskList = new List<ScheduleTask>();
 
+        static List<ScheduleTask> _mainThreadTaskList = new List<ScheduleTask>();
+
+        static Stopwatch _watch = new Stopwatch();
+
         static Thread _thread;
 
         static bool _endLoop = false;
@@ -87,6 +91,7 @@ namespace OpenGLF
             _thread = new Thread(threadRun);
             _thread.IsBackground = true;
             _thread.Start();
+            _watch.Start();
         }
 
         public static void removeTask(ScheduleTask task)
@@ -103,6 +108,16 @@ namespace OpenGLF
             {
                 _taskList.Add(task);
             }
+        }
+
+        public static void addMainThreadUpdateTask(ScheduleTask task)
+        {
+            _mainThreadTaskList.Add(task);
+        }
+
+        public static void removeMainThreadUpdateTask(ScheduleTask task)
+        {
+            _mainThreadTaskList.Remove(task);
         }
 
         private static void executeTask(ScheduleTask task)
@@ -130,6 +145,36 @@ namespace OpenGLF
             task.resetLoopTime();
 
             task._isPick = false;
+        }
+
+        public static void mainThreadRun()
+        {
+            long passTime = _watch.ElapsedMilliseconds;
+            //Console.WriteLine("mainThread watch"+passTime);
+            _watch.Restart();
+            ScheduleTask task;
+
+            for (int i = 0; i < _mainThreadTaskList.Count; i++)
+            {
+                task = _mainThreadTaskList[i];
+
+                //Task is already to remove
+                if (task._ableDistory)
+                {
+                    removeMainThreadUpdateTask(task);
+                    i--;
+                    continue;
+                }
+
+                task._currentTime -= passTime;
+                if (task._currentTime <= 0)
+                {
+                    _executeTaskEx(task);
+                }
+                //Console.WriteLine(00);
+            }
+
+            Thread.Sleep(2);
         }
 
         private static void threadRun()
