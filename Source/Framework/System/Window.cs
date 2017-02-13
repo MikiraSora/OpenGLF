@@ -38,7 +38,7 @@ namespace OpenGLF
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Log.Error(e.Message);
             }
            
             Icon = Icon.ExtractAssociatedIcon(Assembly.GetEntryAssembly().Location);
@@ -124,7 +124,7 @@ namespace OpenGLF
             }
             catch (Exception e)
             {
-                Console.WriteLine("set custom cursor failed!{0}", e.Message);
+                Log.Error("set custom cursor failed!{0}", e.Message);
             }
             finally
             {

@@ -35,21 +35,21 @@ namespace OpenGLF
         {
             base.attach();
             SelectManager.registerSelectObject(gameObject);
-            Console.WriteLine("Selectable Object is attached !");
+            Log.Debug("Selectable Object is attached !");
         }
 
         public override void detach()
         {
             base.detach();
             SelectManager.unregisterSelectObject(gameObject);
-            Console.WriteLine("Selectable Object is detached !");
+            Log.Debug("Selectable Object is detached !");
         }
 
         public virtual void beforeSelect(ref List<GameObject> selectList, int x, int y)
         {
             if (hashSave != gameObject.sprite.material.shader.GetHashCode())
             {
-                Console.WriteLine("build new shader");
+                Log.Debug("build new shader");
                 if (currentShader != null)
                     currentShader.Dispose();
                 buildShader();

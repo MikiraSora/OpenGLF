@@ -82,10 +82,10 @@ namespace OpenGLF
                 GL.CompileShader(fragmentShader);
                 
                 if (!String.IsNullOrEmpty(GL.GetShaderInfoLog(vertexShader)))
-                    Console.WriteLine(GL.GetShaderInfoLog(vertexShader));
+                    Log.Debug(GL.GetShaderInfoLog(vertexShader));
 
                 if (!String.IsNullOrEmpty(GL.GetShaderInfoLog(fragmentShader)))
-                    Console.WriteLine(GL.GetShaderInfoLog(fragmentShader));
+                    Log.Debug(GL.GetShaderInfoLog(fragmentShader));
                     
                 program = GL.CreateProgram();
 
@@ -95,9 +95,9 @@ namespace OpenGLF
                 GL.LinkProgram(program);
 
                 if (!String.IsNullOrEmpty(GL.GetProgramInfoLog(program)))
-                    Console.WriteLine(GL.GetProgramInfoLog(program));
+                    Log.Debug(GL.GetProgramInfoLog(program));
                 else
-                    Console.WriteLine("Shader \"" + name + "\" successfully compiled");
+                    Log.Debug("Shader \"" + name + "\" successfully compiled");
 
                 int total = 0;
 

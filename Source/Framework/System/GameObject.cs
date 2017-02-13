@@ -240,7 +240,7 @@ namespace OpenGLF
             }
             catch
             {
-                Console.WriteLine("Ошибка изменения глубины");
+                Log.Error("Ошибка изменения глубины");
             }
         }
 
@@ -276,7 +276,7 @@ namespace OpenGLF
             }
             catch
             {
-                Console.WriteLine("Ошибка копирования данных");
+                Log.Error("Ошибка копирования данных");
             }
         }
 

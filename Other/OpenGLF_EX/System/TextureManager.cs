@@ -14,7 +14,7 @@ namespace OpenGLF_EX
 
         public static void PushTexture(string cacheName,Texture tex)
         {
-            Console.WriteLine("loaded texture "+cacheName);
+            Log.User("loaded texture "+cacheName);
             _textureMap[cacheName] = tex;
         }
 

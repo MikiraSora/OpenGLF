@@ -22,7 +22,7 @@ namespace OpenGLF
             }
             catch (SerializationException e)
             {
-                Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                Log.Error("Failed to serialize. Reason: " + e.Message);
                 throw;
             }
             finally
@@ -43,7 +43,7 @@ namespace OpenGLF
             }
             catch (SerializationException e)
             {
-                Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                Log.Error("Failed to serialize. Reason: " + e.Message);
                 throw;
             }
             finally
@@ -66,7 +66,7 @@ namespace OpenGLF
             }
             catch (SerializationException e)
             {
-                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+                Log.Debug("Failed to deserialize. Reason: " + e.Message);
                 throw;
             }
             finally
@@ -90,7 +90,7 @@ namespace OpenGLF
             }
             catch (SerializationException e)
             {
-                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+                Log.Error("Failed to deserialize. Reason: " + e.Message);
                 throw;
             }
             finally

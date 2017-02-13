@@ -61,12 +61,12 @@ namespace openglfExample
 
                 ballGameObject.getComponent<Selectable>().onEnterArea += () =>
                 {
-                    Console.WriteLine("enter " + ballGameObject.ID);
+                    Log.Debug("enter " + ballGameObject.ID);
                 };
 
                 ballGameObject.getComponent<Selectable>().onLeaveArea += () =>
                 {
-                    Console.WriteLine("leave " + ballGameObject.ID);
+                    Log.Debug("leave " + ballGameObject.ID);
                 };
 
                 ballGameObject.sprite.center = new Vector(ballGameObject.sprite.width / 2, ballGameObject.sprite.height / 2);
@@ -133,7 +133,7 @@ namespace openglfExample
             GameObject selectObj = SelectManager.selectGameObject(e.X,e.Y);
             if (selectObj == null)
                 return;
-            Console.WriteLine("select objName = {0}\tx:{5}({1}) l_y:{6}({2}) offsetDepth:{3} AbsoluteDepth={4}\n",
+            Log.Debug("select objName = {0}\tx:{5}({1}) l_y:{6}({2}) offsetDepth:{3} AbsoluteDepth={4}\n",
                 selectObj.name,
                 selectObj.LocalPosition.x,selectObj.LocalPosition.y,
                 selectObj.depth,selectObj.FullDepth,
