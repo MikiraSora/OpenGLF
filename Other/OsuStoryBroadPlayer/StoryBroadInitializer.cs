@@ -30,17 +30,17 @@ namespace OsuStoryBroadPlayer
             _currentPlayer = player;
         }
 
-        public List<GameObject> Genarate()
+        public List<SBSpriteGameObject> Genarate()
         {
-            GameObject gameObject;
+            SBSpriteGameObject gameObject;
             TextureSprite sprite;
             StoryBroadParser.Sprite SBSprite;
 
-            List<GameObject> outputList = new List<GameObject>();
+            List<SBSpriteGameObject> outputList = new List<SBSpriteGameObject>();
 
             foreach (var spriteObject in _spriteList)
             {
-                gameObject = new GameObject();
+                gameObject = new SBSpriteGameObject();
 
                 SBSprite = spriteObject;
 
@@ -111,7 +111,7 @@ namespace OsuStoryBroadPlayer
             public ActionBase action;
         }
 
-        public ActionBase buildSpriteCommand(ref GameObject gameObject, ref StoryBroadParser.Sprite spriteObject)
+        public ActionBase buildSpriteCommand(ref SBSpriteGameObject gameObject, ref StoryBroadParser.Sprite spriteObject)
         {
             IInterpolator interpolator = null;
             List<SBActions> action_list = new List<SBActions>();
@@ -224,37 +224,7 @@ namespace OsuStoryBroadPlayer
 
             List<ActionBase> result = new List<ActionBase>();
 
-            /*
-            List<List<ActionBase>> actionList = new List<List<ActionBase>>();
-
-            actionList.Add(new List<ActionBase>());
-            actionList[actionList.Count - 1].Add(new WaitAction(spriteObject._commands.Count != 0 ? spriteObject._commands[0]._startTime : 0));
-
-            List<ActionBase> result = new List<ActionBase>();
-
-            for(int i = 0; i < action_list.Count; i++)
-            {
-                sbAction = action_list[i];
-
-                if (sbAction.command._startTime != (prev_command==null?0:prev_command._startTime))
-                {
-                    if (actionList.Count != 0)
-                    {
-                        int waitTime = Math.Abs(sbAction.command._startTime - (prev_command == null ? 0 : prev_command._startTime));
-                        if (waitTime != 0)
-                        {
-                            actionList.Add(new List<ActionBase>());
-                            actionList[actionList.Count - 1].Add(new WaitAction(0));
-                        }
-                    }
-
-                    actionList.Add(new List<ActionBase>());
-                    prev_command = sbAction.command;
-                }
-
-                actionList[actionList.Count - 1].Add(sbAction.action);
-            }
-            */
+            int minStartTime = int.MinValue;
 
             foreach (var list in map)
             {
@@ -275,14 +245,13 @@ namespace OsuStoryBroadPlayer
                     else
                     {
                         offsetTime = sbAction.command._startTime;
-                        actionbaseList.Add(new SyncMusicPlayerAction(null,this,offsetTime));
-                    }
-                    /*
-                    if (offsetTime != 0)
-                    {
-                        actionbaseList.Add(new WaitAction(offsetTime)); //wait for next same event
-                    }
-                    */
+                        actionbaseList.Add(new SyncMusicPlayerAction(gameObject,this,offsetTime));
+                        if (minStartTime == int.MinValue)
+                            minStartTime = offsetTime;
+                        else if (minStartTime > offsetTime)
+                            minStartTime = offsetTime;
+                    }  
+
                     actionbaseList.Add(sbAction.action);
                 }
 
@@ -291,6 +260,8 @@ namespace OsuStoryBroadPlayer
 
             if (result.Count == 0)
                 return new WaitAction(0);
+
+            gameObject._startTime = minStartTime;
 
             return new ComboAction(false,result);
         }

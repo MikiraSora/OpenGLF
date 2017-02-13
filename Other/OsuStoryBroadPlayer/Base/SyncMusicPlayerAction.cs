@@ -11,11 +11,14 @@ namespace OsuStoryBroadPlayer
     class SyncMusicPlayerAction:ActionBase
     {
         StoryBroadInitializer _initializer = null;
+        SBSpriteGameObject gameobject;
         long _trigger = 0;
 
-        public SyncMusicPlayerAction(GameObject gameobject,StoryBroadInitializer initializer,long trigger):base(0,float.MaxValue,null,gameobject)
+        public SyncMusicPlayerAction(SBSpriteGameObject gameobject,StoryBroadInitializer initializer,long trigger):base(0,float.MaxValue,null,gameobject)
         {
-
+            _initializer = initializer;
+            _trigger = trigger;
+            this.gameobject = gameobject;
         }
 
         public override void onAction(float passTime)
@@ -27,6 +30,7 @@ namespace OsuStoryBroadPlayer
         {
             if(_initializer._currentPlayer.PlayPosition>=_trigger)
             {
+                Log.User("PlayBack:{0} sprite {1} appeared! in (gameobject {2} - trigger {3})", _initializer._currentPlayer.PlayPosition,gameobject.name,gameobject._startTime,_trigger);
                 markDone();
             }
         }

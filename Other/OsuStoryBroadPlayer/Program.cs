@@ -73,11 +73,32 @@ namespace OsuStoryBroadPlayer
 
                 Engine.scene = new Scene();
 
-                initializer.Genarate();
+                var list=initializer.Genarate();
+
+                Schedule.addMainThreadUpdateTask(new Schedule.ScheduleTask(1000, true, null, -1, (refTask, param) =>
+                {
+                    for(int i = 0; i < list.Count; i++)
+                    {
+                        var sprite = list[i];
+
+                        if (player.PlayPosition + 1000 > sprite._startTime)
+                        {
+                            Log.User("playback:{0},show {1} sprite in {2}",player.PlayPosition,sprite.name,sprite._startTime);
+                            Engine.scene.GameObjectRoot.addChild(sprite);
+                            list.RemoveAt(i);
+                            i--;
+                        }
+                    }
+
+                    if (list.Count == 0)
+                        refTask.markLoopDone();
+                }));
 
                 //miss plugin
                 mp3PlayerSource = Engine.sound.AddSoundSourceFromFile(_mp3FilePath);
                 player=Engine.sound.Play2D(mp3PlayerSource,false,false,true);
+
+                initializer.SetPlayer(player);
             }
 
            

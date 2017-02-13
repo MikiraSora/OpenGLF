@@ -72,7 +72,7 @@ namespace OpenGLF
             public event ScheduleFunction onScheduleCallEvent;
             public delegate void ScheduleFunction(ScheduleTask refTask,object param);
 
-            protected void markLoopDone()
+            public void markLoopDone()
             {
                 _loopDone = true;
             }
