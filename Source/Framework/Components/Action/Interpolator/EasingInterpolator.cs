@@ -22,11 +22,11 @@ namespace OpenGLF
 
         EaseType _type = EaseType.Linear;
 
-        static MethodInfo[] _cacheMethodInfoArr = null;
+        //static MethodInfo[] _cacheMethodInfoArr = null;//old
 
         public EasingInterpolator(EaseType type=EaseType.Linear)
         {
-            /*
+            /* old
             if (_cacheMethodInfoArr == null)
             {
                 _cacheMethodInfoArr = typeof(EasingInterpolator).GetMethods();

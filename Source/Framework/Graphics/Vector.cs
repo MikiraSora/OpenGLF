@@ -123,7 +123,7 @@ namespace OpenGLF
             return true;
         }
 
-        public override object CreateInstance(ITypeDescriptorContext context, System.Collections.IDictionary propertyValues)
+        public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
         {
             if (propertyValues == null)
                 throw new ArgumentNullException("propertyValues");

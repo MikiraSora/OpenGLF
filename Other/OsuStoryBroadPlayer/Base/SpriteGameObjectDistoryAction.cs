@@ -9,12 +9,14 @@ namespace OsuStoryBroadPlayer
 {
     public class SpriteGameObjectDistoryAction : ImmediatelyActionBase
     {
-        public SpriteGameObjectDistoryAction(SpriteGameObject gameobject) : base(gameobject) { }
+        public SpriteGameObjectDistoryAction(SBSpriteGameObject gameobject) : base(gameobject) { }
 
         public override void onUpdate()
         {
-            Engine.scene.GameObjectRoot.removeChild(gameObject);
-            Log.User("Sprite {0} was distory!",((SpriteGameObject)gameObject)._sbSprite._imgPath);
+            Schedule.addMainThreadUpdateTask(new Schedule.ScheduleTask(0, (refTask, param) => {
+                Engine.scene.GameObjectRoot.removeChild(gameObject);
+            }, null));
+            Log.User("Sprite {0} was distory!",((SBSpriteGameObject)gameObject).name);
         }
     }
 }

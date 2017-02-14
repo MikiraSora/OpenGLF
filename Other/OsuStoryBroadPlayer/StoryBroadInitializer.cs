@@ -263,7 +263,7 @@ namespace OsuStoryBroadPlayer
 
             gameObject._startTime = minStartTime;
 
-            return new ComboAction(false,result);
+            return new FrameAction(new ActionBase[] { new ComboAction(false, result),new SpriteGameObjectDistoryAction(gameObject)});
         }
 
         public IInterpolator getEasing(Easing easing)

@@ -74,6 +74,7 @@
     <Compile Include="Assets\Assets.cs" />
     <Compile Include="Assets\Audio.cs" />
     <Compile Include="Assets\Font.cs" />
+    <Compile Include="Assets\Scene\SwitchScene.cs" />
     <Compile Include="Blueprint\Blocks\Input\BlockGetKey.cs" />
     <Compile Include="Blueprint\Blocks\Input\BlockMouseGetPosition.cs" />
     <Compile Include="Blueprint\Blocks\Math\BlockDivide.cs" />
@@ -162,8 +163,10 @@
     <Compile Include="System\Physics.cs" />
     <Compile Include="Shaders\Shaders.cs" />
     <Compile Include="System\RenderSystem.cs" />
+    <Compile Include="System\SceneDirector.cs" />
     <Compile Include="System\Schedule.cs" />
     <Compile Include="System\SelectManager.cs" />
+    <Compile Include="System\Singal.cs" />
     <Compile Include="Utils\BezierCurveCubic.cs" />
     <Compile Include="Utils\Log.cs" />
     <Compile Include="Utils\Mathf.cs" />
@@ -186,7 +189,7 @@
     <Compile Include="System\Window.cs" />
     <Compile Include="Assets\Prefab.cs" />
     <Compile Include="Shaders\Sampler2D.cs" />
-    <Compile Include="Assets\Scene.cs" />
+    <Compile Include="Assets\Scene\Scene.cs" />
     <Compile Include="Graphics\Screen.cs" />
     <Compile Include="Assets\Script.cs" />
     <Compile Include="Utils\Serialization.cs" />

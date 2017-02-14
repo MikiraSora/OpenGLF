@@ -105,18 +105,6 @@ namespace OsuStoryBroadPlayer
             protected override void OnMouseDown(MouseButtonEventArgs e)
             {
                 base.OnMouseDown(e);
-                /*
-                GameObject selectObj = SelectManager.selectGameObject(e.X, e.Y);
-                if (selectObj == null)
-                    return;
-                Console.WriteLine("select objName = {0}\tx:{5}({1}) l_y:{6}({2}) offsetDepth:{3} AbsoluteDepth={4}\n CurrentAction:{7}",
-                    selectObj.name,
-                    selectObj.LocalPosition.x, selectObj.LocalPosition.y,
-                    selectObj.depth, selectObj.FullDepth,
-                    selectObj.WorldPosition.x, selectObj.WorldPosition.y,
-                    selectObj.getComponent<ActionExecutor>() != null ? (selectObj.getComponent<ActionExecutor>().CurrentAction==null?"NoAction": selectObj.getComponent<ActionExecutor>().CurrentAction.GetType().Name) : "??"
-                    );
-                    */
             }
 
             protected override void OnUpdateFrame(FrameEventArgs e)
@@ -124,15 +112,24 @@ namespace OsuStoryBroadPlayer
                 base.OnUpdateFrame(e);
                 Title = string.Format("StoryBoard Player time:{0} \t fps:{1}", player.PlayPosition , Math.Truncate(UpdateFrequency));
             }
+            int i = 0;
+            protected override void OnKeyPress(KeyPressEventArgs e)
+            {
+                base.OnKeyPress(e);
+                Singal.registerSingalTrigger("a", (trigger, param) => {
+                    Console.WriteLine(i+"aaa");
+                });
+                Singal.sendSingal("a",null);
+                i++;
+            }
         }
 
         public static void Main(string[] argv)
         {
             //path
-            string oszPath = @"372552 yuiko - Azuma no Sora kara Hajimaru Sekai (Short)\";
-            
-
-            StoryBroadPlayer player = new StoryBroadPlayer(oszPath,oszPath+ @"Azuma no sora kara hajimaru sekai (Short).mp3", oszPath+ @"yuiko - Azuma no Sora kara Hajimaru Sekai (Short) (KaedekaShizuru).osb",oszPath+ @"yuiko - Azuma no Sora kara Hajimaru Sekai (Short) (KaedekaShizuru) [Yomi's Hard].osu");
+            string oszPath = /*@"372552 yuiko - Azuma no Sora kara Hajimaru Sekai (Short)\"*/@"G:\osu!\Songs\49106 jun - KIMONO PRINCESS\";
+           
+            StoryBroadPlayer player = new StoryBroadPlayer(oszPath,oszPath+ @"KIMONO PRINCESS.mp3", oszPath+ @"jun - KIMONO PRINCESS (Philippines).osb", oszPath+ @"jun - KIMONO PRINCESS (Philippines) [Wmf's Taiko].osu");
             player.Run();
         }
     }

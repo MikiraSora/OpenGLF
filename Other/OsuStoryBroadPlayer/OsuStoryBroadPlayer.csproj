@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\SBSpriteGameObject.cs" />
+    <Compile Include="Base\SpriteGameObjectDistoryAction.cs" />
     <Compile Include="Base\SyncMusicPlayerAction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
