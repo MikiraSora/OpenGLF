@@ -8,7 +8,6 @@ namespace OpenGLF
     public class MoveToAction : ActionBase
     {
         int endX,endY,startX,startY;
-        float angle;
 
         public MoveToAction(GameObject gameObject, int endX, int endY, float time, IInterpolator interpolatior) : this(gameObject, (int)gameObject.LocalPosition.x, (int)gameObject.LocalPosition.y, endX, endY, time, interpolatior) { }
 

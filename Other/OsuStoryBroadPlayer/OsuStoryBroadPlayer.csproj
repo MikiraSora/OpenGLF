@@ -53,9 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\Action\ColorToAction.cs" />
+    <Compile Include="Base\Action\MoveXToAction.cs" />
+    <Compile Include="Base\Action\MoveYToAction.cs" />
     <Compile Include="Base\SBSpriteGameObject.cs" />
-    <Compile Include="Base\SpriteGameObjectDistoryAction.cs" />
-    <Compile Include="Base\SyncMusicPlayerAction.cs" />
+    <Compile Include="Base\Action\SpriteGameObjectDistoryAction.cs" />
+    <Compile Include="Base\Action\SyncMusicPlayerAction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoryBroadInitializer.cs" />

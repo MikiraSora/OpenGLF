@@ -27,7 +27,7 @@ namespace StoryBroadParser
                 if(command_params[3].Trim()!=string.Empty)
                     command._endTime = Int32.Parse(command_params[3]);
                 else
-                    command._endTime = command._startTime ;
+                    command._endTime = -1000;
 
                 command._params = new List<string>();
                 for (int i = 4; i < command_params.Length; i++)
@@ -35,34 +35,46 @@ namespace StoryBroadParser
 
                 if (command._event == Events.Color && command._params.Count == 3)
                 {
-                    command._params.Add("255");
-                    command._params.Add("255");
-                    command._params.Add("255");
+                    command._params.Add(command._params[0]);
+                    command._params.Add(command._params[1]);
+                    command._params.Add(command._params[2]);
+                    //command._params.Add("255");
+                    //command._params.Add("255");
+                    //command._params.Add("255");
                 }
-                else if(command._event == Events.Rotate && command._params.Count == 1)
+                else if (command._event == Events.Rotate && command._params.Count == 1)
                 {
-                    command._params.Add("0");
+                    //command._params.Add("0");
+                    command._params.Add(command._params[0]);
                 }
-                else if(command._event == Events.Scale && command._params.Count == 1)
+                else if (command._event == Events.Scale && command._params.Count == 1)
                 {
-                    command._params.Add("1");
+                    //command._params.Add("1");//old
+                    command._params.Add(command._params[0]);
                 }
                 else if (command._event == Events.Fade && command._params.Count == 1)
                 {
-                    command._params.Add("1");
+                    //command._params.Add("1");
+                    command._params.Add(command._params[0]);
                 }
                 else if (command._event == Events.VectorScale && command._params.Count == 2)
                 {
-                    command._params.Add("1");
-                    command._params.Add("1");
+                    //command._params.Add("1");
+                    //command._params.Add("1");
+                    command._params.Add(command._params[0]);
+                    command._params.Add(command._params[1]);
                 }
                 else if (command._event == Events.Move && command._params.Count == 2)
                 {
                     command._params.Add(command._params[0]);
                     command._params.Add(command._params[1]);
                 }
+                else if ((command._event == Events.MoveX|| command._event == Events.MoveY) && command._params.Count == 1)
+                {
+                    command._params.Add(command._params[0]);
+                }
 
-                return command;
+                    return command;
             }
             catch (Exception e)
             {
@@ -107,6 +119,8 @@ namespace StoryBroadParser
             var commands = spriteObject._commands;
             int min = Int32.MaxValue, max = 0 ;
 
+            bool[] isFirst = new bool[11];
+
             foreach (var command in commands) {
                 if (command._startTime < min && command._endTime != -1000)
                     min = command._startTime;
@@ -117,8 +131,9 @@ namespace StoryBroadParser
 
             foreach(var command in commands)
             {
-                if(command._endTime == -1000)
+                if(command._endTime == -1000&&!isFirst[(int)command._event]&&command._event==Events.Move)
                 {
+                    isFirst[(int)command._event] = true;
                     command._startTime = min;
                     command._endTime = max;
                 }
@@ -188,7 +203,7 @@ namespace StoryBroadParser
                         if (spriteList.Count != 0)
                         {
                             var prev_sprite = spriteList[spriteList.Count - 1];
-                            //Parser.recheckCommand(ref prev_sprite); BUG
+                            //Parser.recheckCommand(ref prev_sprite); //BUG
                         }
 
                         //add new sprite and clear

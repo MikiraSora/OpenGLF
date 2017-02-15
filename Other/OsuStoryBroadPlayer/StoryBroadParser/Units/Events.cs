@@ -8,16 +8,16 @@ namespace StoryBroadParser
 {
     public enum Events
     {
-        Move,
-        Fade,
-        Scale,
-        VectorScale,
-        Rotate,
-        Color,
-        Parameter,
-        MoveX,
-        MoveY,
-        Loop,
-        Trigger
+        Move=0,
+        Fade=1,
+        Scale=2,
+        VectorScale=3,
+        Rotate=4,
+        Color=5,
+        Parameter=6,
+        MoveX=7,
+        MoveY=8,
+        Loop=9,
+        Trigger=10
     }
 }

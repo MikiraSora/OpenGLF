@@ -116,20 +116,15 @@ namespace OsuStoryBroadPlayer
             protected override void OnKeyPress(KeyPressEventArgs e)
             {
                 base.OnKeyPress(e);
-                Singal.registerSingalTrigger("a", (trigger, param) => {
-                    Console.WriteLine(i+"aaa");
-                });
-                Singal.sendSingal("a",null);
-                i++;
             }
         }
 
         public static void Main(string[] argv)
         {
             //path
-            string oszPath = /*@"372552 yuiko - Azuma no Sora kara Hajimaru Sekai (Short)\"*/@"G:\osu!\Songs\49106 jun - KIMONO PRINCESS\";
+            string oszPath = @"372552 yuiko - Azuma no Sora kara Hajimaru Sekai (Short)\";
            
-            StoryBroadPlayer player = new StoryBroadPlayer(oszPath,oszPath+ @"KIMONO PRINCESS.mp3", oszPath+ @"jun - KIMONO PRINCESS (Philippines).osb", oszPath+ @"jun - KIMONO PRINCESS (Philippines) [Wmf's Taiko].osu");
+            StoryBroadPlayer player = new StoryBroadPlayer(oszPath,oszPath+ @"Azuma no sora kara hajimaru sekai (Short).mp3", oszPath+ @"yuiko - Azuma no Sora kara Hajimaru Sekai (Short) (KaedekaShizuru).osb", oszPath+ @"yuiko - Azuma no Sora kara Hajimaru Sekai (Short) (KaedekaShizuru) [Yomi's Hard].osu");
             player.Run();
         }
     }

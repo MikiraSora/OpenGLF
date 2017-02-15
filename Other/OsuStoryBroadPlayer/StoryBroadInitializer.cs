@@ -176,16 +176,23 @@ namespace OsuStoryBroadPlayer
                         break;
 
                     case Events.Color:
-                        startColor = new Vec4(Convert.ToSingle(command._params[0]), Convert.ToSingle(command._params[0]), Convert.ToSingle(command._params[0]),prev_fade);
-                        endColor = new Vec4(Convert.ToSingle(command._params[3]), Convert.ToSingle(command._params[4]), Convert.ToSingle(command._params[5]), prev_fade);
-                        action = new ColorToAction(gameObject, startColor, endColor, command._endTime - command._startTime,interpolator);
+                        action = new ColorToAction(gameObject, 
+                            Convert.ToSingle(command._params[0])/255.0f, Convert.ToSingle(command._params[1])/255.0f, Convert.ToSingle(command._params[2]) / 255.0f,
+                            Convert.ToSingle(command._params[3]) / 255.0f, Convert.ToSingle(command._params[4]) / 255.0f, Convert.ToSingle(command._params[5]) / 255.0f,
+                            command._endTime - command._startTime,interpolator);
                         break;
 
                     case Events.Parameter:
                         break;
                     case Events.MoveX:
+                        action = new MoveXToAction(gameObject,
+                            (int)Convert.ToSingle(command._params[0]), (int)Convert.ToSingle(command._params[1]),
+                            command._endTime - command._startTime, interpolator);
                         break;
                     case Events.MoveY:
+                        action = new MoveYToAction(gameObject,
+                            (int)Convert.ToSingle(command._params[0]), (int)Convert.ToSingle(command._params[1]),
+                               command._endTime - command._startTime, interpolator);
                         break;
                     case Events.Loop:
                         break;
