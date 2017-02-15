@@ -214,7 +214,7 @@ namespace OsuStoryBroadPlayer
 
             Command prev_command=null;
 
-            gameObject.sprite.setColor(1, 1, 1, 0);
+            //gameObject.sprite.setColor(1, 1, 1, 0);
 
             Dictionary<Type, List<SBActions>> map = new Dictionary<Type, List<SBActions>>();
 

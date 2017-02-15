@@ -110,7 +110,7 @@ namespace OsuStoryBroadPlayer
             protected override void OnUpdateFrame(FrameEventArgs e)
             {
                 base.OnUpdateFrame(e);
-                Title = string.Format("StoryBoard Player time:{0} \t fps:{1}", player.PlayPosition , Math.Truncate(UpdateFrequency));
+                Title = string.Format("StoryBoard Player time:{0} \t fps:{1} sprite:{2}", player.PlayPosition , Math.Truncate(UpdateFrequency),Engine.scene.GameObjectRoot.getChildren().Count);
             }
             int i = 0;
             protected override void OnKeyPress(KeyPressEventArgs e)
@@ -122,9 +122,9 @@ namespace OsuStoryBroadPlayer
         public static void Main(string[] argv)
         {
             //path
-            string oszPath = @"372552 yuiko - Azuma no Sora kara Hajimaru Sekai (Short)\";
+            string oszPath = @"G:\osu!\Songs\94790 Hatsuki Yura - Fuuga\";
            
-            StoryBroadPlayer player = new StoryBroadPlayer(oszPath,oszPath+ @"Azuma no sora kara hajimaru sekai (Short).mp3", oszPath+ @"yuiko - Azuma no Sora kara Hajimaru Sekai (Short) (KaedekaShizuru).osb", oszPath+ @"yuiko - Azuma no Sora kara Hajimaru Sekai (Short) (KaedekaShizuru) [Yomi's Hard].osu");
+            StoryBroadPlayer player = new StoryBroadPlayer(oszPath,oszPath+ @"fuuga.mp3", oszPath+ @"Hatsuki Yura - Fuuga (Lan wings).osb", oszPath+ @"Hatsuki Yura - Fuuga (Lan wings) [Zero's Hard].osu");
             player.Run();
         }
     }

@@ -24,10 +24,10 @@ namespace StoryBroadParser
                 command._easing = String2Easing(command_params[1]);
                 command._startTime = Int32.Parse(command_params[2]);
 
-                if(command_params[3].Trim()!=string.Empty)
+                if (command_params[3].Trim() != string.Empty)
                     command._endTime = Int32.Parse(command_params[3]);
                 else
-                    command._endTime = -1000;
+                    command._endTime = -1000 ;
 
                 command._params = new List<string>();
                 for (int i = 4; i < command_params.Length; i++)
@@ -131,7 +131,7 @@ namespace StoryBroadParser
 
             foreach(var command in commands)
             {
-                if(command._endTime == -1000&&!isFirst[(int)command._event]&&command._event==Events.Move)
+                if(command._endTime == -1000&&!isFirst[(int)command._event]/*&&(command._event==Events.Move|| command._event == Events.Fade)*/)
                 {
                     isFirst[(int)command._event] = true;
                     command._startTime = min;
@@ -203,7 +203,7 @@ namespace StoryBroadParser
                         if (spriteList.Count != 0)
                         {
                             var prev_sprite = spriteList[spriteList.Count - 1];
-                            //Parser.recheckCommand(ref prev_sprite); //BUG
+                            Parser.recheckCommand(ref prev_sprite); //BUG
                         }
 
                         //add new sprite and clear
