@@ -62,15 +62,9 @@ namespace OpenGLF
         //结束此Scene后第一个callBack,通常用于释放资源操作
         public virtual void onLeaveScene() {}
 
-        //进入场景的过度之前
-        public virtual void onPreEnterScene() {}
-
-        //离开场景的过度之后
-        public virtual void onPreLeaveScene() {}
-
         public void exitScene()
         {
-
+            SceneDirector.exitCurrentScene(); //自我退出
         }
 
         [OnDeserialized()]

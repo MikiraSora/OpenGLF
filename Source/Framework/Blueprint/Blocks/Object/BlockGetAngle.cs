@@ -40,7 +40,7 @@ namespace OpenGLF
 
             if (obj != null)
             {
-                c_angle.value = obj.angle;
+                c_angle.value = obj.Angle;
             }
 
             doNext();

@@ -15,19 +15,19 @@ namespace OpenGLF
             _endAngle = endAngle;
         }
 
-        public RotateToAction(GameObject gameObject,float endAngle,float time,IInterpolator interpolator) : this(gameObject, gameObject.angle,endAngle, time, interpolator) { }
+        public RotateToAction(GameObject gameObject,float endAngle,float time,IInterpolator interpolator) : this(gameObject, gameObject.LocalAngle, endAngle, time, interpolator) { }
 
         public override void onUpdate(float norValue)
         {
             if (norValue >= 1)
             {
                 markDone();
+                gameObject.LocalAngle = _endAngle;
             }
 
             float angle = norValue * (_endAngle - _startAngle);
-            //Console.WriteLine("time : {0:F2}\tx : {1:F2}\ty :　{2:F2}",passTime,x,y);
 
-            gameObject.angle =gameObject.angle+angle;
+            gameObject.LocalAngle =/*gameObject.LocalAngle +*/_startAngle+ angle;
         }
 
         public override ActionBase reverse()

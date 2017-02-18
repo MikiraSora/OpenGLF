@@ -69,4 +69,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if exist G:\OsuStoryBroadPlayer (copy $(TargetPath) G:\OsuStoryBroadPlayer\Dependencies\$(TargetFileName))</PostBuildEvent>
+  </PropertyGroup>
 </Project>

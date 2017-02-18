@@ -55,7 +55,7 @@ namespace OpenGLF
 
             if (obj != null)
             {
-                obj.angle = a;
+                obj.LocalAngle = a;
             }
 
             doNext();

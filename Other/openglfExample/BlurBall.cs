@@ -112,7 +112,7 @@ namespace openglfExample
             DisplayOutputGameObject.sprite.width = width;
             DisplayOutputGameObject.sprite.height = height;
             DisplayOutputGameObject.sprite.center = new Vector(width / 2, height / 2);
-            DisplayOutputGameObject.angle += 180;
+            DisplayOutputGameObject.LocalAngle += 180;
             DisplayOutputGameObject.LocalPosition = new Vector(width / 2, height / 2);
             DisplayOutputGameObject.addChild(this);
 

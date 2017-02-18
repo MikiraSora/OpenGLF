@@ -39,7 +39,7 @@ namespace OpenGLF
                 }
 
                 GL.Translate(gameObject.WorldPosition.x, gameObject.WorldPosition.y, 0);
-                GL.Rotate(gameObject.angle, 0, 0, 1);
+                GL.Rotate(gameObject.Angle, 0, 0, 1);
                 GL.Scale(scale.x, scale.y, 1);
 
                 //Биндим текстурные координаты

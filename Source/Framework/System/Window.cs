@@ -83,6 +83,9 @@ namespace OpenGLF
                 x = (float)Camera.main.gameObject.LocalPosition.x;
                 y = (float)Camera.main.gameObject.LocalPosition.y;
             }
+
+            Input._mouseMapWindowPos = new Vector(Mouse.X,Mouse.Y);
+
             Input._mousePos = new Vector(Mouse.X * zoom - w * zoom + x, Mouse.Y * zoom - h * zoom + y);
 
             Input._mouseInfinityPos = new Vector(OpenTK.Input.Mouse.GetState().X, OpenTK.Input.Mouse.GetState().Y);

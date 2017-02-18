@@ -160,7 +160,7 @@ namespace OpenGLF
 
         public override void start()
         {
-            float angle = (float)gameObject.angle;
+            float angle = (float)gameObject.Angle;
             
             if (vertices.Count <= 1)
             {
@@ -221,7 +221,7 @@ namespace OpenGLF
         public override void update()
         {
             gameObject.LocalPosition = new Vector(body.Position.X, body.Position.Y);
-            gameObject.angle = (float)Mathf.toDegrees(body.Rotation);
+            gameObject.LocalAngle = (float)Mathf.toDegrees(body.Rotation);
         }
 
         public override void draw(OpenTK.Graphics.OpenGL.RenderingMode mode)
@@ -233,7 +233,7 @@ namespace OpenGLF
                     GL.PushMatrix();
                     GL.Translate(gameObject.WorldPosition.x, gameObject.WorldPosition.y, 0);
 
-                    GL.Rotate(gameObject.angle, 0, 0, 1);
+                    GL.Rotate(gameObject.Angle, 0, 0, 1);
 
                     if (_vertices != null)
                     {

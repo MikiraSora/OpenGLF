@@ -10,13 +10,14 @@ namespace OpenGLF
     public static class Input
     {
         static internal float _wheel;
-        static internal Vector _mousePos;
+        static internal Vector _mousePos, _mouseMapWindowPos;
         static internal Vector _mouseInfinityPos;
         static internal int _wheelState = 0;
         static internal bool[] pressed = new bool[256];
         static MouseDevice mouse = new MouseDevice();
         public static float mouseWheelPosition { get { return _wheel; } }
         public static Vector mousePosition { get { return _mousePos; } }
+        public static Vector mouseMapWindowPosition{ get { return _mouseMapWindowPos; } }
         public static Vector mouseInfinityPosition { get { return _mouseInfinityPos; } }
 
         public static bool getMouseScrollUp()

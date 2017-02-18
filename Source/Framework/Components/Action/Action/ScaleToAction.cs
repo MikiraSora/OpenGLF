@@ -9,7 +9,7 @@ namespace OpenGLF
     {
         Vector startScale, endScale;
 
-        public ScaleToAction(GameObject gameobject, Vector endScale, float time, IInterpolator interpolator) :this(gameobject,gameobject.sprite.scale,endScale,time,interpolator){ }
+        public ScaleToAction(GameObject gameobject, Vector endScale, float time, IInterpolator interpolator) :this(gameobject,gameobject.LocalScale,endScale,time,interpolator){ }
 
         public ScaleToAction(GameObject gameobject, Vector startScale, Vector endScale, float time, IInterpolator interpolator) : base(0, time, interpolator, gameobject)
         {
@@ -23,13 +23,13 @@ namespace OpenGLF
             {
                 markDone();
 
-                gameObject.sprite.scale = endScale;
+                gameObject.LocalScale = endScale;
             }
 
             float sx = norValue * (endScale.x - startScale.x);
             float sy = norValue * (endScale.y - startScale.y);
 
-            gameObject.sprite.scale=new Vector(startScale.x + sx, startScale.x + sy);
+            gameObject.LocalScale = new Vector(startScale.x + sx, startScale.x + sy);
         }
 
         public override ActionBase reverse()

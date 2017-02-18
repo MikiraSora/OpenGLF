@@ -21,6 +21,7 @@ namespace OpenGLF
         Vector _localPosition = Vector.zero;
         Vector _oldpos = Vector.zero;
         float _angle = 0;
+        float _localAngle = 0;
         string _name = "";
         int _id = 0;
         GameObject _parent;
@@ -28,6 +29,30 @@ namespace OpenGLF
         public Sprite sprite;
         public Camera camera;
         public Rigidbody rigidbody;
+
+        Vector _localScale, _absoluteScale;
+
+        public Vector Scale { get { return _absoluteScale; } }
+
+        public Vector LocalScale
+        {
+            get { return _localScale; }
+            set
+            {
+                _localScale = value;
+                updateAbsoluteScale();
+            }
+        }
+
+        void updateAbsoluteScale()
+        {
+            _absoluteScale = (_parent == null ? Vector.zero : _parent._absoluteScale) + _localScale;
+            foreach (var child in _children)
+                child.updateAbsoluteScale();
+
+            if (sprite != null)
+                sprite.scale = _absoluteScale;
+        }
 
         static int gen_ID =0;
 
@@ -105,10 +130,9 @@ namespace OpenGLF
         public Vector WorldPosition
         {
             get { return _position; }
-            private set { }
         }
 
-        public void updateWorldPosition()
+        internal void updateWorldPosition()
         {
             _position = (_parent == null ? Vector.zero : _parent.WorldPosition) + _localPosition;
             foreach (var child in _children)
@@ -116,17 +140,19 @@ namespace OpenGLF
         }
 
         [Category("Transform")]
-        public float angle {
+        public float Angle {
             get
             {
                 return _angle;
             }
+            /*
             set
             {
                 if (camera == null)
                 {
-                    List<GameObject> list = getAllChildren();
+                    List<GameObject> list = getChildren();
 
+                    
                     float _old_angle = _angle;
                     _angle = Mathf.roundDegrees(value);
 
@@ -141,8 +167,30 @@ namespace OpenGLF
                             child._angle = child._angle + _new_angle;
                         }
                     }
+                    
+
+                    _angle = Mathf.roundDegrees(value);
+                    
                 }
             }
+    */
+        }
+
+        public float LocalAngle
+        {
+            get { return _localAngle; }
+            set
+            {
+                _localAngle = value;
+                updateAbsoluteAngle();
+            }
+        }
+
+        internal void updateAbsoluteAngle()
+        {
+            _angle = (_parent == null ? 0 : _parent.Angle) + _localAngle;
+            foreach (var child in _children)
+                child.updateAbsoluteAngle();
         }
 
         [Category("Properties")]
@@ -197,6 +245,8 @@ namespace OpenGLF
 
                 if(!_parent.GameObjectChildren.Contains(this))
                     _parent.GameObjectChildren.Add(this);
+
+                updateWorldPosition();
             }
         }
 
@@ -234,7 +284,7 @@ namespace OpenGLF
             {
                 var max = _children.Count;
                 d = max > d ? max : d;
-                var parent = _parent;
+                //var parent = _parent;
                 _parent.removeChild(this);
                 _parent.addChild(this, d);
             }
@@ -266,7 +316,7 @@ namespace OpenGLF
             try
             {
                 name = prefab.name;
-                angle = prefab.gameObject.angle;
+                _angle = prefab.gameObject._angle;
 
                 for (int i = 0; i < prefab.gameObject.components.Count; i++)
                 {
@@ -305,9 +355,11 @@ namespace OpenGLF
 
         public void addChild(GameObject obj,int position=-1)
         {
+            /*
             if (obj._parent != null)
                 obj._parent.removeChild(obj);
-            obj._parent = this;
+                */
+            obj.parent = this;
             position = position<0? _children.Count:position > _children.Count ? _children.Count : position;
             _children.Insert(position,obj);
         }
@@ -349,7 +401,7 @@ namespace OpenGLF
         {
             GameObject obj = new GameObject();
             obj.name = name;      
-            obj.angle = angle;
+            obj._angle = _angle;
             obj.tag = tag;
             obj.parent = parent;
             obj._localPosition = _localPosition.clone();
@@ -844,6 +896,8 @@ namespace OpenGLF
         internal void setComponents()
         {
             sprite = getComponent<Sprite>();
+            if(sprite!=null)
+                sprite.scale = _absoluteScale;
             camera = getComponent<Camera>();
             rigidbody = getComponent<Rigidbody>();
         }

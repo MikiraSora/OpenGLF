@@ -15,14 +15,13 @@ namespace OpenGLF
     {
         int[] viewport;
         bool nodraw = false;
-        static Scene _scene;
         string _projectPath;
         internal static World world;
         public static ISoundEngine sound;
         public static bool debugPhysics = false;
         public static bool debugGUI = false;
         public static bool debugGameObject = false;
-        public static Scene scene { get { return _scene; } set { _scene = value; Assets._assets = Assets.items.Count; } }
+        public static Scene scene { get { return SceneDirector.CurrentScene; } /*set { _scene = value; Assets._assets = Assets.items.Count; }*/ }
         public delegate void OnDraw();  
         public event OnDraw afterDraw;
         public event OnDraw beforeDraw;
@@ -271,6 +270,8 @@ namespace OpenGLF
 
         public void update(float dt, bool callObjectUpdate)
         {
+            SceneDirector.update();
+
             if (Engine.scene != null)
             {
                 if (callObjectUpdate == true)
@@ -279,6 +280,8 @@ namespace OpenGLF
 
                     for (int i = 0; i < 6; i++ )
                         world.Step(dt);
+
+                    SelectManager.updateMove((int)Input.mousePosition.x,(int)Input.mousePosition.y);
 
                     Engine.scene.GameObjectRoot.update();
                 }
