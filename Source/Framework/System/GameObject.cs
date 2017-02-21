@@ -30,7 +30,7 @@ namespace OpenGLF
         public Camera camera;
         public Rigidbody rigidbody;
 
-        Vector _localScale, _absoluteScale;
+        Vector _localScale=new Vector(1,1), _absoluteScale=new Vector(1,1);
 
         public Vector Scale { get { return _absoluteScale; } }
 
@@ -46,7 +46,7 @@ namespace OpenGLF
 
         void updateAbsoluteScale()
         {
-            _absoluteScale = (_parent == null ? Vector.zero : _parent._absoluteScale) + _localScale;
+            _absoluteScale = (_parent == null ? new Vector(1,1) : _parent._absoluteScale) * _localScale;
             foreach (var child in _children)
                 child.updateAbsoluteScale();
 
@@ -247,6 +247,8 @@ namespace OpenGLF
                     _parent.GameObjectChildren.Add(this);
 
                 updateWorldPosition();
+                updateAbsoluteAngle();
+                updateAbsoluteScale();
             }
         }
 
@@ -653,7 +655,6 @@ namespace OpenGLF
             foreach (var c in components)
                 if (((Component)c).enabled)
                     ((Component)c).draw(mode);
-            
 
             foreach (var child in _children)
                 child.draw(mode);

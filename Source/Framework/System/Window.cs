@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Drawing;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using OpenTK.Input;
 
 namespace OpenGLF
 {
@@ -103,6 +104,26 @@ namespace OpenGLF
                 Input._wheelState = 1;
 
             Input._wheel = e.Value;
+        }
+
+        GameObject downObject=null;
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+            downObject=SelectManager.updateClick(e);
+        }
+
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
+            base.OnMouseMove(e);
+            SelectManager.dragUpdateClick(e);
+        }
+
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            base.OnMouseUp(e);
+            downObject = null;
         }
 
         public static void setFullscreen(bool full)

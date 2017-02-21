@@ -20,6 +20,33 @@ namespace OpenGLF
         public static Vector mouseMapWindowPosition{ get { return _mouseMapWindowPos; } }
         public static Vector mouseInfinityPosition { get { return _mouseInfinityPos; } }
 
+        public static MouseState CurrentMouseState
+        {
+            get
+            {
+                return Mouse.GetCursorState();
+            }
+        }
+
+        public enum MouseButtons
+        {
+            LeftButton,
+            RightButton,
+            MiddleScrollButton,
+            None
+        }
+
+        public static MouseButtons GetClickButton()
+        {
+            if (CurrentMouseState.IsButtonDown(MouseButton.Left))
+                return MouseButtons.LeftButton;
+            if (CurrentMouseState.IsButtonDown(MouseButton.Right))
+                return MouseButtons.RightButton;
+            if (CurrentMouseState.IsButtonDown(MouseButton.Middle))
+                return MouseButtons.MiddleScrollButton;
+            return MouseButtons.None;
+        }
+
         public static bool getMouseScrollUp()
         {
             if (_wheelState == 1)

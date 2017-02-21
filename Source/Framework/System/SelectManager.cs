@@ -15,6 +15,8 @@ namespace OpenGLF
         static IntPtr color = Marshal.AllocHGlobal(4);
         static byte[] colorBuffer = new byte[4];
 
+        private static GameObject selectObj = null;
+
         public static bool isSelecting = false;
 
         public static void registerSelectObject(GameObject gameObject)
@@ -66,7 +68,6 @@ namespace OpenGLF
 
         public static void updateMove (int x,int y)
         {
-
             GameObject selectObj = SelectManager.selectGameObject(x,y);
 
             if (_currentGameObject != selectObj)
@@ -83,12 +84,26 @@ namespace OpenGLF
             _currentGameObject = selectObj;
         }
 
-        static GameObject _prevClickGameObject;
+        //static GameObject _prevClickGameObject;
 
-        public static void updateClick(MouseEventArgs e)
+        public static GameObject updateClick(MouseEventArgs e)
         {
-            GameObject selectObj = selectGameObject(e.X,e.Y);
+            selectObj = selectGameObject(e.X,e.Y);
+            if (selectObj == null)
+                return null;
+            selectObj.getComponent<Selectable>().clickArea(e);
+            return selectObj;
         }
 
+        public static void dragUpdateClick(MouseMoveEventArgs e)
+        {
+            if(selectObj!=null && selectObj.getComponent<Selectable>().Type.HasFlag(Selectable.CALLBACKTYPE.OPAREA))
+                selectObj.getComponent<Selectable>().dragArea(e);
+        }
+
+        public static void updateReleaseClick()
+        {
+            selectObj = null;
+        }
     }
 }

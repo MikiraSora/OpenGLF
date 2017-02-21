@@ -21,8 +21,6 @@ namespace openglfExample
 
         GameObject gameobject = null,cameraGameObject;
 
-        int mx, my;
-
         public GameWindow(int width=800,int height=600):base(width, height)
         {
             VSync = VSyncMode.Off;
@@ -30,7 +28,7 @@ namespace openglfExample
 
         void init()
         {
-            Engine.debugGameObject = true;
+            //Engine.debugGameObject = true;
 
             SceneDirector.PushScene(new Scene());
 
@@ -46,47 +44,9 @@ namespace openglfExample
 
             gameobject = new GameObject();
 
-            gameobject.LocalPosition = new Vector(Width / 2, Height / 2);
+            gameobject.LocalPosition = /*new Vector(Width / 2, Height / 2)*/Vector.zero;
             gameobject.name = "base";
             Engine.scene.GameObjectRoot.addChild(gameobject);
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            init();
-            
-            //for (int i = 0; i < 100; i++)
-            {
-
-                GameObject ballGameObject = new GameObject();
-                gameobject.addChild(ballGameObject);
-
-                ballGameObject.components.Add(new Selectable(Selectable.CALLBACKTYPE.OPAREA));
-                ballGameObject.components.Add(new ActionExecutor());
-                ballGameObject.components.Add(new TextureSprite("Assets/cursor.png"));
-
-                ballGameObject.sprite.center = new Vector(ballGameObject.sprite.width / 2, ballGameObject.sprite.height / 2);
-
-                var action = new ScaleToAction(ballGameObject,new Vector(0,0),new Vector(1,1), 1000, new EasingInterpolator(EasingInterpolator.EaseType.Linear));
-
-                GameObject subBall = new GameObject();
-                subBall.components.Add(new TextureSprite("Assets/cursor.png"));
-                subBall.sprite.setColor(0.5f, 1, 0.5f, 0.5f);
-                subBall.sprite.center = new Vector(subBall.sprite.width/2,subBall.sprite.height/2);
-
-
-                ballGameObject.addChild(subBall);
-
-                subBall.LocalPosition = new Vector(100,0);
-
-                ballGameObject.getComponent<ActionExecutor>().executeAction(new LoopAction(true, 50000, new ActionBase[] {
-                    action,
-                    action.reverse()
-                }));
-
-            }
 
             #region debugDraw
             //Draw XY for debug
@@ -101,7 +61,7 @@ namespace openglfExample
                 Drawing.drawLine(new Vector(Width / 2, 10000), new Vector(Width / 2, -10000), 5, new OpenGLF.Color(0, 255, 0, 125));
 
             };
-            
+
             engine.afterDraw += () =>
             {
                 //sprite.Text = string.Format("r:{0:F4}ms,u:{1:F4}ms", (RenderTime * 100), (UpdateTime * 100));
@@ -109,15 +69,25 @@ namespace openglfExample
             #endregion
         }
 
-        GameObject selectobject = null;
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            init();
+
+            Button buttonObject = new Button("Button", 100, OpenGLF.Color.blue, 250, 50, font);
+
+            buttonObject.onClick += (mouse) => { Log.User("{0} Click!", mouse); };
+
+            buttonObject.onDrag += (drag) => {
+                    
+            };
+
+            gameobject.addChild(buttonObject);
+        }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
             base.OnMouseMove(e);
-
-            mx = e.X;
-            my = e.Y;
-
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
@@ -137,6 +107,7 @@ namespace openglfExample
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
             base.OnMouseUp(e);
+            SelectManager.updateReleaseClick();
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -154,17 +125,6 @@ namespace openglfExample
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
             base.OnKeyPress(e);
-            /*
-            switch (e.KeyChar)
-            {
-                case 'a':
-                    cameraGameObject.LocalPosition = cameraGameObject.LocalPosition +new Vector(-7,0);
-                    break;
-                case 'd':
-                    cameraGameObject.LocalPosition = cameraGameObject.LocalPosition + new Vector(7, 0);
-                    break;
-            }
-            */
         }
     }
 

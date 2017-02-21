@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using OpenTK.Input;
 using System.Text;
 
 namespace OpenGLF
@@ -81,33 +82,33 @@ namespace OpenGLF
 
         public virtual void enterArea()
         {
-            onEnterArea();
+            onEnterArea?.Invoke();
         }
 
         public virtual void leaveArea()
         {
-            onLeaveArea();
+            onLeaveArea?.Invoke();
         }
 
-        public virtual void clickArea()
+        public virtual void clickArea(MouseEventArgs e)
         {
-            onClickArea();
+            onClickArea?.Invoke(e);
         }
 
-        public virtual void dragArea()
+        public virtual void dragArea(MouseMoveEventArgs e)
         {
-            onDragArea();
+            onDragArea?.Invoke(e);
         }
 
         public virtual void repeatArea()
         {
-            onRepeatArea();
+            onRepeatArea?.Invoke();
         }
 
         public delegate void EnterArea();
         public delegate void LeaveArea();
-        public delegate void ClickArea();
-        public delegate void DragArea();
+        public delegate void ClickArea(MouseEventArgs e);
+        public delegate void DragArea(MouseMoveEventArgs e);
         public delegate void RepeatArea();
 
         public event EnterArea onEnterArea;

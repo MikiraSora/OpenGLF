@@ -281,7 +281,9 @@ namespace OpenGLF
                     for (int i = 0; i < 6; i++ )
                         world.Step(dt);
 
-                    SelectManager.updateMove((int)Input.mousePosition.x,(int)Input.mousePosition.y);
+                    
+                    SelectManager.updateMove((int)Input.mousePosition.x, (int)Input.mousePosition.y);
+                    
 
                     Engine.scene.GameObjectRoot.update();
                 }
