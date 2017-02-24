@@ -352,16 +352,7 @@ namespace OpenGLF
             }
 
             setComponents();
-            /*
-            for (int i = 0; i < Engine.scene.gameObjectRoot.getAllChildren().Count; i++)
-            {
-                if (Engine.scene.gameObjectRoot.getAllChildren()[i].parent == this)
-                {
-                    GameObject clone = Engine.scene.gameObjectRoot.getAllChildren()[i].clone();
-                    clone.parent = obj;
-                }
-            }
-            */
+            
             for (int i = 0; i < _children.Count; i++)
             {
                 if (_children[i].parent == this)

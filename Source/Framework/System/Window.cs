@@ -25,7 +25,7 @@ namespace OpenGLF
 
         public static Window CurrentWindow { get { return self; } private set { } }
 
-        public Window(int width=800,int height=600):base(width,height)/*base(800, 600,OpenTK.Graphics.GraphicsMode.Default,"",GameWindowFlags.Default,DisplayDevice.Default,4,3,OpenTK.Graphics.GraphicsContextFlags.Debug)*/
+        public Window(int width=800,int height=600):base(width,height)
         {
             self = this;
             showCursor = true;
@@ -46,6 +46,11 @@ namespace OpenGLF
             engine.resize(Width, Height);
         }
 
+        /// <summary>
+        /// 改变窗口大小
+        /// </summary>
+        /// <param name="width">新窗口的宽度</param>
+        /// <param name="height">新窗口的高度</param>
         public void resizeWindow(int width,int height)
         {
             base.Size = new Size(width, height);
@@ -54,7 +59,7 @@ namespace OpenGLF
 
         protected override void OnLoad(EventArgs e)
         {
-            //engine.start(true);
+            base.OnLoad(e);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)

@@ -28,25 +28,37 @@ namespace OpenGLF
             }
         }
 
+        [Flags]
         public enum MouseButtons
         {
-            LeftButton,
-            RightButton,
-            MiddleScrollButton,
-            None
+            LeftButton=2,
+            RightButton=4,
+            MiddleScrollButton=8,
+            None=0
         }
 
+        /// <summary>
+        /// 获取此时鼠标按下的键
+        /// </summary>
+        /// <returns>返回按下鼠标键的Flag</returns>
         public static MouseButtons GetClickButton()
         {
+            MouseButtons buttonState = MouseButtons.None;
+
             if (CurrentMouseState.IsButtonDown(MouseButton.Left))
-                return MouseButtons.LeftButton;
+                buttonState |= MouseButtons.LeftButton;
             if (CurrentMouseState.IsButtonDown(MouseButton.Right))
-                return MouseButtons.RightButton;
+                buttonState |= MouseButtons.RightButton;
             if (CurrentMouseState.IsButtonDown(MouseButton.Middle))
-                return MouseButtons.MiddleScrollButton;
-            return MouseButtons.None;
+                buttonState |= MouseButtons.MiddleScrollButton;
+
+            return buttonState;
         }
 
+        /// <summary>
+        /// 鼠标滚轮是否往上滚
+        /// </summary>
+        /// <returns></returns>
         public static bool getMouseScrollUp()
         {
             if (_wheelState == 1)
@@ -60,6 +72,10 @@ namespace OpenGLF
             }
         }
 
+        /// <summary>
+        /// 鼠标滚轮是否往下滚
+        /// </summary>
+        /// <returns></returns>
         public static bool getMouseScrollDown()
         {
             if (_wheelState == -1)
@@ -73,6 +89,11 @@ namespace OpenGLF
             }
         }
 
+        /// <summary>
+        /// 判断某键是否被按下(按着)
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static bool getKeyDown(Keys key)
         {
             if (OpenTK.Input.Keyboard.GetState().IsKeyDown((short)key))
@@ -85,6 +106,11 @@ namespace OpenGLF
             }
         }
 
+        /// <summary>
+        /// 判断某键是否松开
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static bool getKeyUp(Keys key)
         {
             if (OpenTK.Input.Keyboard.GetState().IsKeyUp((short)key))
@@ -98,6 +124,11 @@ namespace OpenGLF
             }
         }
 
+        /// <summary>
+        /// 判断某键是否被按了一次
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static bool getKeyPressed(Keys key)
         {
             if (OpenTK.Input.Keyboard.GetState().IsKeyDown((short)key))

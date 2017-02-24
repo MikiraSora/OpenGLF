@@ -9,7 +9,12 @@ namespace OpenGLF
     public static class Singal
     {
         static Dictionary<string, List<ISingalable>> _registerSingalMap = new Dictionary<string, List<ISingalable>>();
-        
+
+        /// <summary>
+        /// 声明一个信号接收器，sendSingal发出钦定的信号会回调这个接收器
+        /// </summary>
+        /// <param name="singalTrigger">信号名称</param>
+        /// <param name="callbackObject">信号接收器</param>
         public static void registerSingalTrigger(string singalTrigger,ISingalable callbackObject)
         {
             if (callbackObject != null && singalTrigger.Length != 0)
@@ -22,10 +27,21 @@ namespace OpenGLF
             }
         }
 
+        /// <summary>
+        /// 声明一个信号回调，sendSingal发出钦定的信号会回调委托
+        /// </summary>
+        /// <param name="singalTrigger">信号名称</param>
+        /// <param name="callbackObject">信号回调委托</param>
         public static void registerSingalTrigger(string singalTrigger, SingalCallBackWrapper.OnSingalCallBackFunc func){
             registerSingalTrigger(singalTrigger, new SingalCallBackWrapper(func));
         }
 
+        /// <summary>
+        /// 发送一个信号
+        /// </summary>
+        /// <param name="singalTrigger">信号名称</param>
+        /// <param name="param">自定义传递参数</param>
+        /// <param name="isAsync">是否异步回调</param>
         public static void sendSingal(string singalTrigger,object param,bool isAsync = false)
         {
             if (!_registerSingalMap.ContainsKey(singalTrigger))

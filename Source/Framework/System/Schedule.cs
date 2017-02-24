@@ -41,6 +41,12 @@ namespace OpenGLF
 
             public object Param { get { return _state; } }
 
+            /// <summary>
+            /// 新建一个一次性的计时任务
+            /// </summary>
+            /// <param name="waitTime">等待时间</param>
+            /// <param name="initFunction">触发回调</param>
+            /// <param name="param">携带自定义参数</param>
             public ScheduleTask(long waitTime,ScheduleFunction initFunction,object param) : this(waitTime, false, param, 0,initFunction) { }
 
             /// <summary>
@@ -49,7 +55,7 @@ namespace OpenGLF
             /// <param name="waitTime">time to call</param>
             /// <param name="isLoop">is task call once and remove it from manager</param>
             /// <param name="state">param to your callback function</param>
-            /// <param name="loopTimes">loop times,it's vaild when "isLoop=true"</param>
+            /// <param name="loopTimes">loop times,it's vaild when "isLoop=true,-1 means endless loop"</param>
             /// <param name="initFunction">time to call function</param>
             public ScheduleTask(long waitTime,bool isLoop,object param = null,int loopTimes=-1,ScheduleFunction initFunction=null)
             {
@@ -72,6 +78,9 @@ namespace OpenGLF
             public event ScheduleFunction onScheduleCallEvent;
             public delegate void ScheduleFunction(ScheduleTask refTask,object param);
 
+            /// <summary>
+            /// 跳过剩余的循环次数，终止循环
+            /// </summary>
             public void markLoopDone()
             {
                 _loopDone = true;
@@ -94,6 +103,10 @@ namespace OpenGLF
             _watch.Start();
         }
 
+        /// <summary>
+        /// 删除在计划中的任务
+        /// </summary>
+        /// <param name="task"></param>
         public static void removeTask(ScheduleTask task)
         {
             lock (_lock)
@@ -102,6 +115,10 @@ namespace OpenGLF
             }
         }
 
+        /// <summary>
+        /// 添加一个任务，到时会异步回调
+        /// </summary>
+        /// <param name="task"></param>
         public static void addTask(ScheduleTask task)
         {
             lock (_lock)
@@ -110,11 +127,19 @@ namespace OpenGLF
             }
         }
 
+        /// <summary>
+        /// 添加一个任务，会在引擎主线程更新并回调
+        /// </summary>
+        /// <param name="task"></param>
         public static void addMainThreadUpdateTask(ScheduleTask task)
         {
             _mainThreadTaskList.Add(task);
         }
 
+        /// <summary>
+        /// 删除在主线程更新任务的任务
+        /// </summary>
+        /// <param name="task"></param>
         public static void removeMainThreadUpdateTask(ScheduleTask task)
         {
             _mainThreadTaskList.Remove(task);
@@ -147,7 +172,7 @@ namespace OpenGLF
             task._isPick = false;
         }
 
-        public static void mainThreadRun()
+        internal static void mainThreadRun()
         {
             long passTime = _watch.ElapsedMilliseconds;
             //Console.WriteLine("mainThread watch"+passTime);

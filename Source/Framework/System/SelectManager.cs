@@ -17,6 +17,9 @@ namespace OpenGLF
 
         private static GameObject selectObj = null;
 
+        /// <summary>
+        /// 判断是否由SelectManager::selectGameObject()所引起的行为
+        /// </summary>
         public static bool isSelecting = false;
 
         public static void registerSelectObject(GameObject gameObject)
@@ -64,9 +67,9 @@ namespace OpenGLF
             return id==0?null:Engine.scene.GameObjectRoot.findId(id);
         }
 
-        static GameObject _currentGameObject = null;
+        internal static GameObject _currentGameObject = null;
 
-        public static void updateMove (int x,int y)
+        internal static void updateMove (int x,int y)
         {
             GameObject selectObj = SelectManager.selectGameObject(x,y);
 
@@ -86,7 +89,7 @@ namespace OpenGLF
 
         //static GameObject _prevClickGameObject;
 
-        public static GameObject updateClick(MouseEventArgs e)
+        internal static GameObject updateClick(MouseEventArgs e)
         {
             selectObj = selectGameObject(e.X,e.Y);
             if (selectObj == null)
@@ -95,13 +98,13 @@ namespace OpenGLF
             return selectObj;
         }
 
-        public static void dragUpdateClick(MouseMoveEventArgs e)
+        internal static void dragUpdateClick(MouseMoveEventArgs e)
         {
             if(selectObj!=null && selectObj.getComponent<Selectable>().Type.HasFlag(Selectable.CALLBACKTYPE.OPAREA))
                 selectObj.getComponent<Selectable>().dragArea(e);
         }
 
-        public static void updateReleaseClick()
+        internal static void updateReleaseClick()
         {
             selectObj = null;
         }

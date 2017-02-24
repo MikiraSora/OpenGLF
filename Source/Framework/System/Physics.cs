@@ -7,7 +7,8 @@ namespace OpenGLF
 {
     public static class Physics
     {
-        public static Vector gravity { get
+        public static Vector gravity {
+            get
             {
                 return new Vector(Engine.world.Gravity.X, Engine.world.Gravity.Y);
             }
