@@ -278,6 +278,8 @@ namespace OpenGLF
                 //Find another collision gameobject
                 Engine.scene.GameObjectRoot.ForeachCall((obj, state) =>
                 {
+                    if (obj.rigidbody == null)
+                        return false;
                     for (int j = 0; j < obj.rigidbody.fixture.Count; j++)
                         if (obj.rigidbody.fixture[j] == fixtureB)
                             col = obj;

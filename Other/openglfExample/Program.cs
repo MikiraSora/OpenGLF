@@ -83,8 +83,15 @@ namespace openglfExample
             obj.sprite.center = new Vector(obj.sprite.width / 2, obj.sprite.height / 2);
             obj.rigidbody.Body.SleepingAllowed = false;
             obj.rigidbody.restitution = 0.5f;
+            obj.name = "Ball";
+
+
+            obj.rigidbody.onCollision = (obj) => {
+                Log.Debug("Collision : {0}",obj.name);
+            };
 
             GameObject blank = new GameObject();
+            blank.name = "Blank";
             gameobject.addChild(blank);
             blank.components.Add(new TextureSprite("Assets/blank.png"));
           
@@ -149,7 +156,7 @@ namespace openglfExample
             switch (e.KeyChar)
             {
                 case 'w':
-                    obj.rigidbody.addForce(new Vector(-100,-100), new Vector(obj.rigidbody.Body.WorldCenter.X, obj.rigidbody.Body.WorldCenter.Y));
+                    obj.rigidbody.addForce(new Vector(0, -10000000*2), new Vector(obj.rigidbody.Body.WorldCenter.X, obj.rigidbody.Body.WorldCenter.Y));
                     Log.User("body x={0}\ty={1}", obj.rigidbody.Body.WorldCenter.X, obj.rigidbody.Body.WorldCenter.Y);
                     break;
             }
