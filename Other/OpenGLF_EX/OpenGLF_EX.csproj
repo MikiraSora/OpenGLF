@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Animation\AnimationBase.cs" />
     <Compile Include="Components\GUI\Button.cs" />
+    <Compile Include="Components\GUI\Switch.cs" />
     <Compile Include="Components\TextSprite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Components\AnimationTextureSprite.cs" />

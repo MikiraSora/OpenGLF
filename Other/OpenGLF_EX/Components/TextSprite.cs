@@ -11,6 +11,7 @@ namespace OpenGLF_EX
     {
         string text = "";
         int text_size = 0;
+        int width;
         OpenGLF.Color text_color;
         OpenGLF.Font font = null;
 
@@ -18,6 +19,16 @@ namespace OpenGLF_EX
             get { return font; }
             set {
                 font = value;
+                updateTexture();
+            }
+        }
+
+        public int Width
+        {
+            get { return width; }
+            set
+            {
+                width = value;
                 updateTexture();
             }
         }
@@ -52,11 +63,12 @@ namespace OpenGLF_EX
             }
         }
 
-        public TextSprite(string text,int size, OpenGLF.Color color, OpenGLF.Font font):base()
+        public TextSprite(string text,int size, OpenGLF.Color color, OpenGLF.Font font, int width) :base()
         {
             this.text = text;
             text_size = size;
             text_color = color;
+            this.width = width;
             this.font = font;
 
             Color = new Vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -66,7 +78,7 @@ namespace OpenGLF_EX
 
         protected void updateTexture()
         {
-            var real_size = font.calculateSize(text, text_size, 250);
+            var real_size = font.calculateSize(text, text_size, width);
             if (this.Texture != null)
             {
                 this.Texture.bitmap.Dispose();

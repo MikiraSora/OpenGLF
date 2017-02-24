@@ -65,7 +65,9 @@ namespace OpenGLF
                     T.attach();
                 }
             }
+
             gameObject.setComponents();
+
         }
         public void Add(Component T)
         {
@@ -92,6 +94,7 @@ namespace OpenGLF
             }
 
             gameObject.setComponents();
+            T.start();
             T.attach();
         }
 

@@ -16,7 +16,7 @@ namespace OpenGLF
         int[] viewport;
         bool nodraw = false;
         string _projectPath;
-        internal static World world;
+        public static World world;
         public static ISoundEngine sound;
         public static bool debugPhysics = false;
         public static bool debugGUI = false;
@@ -48,7 +48,7 @@ namespace OpenGLF
 
             sound = new ISoundEngine(SoundOutputDriver.AutoDetect, SoundEngineOptionFlag.DefaultOptions);
 
-            world = new World(new FarseerPhysics.Common.Vector2(0, 9.82f));
+            world = new World(new FarseerPhysics.Common.Vector2(0, 9.82f));      
 
             viewport = new int[4];
 

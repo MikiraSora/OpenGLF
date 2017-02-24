@@ -17,7 +17,6 @@ namespace openglfExample
     class GameWindow : Window
     {
         OpenGLF.Font font = new OpenGLF.Font("Assets/OpenSans-Bold.ttf");
-        static byte[] colorBuffer = new byte[4];
 
         GameObject gameobject = null,cameraGameObject;
 
@@ -28,7 +27,7 @@ namespace openglfExample
 
         void init()
         {
-            //Engine.debugGameObject = true;
+            Engine.debugPhysics = true;
 
             SceneDirector.PushScene(new Scene());
 
@@ -44,7 +43,7 @@ namespace openglfExample
 
             gameobject = new GameObject();
 
-            gameobject.LocalPosition = /*new Vector(Width / 2, Height / 2)*/Vector.zero;
+            gameobject.LocalPosition = new Vector(Width / 2, Height / 2);
             gameobject.name = "base";
             Engine.scene.GameObjectRoot.addChild(gameobject);
 
@@ -69,20 +68,38 @@ namespace openglfExample
             #endregion
         }
 
+        GameObject obj;
+
         protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad(e);
             init();
 
-            Button buttonObject = new Button("Button", 100, OpenGLF.Color.blue, 250, 50, font);
+            obj = new GameObject();
+            gameobject.addChild(obj);
+            obj.components.Add(new TextureSprite("Assets/circle.png"));
+            obj.components.Add(new Rigidbody());
+            obj.WorldPosition = new Vector(400, 0);
+            obj.rigidbody.buildCircleShape(obj.sprite.width/2);
+            obj.sprite.center = new Vector(obj.sprite.width / 2, obj.sprite.height / 2);
+            obj.rigidbody.Body.SleepingAllowed = false;
+            obj.rigidbody.restitution = 0.5f;
 
-            buttonObject.onClick += (mouse) => { Log.User("{0} Click!", mouse); };
+            GameObject blank = new GameObject();
+            gameobject.addChild(blank);
+            blank.components.Add(new TextureSprite("Assets/blank.png"));
+          
+            blank.components.Add(new Rigidbody());
+            blank.sprite.width = 800;
+            blank.rigidbody.buildRectangleShape(blank.sprite.width, blank.sprite.height-60);
+            
+            blank.sprite.center = new Vector(blank.sprite.width / 2, blank.sprite.height / 2);
 
-            buttonObject.onDrag += (drag) => {
-                    
-            };
+            blank.WorldPosition = new Vector(400, 550);
+            blank.LocalAngle = 10;
 
-            gameobject.addChild(buttonObject);
+            base.OnLoad(e);
+
+            blank.rigidbody.bodyType = BodyType.Static;
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
@@ -93,6 +110,9 @@ namespace openglfExample
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);
+
+            obj.WorldPosition = new Vector(e.X, e.Y);
+
             GameObject selectObj = SelectManager.selectGameObject(e.X,e.Y);
             if (selectObj == null)
                 return;
@@ -107,7 +127,7 @@ namespace openglfExample
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
             base.OnMouseUp(e);
-            SelectManager.updateReleaseClick();
+            
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -125,6 +145,14 @@ namespace openglfExample
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
             base.OnKeyPress(e);
+
+            switch (e.KeyChar)
+            {
+                case 'w':
+                    obj.rigidbody.addForce(new Vector(-100,-100), new Vector(obj.rigidbody.Body.WorldCenter.X, obj.rigidbody.Body.WorldCenter.Y));
+                    Log.User("body x={0}\ty={1}", obj.rigidbody.Body.WorldCenter.X, obj.rigidbody.Body.WorldCenter.Y);
+                    break;
+            }
         }
     }
 

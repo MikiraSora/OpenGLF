@@ -43,6 +43,7 @@ namespace OpenGLF
         float _rotation = 0;
         Vector _linearVelocity;
         Vector _localCenter;
+        object _userData = null;
 
         [NonSerialized]
         internal Body body;
@@ -50,8 +51,11 @@ namespace OpenGLF
         [NonSerialized]
         internal List<Fixture> fixture;
 
+        /*
         [NonSerialized]
         internal List<Vertices> _vertices;
+        */
+        internal object shapeData;
 
         [Editor(typeof(VerticesEditor), typeof(UITypeEditor))]
         public List<Vector> vertices { get { return _verts; } internal set { _verts = value; } }
@@ -121,6 +125,8 @@ namespace OpenGLF
             set { _localCenter = value; if (body != null) body.LocalCenter = new Vector2((float)value.x, (float)value.y); }
         }
 
+        public Body Body { get { return body; } }
+
         [Browsable(false)]
         public Vector position
         {
@@ -149,6 +155,16 @@ namespace OpenGLF
             set { _rotation = value; if (body != null) body.Rotation = value; }
         }
 
+        
+        public enum ShapeType
+        {
+            Circle,
+            Rectangle,
+            Custom
+        }
+
+        public ShapeType shapeType { get; set; }
+
         public delegate void OnCollision(GameObject collider);
 
         public OnCollision onCollision;
@@ -160,27 +176,79 @@ namespace OpenGLF
 
         public override void start()
         {
+
+        }
+
+        public void build()
+        {
+            buildRectangleShape(20, 20);
+        }
+
+        public void buildRectangleShape(float width,float height,object userData = null, BodyType bodyType = BodyType.Dynamic)
+        {
+            var vertices = new List<Vector>();
+
+            vertices.Add(new Vector(-width/2, height/2));
+            vertices.Add(new Vector(width / 2, height / 2));
+            vertices.Add(new Vector(width / 2, -height / 2));
+            vertices.Add(new Vector(-width / 2, -height / 2));
+
+            buildRectangleShape(userData, vertices);
+        }
+
+        public void buildRectangleShape(object userData = null,List < Vector> bound_vertices = null, BodyType bodyType = BodyType.Dynamic)
+        {
+            if (gameObject == null)
+                return;
+
             float angle = (float)gameObject.Angle;
-            
-            if (vertices.Count <= 1)
-            {
-                vertices.Add(new Vector(0, 0));
-                vertices.Add(new Vector(10, 0));
-                vertices.Add(new Vector(10, 10));
-                vertices.Add(new Vector(0, 10));
-            }
+
+            _userData = userData;
+
+            vertices = bound_vertices;
 
             Vertices vrts = new Vertices();
+
             for (int i = 0; i < vertices.Count; i++)
             {
                 vrts.Add(new Vector2((float)vertices[i].x, (float)vertices[i].y));
             }
 
-            _vertices = FarseerPhysics.Common.Decomposition.Triangulate.ConvexPartition(vrts, TriangulationAlgorithm.Bayazit);
+            shapeData = FarseerPhysics.Common.Decomposition.Triangulate.ConvexPartition(vrts, TriangulationAlgorithm.Bayazit);
 
-            body = new Body(Engine.world, new Vector2((float)gameObject.WorldPosition.x, (float)gameObject.WorldPosition.y), (float)Mathf.toRadians(angle), FarseerPhysics.Dynamics.BodyType.Dynamic, null);
+            body = new Body(Engine.world, new Vector2((float)gameObject.WorldPosition.x, (float)gameObject.WorldPosition.y), (float)Mathf.toRadians(angle), FarseerPhysics.Dynamics.BodyType.Dynamic    , userData);
             setBodyType(bodyType);
-            fixture = FixtureFactory.AttachCompoundPolygon(_vertices, 1.0f, body);
+            fixture = FixtureFactory.AttachCompoundPolygon((List<Vertices>)shapeData, 1.0f, body);
+
+            shapeType = ShapeType.Rectangle;
+
+            body.AngularDamping = _angularDamping;
+            body.Enabled = _enabled;
+            body.FixedRotation = _fixedRotation;
+            body.Friction = _friction;
+            body.LinearDamping = _linearDamping;
+
+            body.OnCollision += body_OnCollision;
+        }
+
+        public void buildCircleShape(float radius,object userData = null, BodyType bodyType = BodyType.Dynamic)
+        {
+            if (gameObject == null)
+                return;
+
+            float angle = (float)gameObject.Angle;
+
+            _userData = userData;
+
+            body = new Body(Engine.world, new Vector2((float)gameObject.WorldPosition.x, (float)gameObject.WorldPosition.y), (float)Mathf.toRadians(angle), FarseerPhysics.Dynamics.BodyType.Dynamic, userData);
+            setBodyType(bodyType);
+
+            fixture = new List<Fixture>();
+            fixture.Add(FixtureFactory.AttachCircle(radius, 1, body));
+
+            shapeType = ShapeType.Circle;
+
+            shapeData = radius;
 
             body.AngularDamping = _angularDamping;
             body.Enabled = _enabled;
@@ -206,13 +274,16 @@ namespace OpenGLF
                             col = Engine.scene.objects[i];
                 }
                 */
-                Engine.scene.GameObjectRoot.ForeachCall((obj,state)=> {
+
+                //Find another collision gameobject
+                Engine.scene.GameObjectRoot.ForeachCall((obj, state) =>
+                {
                     for (int j = 0; j < obj.rigidbody.fixture.Count; j++)
                         if (obj.rigidbody.fixture[j] == fixtureB)
                             col = obj;
                     return false;
                 });
-                
+
                 onCollision(col);
             }
             return true;
@@ -220,49 +291,73 @@ namespace OpenGLF
 
         public override void update()
         {
-            gameObject.LocalPosition = new Vector(body.Position.X, body.Position.Y);
+            gameObject.WorldPosition = new Vector(body.Position.X, body.Position.Y);
             gameObject.LocalAngle = (float)Mathf.toDegrees(body.Rotation);
+            
         }
 
         public override void draw(OpenTK.Graphics.OpenGL.RenderingMode mode)
         {
-            if (Engine.debugPhysics == true)
+            base.draw(mode);
+
+            if (gameObject == null || mode != RenderingMode.Render||Engine.debugPhysics!=true)
+                return;
+
+            switch (shapeType)
             {
-                if (mode == OpenTK.Graphics.OpenGL.RenderingMode.Render)
+                case ShapeType.Circle:
+                    debugDrawCircle();
+                    break;
+                case ShapeType.Rectangle:
+                    debugDrawRectangle();
+                    break;
+                case ShapeType.Custom:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void debugDrawRectangle()
+        {
+            List<Vertices> _vertices = (List<Vertices>)shapeData;
+
+            GL.PushMatrix();
+            GL.Translate(gameObject.WorldPosition.x, gameObject.WorldPosition.y, 0);
+
+            GL.Rotate(gameObject.Angle, 0, 0, 1);
+
+            if (_vertices != null)
+            {
+                for (int i = 0; i < _vertices.Count; i++)
                 {
-                    GL.PushMatrix();
-                    GL.Translate(gameObject.WorldPosition.x, gameObject.WorldPosition.y, 0);
+                    Vertices v = _vertices[i];
 
-                    GL.Rotate(gameObject.Angle, 0, 0, 1);
-
-                    if (_vertices != null)
+                    if (v.Count > 2)
                     {
-                        for (int i = 0; i < _vertices.Count; i++)
-                        {
-                            Vertices v = _vertices[i];
+                        for (int j = 0; j < v.Count - 1; j++)
+                            Drawing.drawLine(new Vector(v[j].X, v[j].Y), new Vector(v[j + 1].X, v[j + 1].Y), 1f, Color.green);
 
-                            if (v.Count > 2)
-                            {
-                                for (int j = 0; j < v.Count - 1; j++)
-                                    Drawing.drawLine(new Vector(v[j].X, v[j].Y), new Vector(v[j + 1].X, v[j + 1].Y), 1f, Color.green);
-
-                                Drawing.drawLine(new Vector(v[v.Count - 1].X, v[v.Count - 1].Y), new Vector(v[0].X, v[0].Y), 1f, Color.green);
-                            }
-                        }
+                        Drawing.drawLine(new Vector(v[v.Count - 1].X, v[v.Count - 1].Y), new Vector(v[0].X, v[0].Y), 1f, Color.green);
                     }
-                    else if (vertices.Count > 2)
-                    {
-                        for (int j = 0; j < vertices.Count - 1; j++)
-                        {
-                            Drawing.drawLine(vertices[j], vertices[j + 1], 1f, Color.green);
-                        }
-
-                        Drawing.drawLine(vertices[vertices.Count - 1], vertices[0], 1f, Color.green);
-                    }
-
-                    GL.PopMatrix();
                 }
             }
+            else if (vertices.Count > 2)
+            {
+                for (int j = 0; j < vertices.Count - 1; j++)
+                {
+                    Drawing.drawLine(vertices[j], vertices[j + 1], 1f, Color.green);
+                }
+
+                Drawing.drawLine(vertices[vertices.Count - 1], vertices[0], 1f, Color.green);
+            }
+
+            GL.PopMatrix();
+        }
+
+        public void debugDrawCircle()
+        {
+            Drawing.drawCircle(new Vector(body.Position.X, body.Position.Y), (int)((float)shapeData), false, 1, Color.green);
         }
 
         void setBodyType(BodyType value)
@@ -336,10 +431,7 @@ namespace OpenGLF
 
         public void addForce(Vector force, Vector point)
         {
-            if (body != null)
-            {
-                body.ApplyForce(new Vector2(force.x, force.y), new Vector2(point.x, point.y));
-            }
+            body.ApplyForce(new Vector2(force.x, force.y), new Vector2(point.x, point.y));
         }
 
         public bool raycast(Vector ray)

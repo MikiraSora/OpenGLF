@@ -57,60 +57,7 @@ namespace OpenGLF
         static int gen_ID =0;
 
         public delegate bool ForeachCallFunc(GameObject obj, object state = null);
-        /*
-        [Category("Transform")]
-        public Vector position 
-        { 
-            get 
-            { 
-                return _position; 
-            } 
-            set 
-            {
-                _oldpos = _position.clone();
-                _position = value;
-                
-                List<GameObject> list = getChildren();
-
-                if (list != null)
-                {
-                    foreach (GameObject child in list)
-                    {
-                        //if (child.rigidbody == null)
-                        //{
-                        Vector _pos = child.position - _oldpos;
-                        child.localPosition = _pos;
-                        //}
-                    }
-                }
-            } 
-        }
-
-        [Category("Transform")]
-        public Vector localPosition
-        {
-            get
-            {
-                if (parent != null)
-                    return _position - parent._position;
-                else
-                    return _position;
-            }
-            set
-            {
-                if (parent != null)
-                {
-                    position = parent._position + value;
-                    _localPosition = value;
-                }
-                else
-                {
-                    position = value;
-                    _localPosition = value;
-                }
-            }
-        }
-        */
+        
         [Category("Transform")]
         public Vector LocalPosition
         {
@@ -130,11 +77,22 @@ namespace OpenGLF
         public Vector WorldPosition
         {
             get { return _position; }
+            set
+            {
+                Vector offset_postion=value- (_parent == null ? Vector.zero : _parent.WorldPosition);
+                LocalPosition = offset_postion;
+            }
         }
 
         internal void updateWorldPosition()
         {
             _position = (_parent == null ? Vector.zero : _parent.WorldPosition) + _localPosition;
+
+            if (rigidbody != null)
+            {
+                rigidbody.position = _position;
+            }
+
             foreach (var child in _children)
                 child.updateWorldPosition();
         }
@@ -145,9 +103,9 @@ namespace OpenGLF
             {
                 return _angle;
             }
-            /*
             set
             {
+                /*
                 if (camera == null)
                 {
                     List<GameObject> list = getChildren();
@@ -163,7 +121,7 @@ namespace OpenGLF
                         GameObject child = list[i];
                         if (child.camera == null)
                         {
-                            child._position = Mathf.rotateAround(child.LocalPosition, LocalPosition, (float)Mathf.toRadians(_new_angle));
+                            child.WorldPosition = Mathf.rotateAround(child.WorldPosition, WorldPosition, (float)Mathf.toRadians(_new_angle));
                             child._angle = child._angle + _new_angle;
                         }
                     }
@@ -172,8 +130,8 @@ namespace OpenGLF
                     _angle = Mathf.roundDegrees(value);
                     
                 }
+                */
             }
-    */
         }
 
         public float LocalAngle
@@ -189,8 +147,14 @@ namespace OpenGLF
         internal void updateAbsoluteAngle()
         {
             _angle = (_parent == null ? 0 : _parent.Angle) + _localAngle;
+
             foreach (var child in _children)
                 child.updateAbsoluteAngle();
+
+            if (rigidbody != null)
+            {
+                rigidbody.rotation = (float)Mathf.toRadians(_angle);
+            }
         }
 
         [Category("Properties")]
@@ -203,18 +167,7 @@ namespace OpenGLF
             {
                 Regex regex = new Regex(@"\d+");
                 string val = regex.Replace(value, "");
-                /*
-                if (Engine.scene != null)
-                {
-                    if (Engine.scene.gameObjectRoot.getAllChildren().Contains(GameObject.find(value)))
-                        _name = val + ID;
-                    else
-                        _name = value;
-                }
-                else
-                {
-                    _name = value;
-                }*/
+
                 if (_children.Contains(GameObject.find(value)))
                     _name = val + ID;
                 else
@@ -286,7 +239,6 @@ namespace OpenGLF
             {
                 var max = _children.Count;
                 d = max > d ? max : d;
-                //var parent = _parent;
                 _parent.removeChild(this);
                 _parent.addChild(this, d);
             }
@@ -336,18 +288,7 @@ namespace OpenGLF
         {
             _position = new Vector(0, 0);
             components = new ComponentList(this);
-            /*
-            try
-            {
-                Engine.scene.objects.Add(this);
-                Engine.scene.objCount += 1;
-                _id = Engine.scene.objCount;
-            }
-            catch
-            {
-                Console.WriteLine("Ошибка создания объекта. Сначала создайте сцену");
-            }
-            */
+
             name = "Game Object";
             _id = gen_ID++;
 
@@ -357,10 +298,6 @@ namespace OpenGLF
 
         public void addChild(GameObject obj,int position=-1)
         {
-            /*
-            if (obj._parent != null)
-                obj._parent.removeChild(obj);
-                */
             obj.parent = this;
             position = position<0? _children.Count:position > _children.Count ? _children.Count : position;
             _children.Insert(position,obj);

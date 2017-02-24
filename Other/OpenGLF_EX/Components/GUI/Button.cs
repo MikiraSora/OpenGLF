@@ -35,11 +35,13 @@ namespace OpenGLF_EX
 
             
             _textGameObject = new GameObject();
-            _textGameObject.components.Add(new TextSprite(text,size,color,font));
+            _textGameObject.components.Add(new TextSprite(text,size,color,font,width));
+            
             /*
             _textGameObject.sprite.width = width;
             _textGameObject.sprite.height = height;
             */
+
             _textGameObject.sprite.center = new Vector(_textGameObject.sprite.width / 2, _textGameObject.sprite.height / 2);
             
             

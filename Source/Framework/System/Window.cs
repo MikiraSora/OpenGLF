@@ -54,7 +54,7 @@ namespace OpenGLF
 
         protected override void OnLoad(EventArgs e)
         {
-            engine.start(true);
+            //engine.start(true);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -124,6 +124,7 @@ namespace OpenGLF
         {
             base.OnMouseUp(e);
             downObject = null;
+            SelectManager.updateReleaseClick();
         }
 
         public static void setFullscreen(bool full)
