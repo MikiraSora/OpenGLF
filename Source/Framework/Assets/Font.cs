@@ -252,16 +252,14 @@ namespace OpenGLF
                 g.Dispose();
                 font.Dispose();
                 tex.Dispose();
-            }
 
-            GL.PopMatrix();
-
-            if (bitmap != null)
-            {
+                GL.PopMatrix();
                 //Отключаем все
                 GL.DisableClientState(ArrayCap.VertexArray);
                 GL.DisableClientState(ArrayCap.TextureCoordArray);
             }
+
+            bitmap = null;
 
             GL.DeleteBuffer(vId);
             GL.DeleteBuffer(tId);

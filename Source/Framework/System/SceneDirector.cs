@@ -13,6 +13,10 @@ namespace OpenGLF
 
         private static bool shouldPopScene = false;
 
+        /// <summary>
+        /// 将一个场景推进栈，下一次游戏循环将会从此开始
+        /// </summary>
+        /// <param name="scene"></param>
         public static void PushScene(Scene scene/*,SwitchScene transformSwitchScene=null*/)
         {
             _sceneStack.Push(scene);
@@ -29,12 +33,13 @@ namespace OpenGLF
                     prev_scene.onLeaveScene();
                     Log.User("Pop scene {0},now scene is {1}", prev_scene.name, _sceneStack.Peek().name);
                     _sceneStack.Peek().onEnterScene();
+                    shouldPopScene = false;
                 }
             }
         }
 
         /// <summary>
-        /// 标记当前SCENE退出(，下一循环才真正切换上一个SCENE来循环).
+        /// 标记当前SCENE退出,下一循环将切换至上一个场景来运行.
         /// </summary>
         public static void exitCurrentScene()
         {

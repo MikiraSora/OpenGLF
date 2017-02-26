@@ -154,7 +154,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Shaders\Int.cs" />
-    <Compile Include="System\ActionManager.cs" />
     <Compile Include="System\GameObjectList.cs" />
     <Compile Include="Graphics\Color.cs" />
     <Compile Include="Graphics\GLCanvas.cs" />
@@ -162,7 +161,6 @@
     <Compile Include="System\Input.cs" />
     <Compile Include="System\Physics.cs" />
     <Compile Include="Shaders\Shaders.cs" />
-    <Compile Include="System\RenderSystem.cs" />
     <Compile Include="System\SceneDirector.cs" />
     <Compile Include="System\Schedule.cs" />
     <Compile Include="System\SelectManager.cs" />

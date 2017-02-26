@@ -12,6 +12,9 @@ namespace OpenGLF
         static long _currentTime = 0;
 
         static bool _outPutWithColor = true;
+
+        public static bool AbleLog { get; set; }
+
         public static bool IsColorOutput { get { return _outPutWithColor; } set { _outPutWithColor = value; } }
 
         static ConsoleColor[] colors =
@@ -33,6 +36,7 @@ namespace OpenGLF
         internal static void Init()
         {
             _currentTime = Environment.TickCount;
+            AbleLog = true;
         }
 
         static string _getTimeStr()
@@ -70,6 +74,9 @@ namespace OpenGLF
 
         static void _log(string message,LogLevel level)
         {
+            if (!AbleLog)
+                return;
+
             string output = _buildLogMessage(message, level);
 
             if (_outPutWithColor)

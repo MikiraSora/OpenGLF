@@ -140,6 +140,12 @@ namespace OpenGLF
                 self.WindowState = OpenTK.WindowState.Normal;
         }
 
+        /// <summary>
+        /// 改变在窗口内鼠标的指针图像
+        /// </summary>
+        /// <param name="filePath">图片文件路径</param>
+        /// <param name="centerX">定义指针中心X轴对应的图片坐标，-1自动取中心</param>
+        /// <param name="centerY">定义指针中心Y轴对应的图片坐标，-1自动取中心</param>
         public void setCursorImage(string filePath,int centerX=-1,int centerY=-1)
         {
             Bitmap bitmap=null;

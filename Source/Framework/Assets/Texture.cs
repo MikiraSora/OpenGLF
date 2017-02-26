@@ -16,7 +16,7 @@ namespace OpenGLF
     public class Texture : Asset
     {
         protected int _id;
-        byte[] _bytes;
+        byte[] cache_bytes;
 
         [NonSerialized]
         Bitmap _bitmap;
@@ -28,7 +28,19 @@ namespace OpenGLF
         public Bitmap bitmap { get { return _bitmap; } internal set { _bitmap = value; } }
 
         [Browsable(false)]
-        public byte[] bytes { get { return _bytes; } }
+        public byte[] bytes { get {
+                if (cache_bytes != null)
+                    return cache_bytes;
+                if (bitmap == null)
+                    return null;
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    bitmap.Save(ms, ImageFormat.Png);
+                    cache_bytes = ms.ToArray();
+                    ms.Dispose();
+                    return cache_bytes;
+                }
+            } }
 
         [Browsable(false)]
         public int ID { get { return _id; } }
@@ -89,14 +101,14 @@ namespace OpenGLF
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 
                     Bitmap bmp = new Bitmap(filename);
-
+                    /*
                     using (MemoryStream ms = new MemoryStream())
                     {
                         bmp.Save(ms, ImageFormat.Png);
                         _bytes = ms.ToArray();
                         ms.Dispose();
                     }
-
+                    */
                     bitmap = bmp;
 
                     BitmapData bmp_data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -119,14 +131,14 @@ namespace OpenGLF
 
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-
+            /*
             using (MemoryStream ms = new MemoryStream())
             {
                 bmp.Save(ms, ImageFormat.Png);
                 _bytes = ms.ToArray();
                 ms.Dispose();
             }
-
+            */
             bitmap = bmp;
 
             BitmapData bmp_data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -141,7 +153,7 @@ namespace OpenGLF
         {
             if (fbytes != null)
             {
-                _bytes = fbytes;
+                //var _bytes = fbytes;
                 GL.GenTextures(1, out _id);
 
                 GL.BindTexture(TextureTarget.Texture2D, _id);
@@ -210,9 +222,6 @@ namespace OpenGLF
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            //free
-            _bytes = null;
-            _filename = null;
             GL.DeleteTexture(_id);
             //remove from assets list
             Assets.items.Remove(this);

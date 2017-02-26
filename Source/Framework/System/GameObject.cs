@@ -105,32 +105,8 @@ namespace OpenGLF
             }
             set
             {
-                /*
-                if (camera == null)
-                {
-                    List<GameObject> list = getChildren();
-
-                    
-                    float _old_angle = _angle;
-                    _angle = Mathf.roundDegrees(value);
-
-                    float _new_angle = _angle - _old_angle;
-
-                    for (int i = 0; i < list.Count; i++)
-                    {
-                        GameObject child = list[i];
-                        if (child.camera == null)
-                        {
-                            child.WorldPosition = Mathf.rotateAround(child.WorldPosition, WorldPosition, (float)Mathf.toRadians(_new_angle));
-                            child._angle = child._angle + _new_angle;
-                        }
-                    }
-                    
-
-                    _angle = Mathf.roundDegrees(value);
-                    
-                }
-                */
+                var offsetAngle = (_parent == null ? 0 : _parent.Angle) - value;
+                LocalAngle = offsetAngle;
             }
         }
 
@@ -494,10 +470,7 @@ namespace OpenGLF
 
         public virtual void beforeDraw()
         {
-            /*
-            foreach (var child in _children)
-                child.beforeDraw();
-                */
+
         }
 
         public virtual void prepareDraw()
