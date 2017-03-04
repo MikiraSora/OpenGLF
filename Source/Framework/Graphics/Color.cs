@@ -63,6 +63,11 @@ namespace OpenGLF
         {
             return r.ToString() + "," + g.ToString() + "," + b.ToString() + "," + a.ToString();
         }
+
+        public static explicit operator Vec4(Color color)
+        {
+            return new Vec4(color._r / 255.0f, color._g / 255.0f, color._b / 255.0f, color._a / 255.0f);
+        }
     }
 
     public class ColorEditor : UITypeEditor

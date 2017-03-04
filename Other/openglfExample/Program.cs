@@ -64,15 +64,23 @@ namespace openglfExample
             engine.afterDraw += () =>
             {
                 //sprite.Text = string.Format("r:{0:F4}ms,u:{1:F4}ms", (RenderTime * 100), (UpdateTime * 100));
+                Drawing.drawText(new Vector(400, 300), Vector.zero, new Vector(1, 1), 0, 300, 100, "HELLO GUI", OpenGLF.Color.red, 30, font);
             };
             #endregion
         }
 
         protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
             init();
 
-            base.OnLoad(e);
+            OpenGLF.GUI.Button button = new OpenGLF.GUI.Button("hello gui", 200, 50, 30, font);
+            button.Center = new Vector(100, 25);
+
+            gameobject.addChild(button);
+
+            button.LocalPosition = new Vector(0, 0);
+            button.BackgroundTexture = new Texture(@"Assets/circle.png");
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)

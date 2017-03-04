@@ -33,14 +33,13 @@ namespace OpenGLF
 		"}";
 
 	    string frag =
-		"uniform sampler2D diffuse;" +
-        "uniform vec4 colorkey;" +
-		"void main(void)" +
-		"{" +
-			"vec4 color = texture2D(diffuse, gl_TexCoord[0].st);" +
-			"gl_FragColor = color * colorkey;" +
-		"}";
-        
+        "uniform sampler2D diffuse;" +
+                "uniform vec4 colorkey;" +
+                "void main(void)" +
+                "{" +
+                    "vec4 color = texture2D(diffuse, gl_TexCoord[0].st);" +
+                    "gl_FragColor = color * colorkey;" +
+                "}";
         [Editor(typeof(StringEditor), typeof(UITypeEditor))]
         [Browsable(false)]
         public string vertexProgram { get { return vert; } set { vert = value; } }

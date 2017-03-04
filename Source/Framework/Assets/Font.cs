@@ -125,20 +125,23 @@ namespace OpenGLF
             Graphics g = Graphics.FromImage(bitmap);
 
             //钦定渲染的设定
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+
+            var tmpFont = new System.Drawing.Font(font.FontFamily, size);
 
             //将Bitmap弄成透明底色
             g.Clear(System.Drawing.Color.Transparent);
 
             //将文字写到Bitmap
-            g.DrawString(text, font, new SolidBrush(System.Drawing.Color.FromArgb(color.a, color.r, color.g, color.b)), new PointF(0, 0));
+            g.DrawString(text, tmpFont, new SolidBrush(System.Drawing.Color.FromArgb(color.a, color.r, color.g, color.b)), new PointF(0, 0));
 
             //新建OpenGL纹理，并把此Bitmap交给纹理使用
             Texture tex = new Texture();
             tex.LoadFromBitmap(bitmap);
 
             g.Dispose();
+            tmpFont.Dispose();  
 
             return tex;
         }

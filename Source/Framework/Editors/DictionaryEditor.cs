@@ -15,6 +15,7 @@ namespace OpenGLF
     public class DictionaryEditorWindow : Form
     {
         public Dictionary<string, object> Value;
+
         TreeView list;
         PropertyGrid grid;
         Button ok;

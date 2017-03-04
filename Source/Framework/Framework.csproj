@@ -103,6 +103,9 @@
     <Compile Include="Components\Action\Interpolator\IInterpolator.cs" />
     <Compile Include="Components\Action\Interpolator\LinearInterpolator.cs" />
     <Compile Include="Components\Action\Action\MoveToAction.cs" />
+    <Compile Include="Components\GUI\Button.cs" />
+    <Compile Include="Components\GUI\Panel.cs" />
+    <Compile Include="Components\GUI\Widget.cs" />
     <Compile Include="Components\Selectable.cs" />
     <Compile Include="Components\Tile.cs" />
     <Compile Include="Blueprint\Blocks\Block.cs" />
