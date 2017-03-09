@@ -76,8 +76,16 @@ namespace openglfExample
             init();
 
 			GameObjectLayoutLoader loader = new GameObjectLayoutLoader();
-			var loadGameObjectList=loader.loadFromString(File.ReadAllText(@"g:\test2.swls"));
-        }
+			//var loadGameObjectList=loader.loadFromString(File.ReadAllText(@"g:\test2.swls"));
+			//gameobject.addChild(loadGameObjectList[0]);
+			GameObject simpleGameObject = new GameObject();
+			simpleGameObject.components.Add(new TextureSprite("Assets/cursor.png"));
+			simpleGameObject.sprite.width = ((TextureSprite)simpleGameObject.sprite).Texture.bitmap.Width;
+			simpleGameObject.sprite.height = ((TextureSprite)simpleGameObject.sprite).Texture.bitmap.Height;
+			simpleGameObject.LocalPosition=new Vector(0, 0);
+			gameobject.addChild(simpleGameObject);
+			//simpleGameObject.LocalPosition = new Vector(0, 0);
+		}
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {

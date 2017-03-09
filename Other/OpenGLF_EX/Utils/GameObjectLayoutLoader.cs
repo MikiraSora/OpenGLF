@@ -93,6 +93,7 @@ namespace OpenGLF_EX
 						case "x": _setup_x(gameobject, property.Value); break;
 						case "y": _setup_y(gameobject, property.Value); break;
 						case "backgroundImage": _setup_backgroundImage(gameobject, property.Value); break;
+						case "widgetName":_setup_widgetName(gameobject, property.Value); break;
 						default:
 							Log.Warn("unknown element property \"{0}\"", ElementName);
 							break;
@@ -109,25 +110,36 @@ namespace OpenGLF_EX
 			void _setup_width(GameObject gameobject,object data)
 			{
 				if (gameobject.sprite == null)
-					gameobject.components.Add(new TextureSprite());
-
-				gameobject.sprite.width = Convert.ToInt32(data);
+					Singal.registerSingalTrigger(string.Format("Layout_trigger_{0}_",ElementName),(singalTrigger,param)=> {
+						gameobject.sprite.width = Convert.ToInt32(data);
+					});
+				else 
+					gameobject.sprite.width = Convert.ToInt32(data);
 			}
 
 			void _setup_height(GameObject gameobject, object data)
 			{
 				if (gameobject.sprite == null)
-					gameobject.components.Add(new TextureSprite());
-
-				gameobject.sprite.height = Int32.Parse(data.ToString());
+					Singal.registerSingalTrigger(string.Format("Layout_trigger_{0}_", ElementName), (singalTrigger, param) => {
+						gameobject.sprite.height = Int32.Parse(data.ToString());
+					});
+				else
+					gameobject.sprite.height = Int32.Parse(data.ToString());
 			}
 
 			void _setup_backgroundImage(GameObject gameobject, object data)
 			{
 				if (gameobject.sprite == null)
 					gameobject.components.Add(new TextureSprite());
-
+				
 				((TextureSprite)gameobject.sprite).Texture = new Texture(data.ToString().Trim('"').Trim());
+
+				Singal.sendSingal(string.Format("Layout_trigger_{0}_", ElementName),null);
+			}
+
+			void _setup_widgetName(GameObject gameobject, object data)
+			{
+				gameobject.name = data.ToString();
 			}
 
 			void _setup_x(GameObject gameobject, object data)

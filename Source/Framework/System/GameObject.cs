@@ -277,7 +277,10 @@ namespace OpenGLF
             obj._parent = this;
             position = position<0? _children.Count:position > _children.Count ? _children.Count : position;
             _children.Insert(position,obj);
-        }
+			updateWorldPosition();
+			updateAbsoluteAngle();
+			updateAbsoluteScale();
+		}
 
         public void removeChild(GameObject obj)
         {

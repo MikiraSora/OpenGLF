@@ -199,7 +199,6 @@ namespace OpenGLF
                 //Console.WriteLine(00);
             }
 
-            Thread.Sleep(2);
         }
 
         private static void threadRun()
