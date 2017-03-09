@@ -274,7 +274,7 @@ namespace OpenGLF
 
         public void addChild(GameObject obj,int position=-1)
         {
-            obj.parent = this;
+            obj._parent = this;
             position = position<0? _children.Count:position > _children.Count ? _children.Count : position;
             _children.Insert(position,obj);
         }

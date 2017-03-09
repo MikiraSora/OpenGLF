@@ -11,7 +11,6 @@ namespace OpenGLF_EX
     {
         string text = "";
         int text_size = 0;
-        int width;
         OpenGLF.Color text_color;
         OpenGLF.Font font = null;
 
@@ -23,12 +22,12 @@ namespace OpenGLF_EX
             }
         }
 
-        public int Width
+        public int FontWidth
         {
             get { return width; }
             set
             {
-                width = value;
+				width = value;
                 updateTexture();
             }
         }

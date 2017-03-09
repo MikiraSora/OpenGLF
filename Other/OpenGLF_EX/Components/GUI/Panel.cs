@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenGLF;
 
-namespace OpenGLF.Components.GUI
+namespace OpenGLF_EX
 {
     class Panel : WidgetObject
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenGLF_EX.System
+namespace OpenGLF_EX
 {
     class GameObjectEx
     {

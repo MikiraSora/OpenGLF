@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using OpenGLF;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -74,13 +75,8 @@ namespace openglfExample
             base.OnLoad(e);
             init();
 
-            OpenGLF.GUI.Button button = new OpenGLF.GUI.Button("hello gui", 200, 50, 30, font);
-            button.Center = new Vector(100, 25);
-
-            gameobject.addChild(button);
-
-            button.LocalPosition = new Vector(0, 0);
-            button.BackgroundTexture = new Texture(@"Assets/circle.png");
+			GameObjectLayoutLoader loader = new GameObjectLayoutLoader();
+			var loadGameObjectList=loader.loadFromString(File.ReadAllText(@"g:\test2.swls"));
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
